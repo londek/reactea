@@ -49,7 +49,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, tea.Sequence(cmd, handleAfterUpdates())
 }
 
-// We've already rendered root component in Update()
 func (m model) View() string {
 	return m.root.Render(m.width, m.height)
 }
