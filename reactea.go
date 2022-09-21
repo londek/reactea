@@ -44,7 +44,7 @@ type Component[TProps any] interface {
 	// reactea implementation methods, just use BasicComponent
 	// if you don't know what are you doing
 
-	// It's an Update() but for props, the state deriving stage
+	// It's an Update() but for props, the state derive stage
 	// happens here
 	UpdateProps(TProps)
 
