@@ -28,8 +28,11 @@ type Component[TProps any] interface {
 	// long IO operations through tea.Cmd
 	Init(TProps) tea.Cmd
 
-	// It's called when component is about to be gc'ed
-	// Please note that
+	// It's called when component is about to be destroyed
+	//
+	// Note: It's parent component job to call it and
+	// relying on it outside of reactea builtins is
+	// not reliable
 	Destroy()
 
 	// Typical tea.Model Update(), we handle all IO events here
