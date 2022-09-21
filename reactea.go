@@ -36,7 +36,6 @@ type Component[TProps any] interface {
 	Destroy()
 
 	// Typical tea.Model Update(), we handle all IO events here
-	// Also state is being derived from props
 	Update(tea.Msg) tea.Cmd
 
 	// Callee already knows at which size it should render at
