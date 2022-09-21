@@ -40,6 +40,6 @@ func (c *proplessWrapper) Render(width, height int) string {
 	return c.Renderer(width, height)
 }
 
-func ProplessToSomeComponent(renderer ProplessRenderer) SomeComponent {
+func ProplessToComponent(renderer ProplessRenderer) SomeComponent {
 	return &proplessWrapper{Renderer: renderer}
 }
