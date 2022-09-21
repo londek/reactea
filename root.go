@@ -31,11 +31,14 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.root.Destroy()
 		return m, tea.Quit
 	// We want component to know at what size should it render
-	// and unify size handling between all reactea components
+	// and unify size handling across all reactea components
 	// That's why we don't forward WindowSizeMsg, but tell
 	// target width and height with Render()
+	//
+	// Note: It also means no Update() before first render
 	case tea.WindowSizeMsg:
 		m.width, m.height = msg.Width, msg.Height
+		return m, nil
 	}
 
 	var cmd tea.Cmd
