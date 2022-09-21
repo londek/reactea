@@ -69,8 +69,11 @@ func RouteOf(route string) (dst Route) {
 	return strings.Split(route, "/")
 }
 
-type UpdatedRoutesMsg struct{}
+type updatedRoutesMsg struct{}
 
-func UpdatedRoutes() tea.Msg {
-	return UpdatedRoutesMsg{}
+// It might be important to do so in some scenarios.
+// Basically causes rerender so ALL components are
+// aware of changed routes
+func updatedRoutes() tea.Msg {
+	return updatedRoutesMsg{}
 }
