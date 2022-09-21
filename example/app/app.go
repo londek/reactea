@@ -34,11 +34,8 @@ func (c *Component) Init(reactea.NoProps) tea.Cmd {
 			})
 		},
 		"display-name": func() (reactea.SomeComponent, tea.Cmd) {
-			// Usually it doesn't look like that, it should be as simple
-			// as single function call in fact!
-			return reactea.ProplessToComponent(
-				reactea.PropfulToLess(displayname.Renderer, c.text),
-			), nil
+			// Don't worry, usually it doesn't look like that!
+			return reactea.PropfulToComponent(displayname.Renderer, c.text), nil
 		},
 	})
 }
