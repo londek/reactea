@@ -28,7 +28,7 @@ func PropfulToLess[TProps any](renderer Renderer[TProps], props TProps) Propless
 	}
 }
 
-// Transformer for Propless -> Some component
+// Transformer for Propless -> SomeComponent
 
 type proplessWrapper struct {
 	BasicComponent
@@ -44,7 +44,7 @@ func ProplessToComponent(renderer ProplessRenderer) SomeComponent {
 	return &proplessWrapper{Renderer: renderer}
 }
 
-// Transformer for Propful -> Some component
+// Transformer for Propful -> SomeComponent
 
 type propfulWrapper[TProps any] struct {
 	BasicComponent
