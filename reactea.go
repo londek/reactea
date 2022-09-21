@@ -38,7 +38,7 @@ type Component[TProps any] interface {
 	// Typical tea.Model Update(), we handle all IO events here
 	Update(tea.Msg) tea.Cmd
 
-	// Callee already knows at which size it should render at
+	// Callee already knows at which size should it render at
 	Render(int, int) string
 
 	// reactea implementation methods, just use BasicComponent
