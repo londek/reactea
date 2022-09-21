@@ -5,10 +5,12 @@ import (
 )
 
 // The lifecycle is
+//
 //           \/ Usually won't be called on first render
 // Init ---> Update -> Render ---> Destroy?
-//       |                     |   /\ implementation detail
-//       |---------------------|
+//       |                     |   /\ implementation detail and
+//       |---------------------|   therefore doesn't return tea.Cmd
+//
 // reactea takes pointer approach for components
 // making state modifiable in any lifecycle method
 //
