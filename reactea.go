@@ -83,7 +83,7 @@ type Renderer[TProps any] func(TProps, int, int) string
 type ProplessRenderer func(int, int) string
 
 // Doesn't have state, props, even scalling for
-// target dimensions = Dumb component, or Stringer
+// target dimensions = DumbRenderer, or Stringer
 type DumbRenderer func() string
 
 // The most basic form of reactea component
