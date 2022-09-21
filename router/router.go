@@ -22,14 +22,10 @@ func New() *Component {
 	return &Component{}
 }
 
-func (c *Component) Init(props Props) (cmd tea.Cmd) {
+func (c *Component) Init(props Props) tea.Cmd {
 	c.UpdateProps(props)
 
-	if initializer, ok := c.Props()["default"]; ok {
-		c.lastComponent, cmd = initializer()
-	}
-
-	return
+	return c.initializeRoute()
 }
 
 func (c *Component) Update(msg tea.Msg) tea.Cmd {
@@ -52,6 +48,20 @@ func (c *Component) AfterUpdate() tea.Cmd {
 		c.lastComponent.Destroy()
 	}
 
+	c.lastComponent = nil
+
+	return c.initializeRoute()
+}
+
+func (c *Component) Render(width, height int) string {
+	if c.lastComponent != nil {
+		return c.lastComponent.Render(width, height)
+	}
+
+	return fmt.Sprintf("Couldn't route for '%s'", reactea.CurrentRoute())
+}
+
+func (c *Component) initializeRoute() tea.Cmd {
 	var cmd tea.Cmd
 
 	if initializer, ok := c.Props()[reactea.CurrentRoute().String()]; ok {
@@ -61,12 +71,4 @@ func (c *Component) AfterUpdate() tea.Cmd {
 	}
 
 	return cmd
-}
-
-func (c *Component) Render(width, height int) string {
-	if c.lastComponent != nil {
-		return c.lastComponent.Render(width, height)
-	}
-
-	return fmt.Sprintf("Couldn't route for '%s'", reactea.CurrentRoute())
 }
