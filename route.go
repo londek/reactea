@@ -7,10 +7,22 @@ import (
 )
 
 // Global Route object, substitute of window.location
-var currentRoute Route
+var (
+	currentRoute    Route
+	lastRoute       Route
+	wasRouteChanged bool
+)
 
 func CurrentRoute() Route {
 	return currentRoute.Copy()
+}
+
+func LastRoute() Route {
+	return lastRoute.Copy()
+}
+
+func WasRouteChanged() bool {
+	return wasRouteChanged
 }
 
 func SetCurrentRoute(r Route) {
@@ -56,8 +68,8 @@ func (r1 Route) Equal(r2 Route) bool {
 		return false
 	}
 
-	for i, element := range r1 {
-		if element != r2[i] {
+	for i := range r1 {
+		if r1[i] != r2[i] {
 			return false
 		}
 	}
@@ -74,6 +86,6 @@ type updatedRoutesMsg struct{}
 // It might be important to do so in some scenarios.
 // Basically causes rerender so ALL components are
 // aware of changed routes
-func updatedRoutes() tea.Msg {
+func updatedRoute() tea.Msg {
 	return updatedRoutesMsg{}
 }

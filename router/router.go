@@ -13,8 +13,6 @@ type Component struct {
 	reactea.BasicComponent
 	reactea.BasicPropfulComponent[Props]
 
-	// If last route != currentRoute we want to reinitialize the component
-	lastRoute     reactea.Route
 	lastComponent reactea.SomeComponent
 }
 
@@ -45,15 +43,13 @@ func (c *Component) Update(msg tea.Msg) tea.Cmd {
 }
 
 func (c *Component) AfterUpdate() tea.Cmd {
-	defer func() { c.lastRoute = reactea.CurrentRoute() }()
-
-	if reactea.CurrentRoute().Equal(c.lastRoute) {
+	// If last route != currentRoute we want to reinitialize the component
+	if !reactea.WasRouteChanged() {
 		return nil
 	}
 
 	if c.lastComponent != nil {
 		c.lastComponent.Destroy()
-		c.lastComponent = nil
 	}
 
 	var cmd tea.Cmd

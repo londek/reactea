@@ -45,8 +45,15 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	cmd = m.root.Update(msg)
 
 	isUpdate = false
+	wasRouteChanged = !currentRoute.Equal(lastRoute)
 
-	return m, tea.Sequence(cmd, handleAfterUpdates())
+	// Guarantee rerender if route was changed
+	if wasRouteChanged {
+		lastRoute = currentRoute
+		return m, tea.Batch(updatedRoute, cmd, handleAfterUpdates())
+	}
+
+	return m, tea.Batch(cmd, handleAfterUpdates())
 }
 
 func (m model) View() string {
