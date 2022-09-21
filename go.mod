@@ -19,5 +19,3 @@ require (
 	golang.org/x/term v0.0.0-20220919170432-7a66f970e087 // indirect
 	golang.org/x/text v0.3.7 // indirect
 )
-
-replace github.com/charmbracelet/bubbletea => ../bubbletea
