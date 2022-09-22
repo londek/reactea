@@ -67,7 +67,7 @@ type SomeComponent interface {
 
 // I decided to give it a name "Component" and not "Renderer"
 // Because Component.Render is itself ProplessRenderer
-// (or the other way around ProplessRender = Component.Render)
+// (or the other way around ProplessRenderer = Component.Render)
 // So the naming is infact valid for any type of
 // components in reactea
 type AnyComponent[TProps any] interface {
@@ -76,7 +76,7 @@ type AnyComponent[TProps any] interface {
 
 // I decided to give it a name "Component" and not "Renderer"
 // Because Component.Render is itself ProplessRenderer
-// (or the other way around ProplessRender = Component.Render)
+// (or the other way around ProplessRenderer = Component.Render)
 // So the naming is infact valid for any type of
 // components in reactea
 type AnyProplessComponent interface {
