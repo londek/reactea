@@ -1,6 +1,6 @@
 module github.com/londek/reactea/example
 
-go 1.20
+go 1.18
 
 require github.com/londek/reactea v0.0.0
 

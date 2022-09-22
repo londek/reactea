@@ -1,6 +1,6 @@
 module github.com/londek/reactea
 
-go 1.20
+go 1.18
 
 require github.com/charmbracelet/bubbletea v0.22.1
 
