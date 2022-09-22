@@ -65,17 +65,22 @@ type SomeComponent interface {
 	AfterUpdate() tea.Cmd
 }
 
-type (
-	DestroyerFunc func()
-	UpdaterFunc   func(msg tea.Msg) tea.Cmd
-)
-
-type AnyRenderer[TProps any] interface {
-	Renderer[TProps] | ProplessRenderer | DumbRenderer
+// I decided to give it a name "Component" and not "Renderer"
+// Because Component.Render is itself ProplessRenderer
+// (or the other way around ProplessRender = Component.Render)
+// So the naming is infact valid for any type of
+// components in reactea
+type AnyComponent[TProps any] interface {
+	Renderer[TProps] | AnyProplessComponent
 }
 
-type AfterUpdater interface {
-	AfterUpdate() tea.Cmd
+// I decided to give it a name "Component" and not "Renderer"
+// Because Component.Render is itself ProplessRenderer
+// (or the other way around ProplessRender = Component.Render)
+// So the naming is infact valid for any type of
+// components in reactea
+type AnyProplessComponent interface {
+	ProplessRenderer | DumbRenderer
 }
 
 // Ultra shorthand for components = just renderer

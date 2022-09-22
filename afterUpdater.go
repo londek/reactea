@@ -2,6 +2,10 @@ package reactea
 
 import tea "github.com/charmbracelet/bubbletea"
 
+type AfterUpdater interface {
+	AfterUpdate() tea.Cmd
+}
+
 var afterUpdaters []AfterUpdater
 
 // Queue component for AfterUpdate event

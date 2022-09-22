@@ -1,17 +1,26 @@
 package reactea
 
-// There are no unions yet in Golang (Currently they are Type constraints BUT
-// type constraints can't be used as argument type)
-func RenderAny[TProps any](renderer any, props TProps, width, height int) string {
-	if renderer, ok := renderer.(Renderer[TProps]); ok {
+// I'm sorry gophers, I did it for compile-time safety
+// Hopefully nobody is ever gonna get headache
+// because of this
+func RenderAny[TRenderer AnyComponent[TProps], TProps any](renderer TRenderer, props TProps, width, height int) string {
+	switch renderer := any(renderer).(type) {
+	case Renderer[TProps]:
 		return renderer(props, width, height)
+	case ProplessRenderer:
+		return renderer(width, height)
+	case DumbRenderer:
+		return renderer()
 	}
 
-	return RenderPropless(renderer, width, height)
+	return ""
 }
 
-func RenderPropless(renderer any, width, height int) string {
-	switch renderer := renderer.(type) {
+// I'm sorry gophers, I did it for compile-time safety
+// Hopefully nobody is ever gonna get headache
+// because of this
+func RenderPropless[TRenderer AnyProplessComponent](renderer TRenderer, width, height int) string {
+	switch renderer := any(renderer).(type) {
 	case ProplessRenderer:
 		return renderer(width, height)
 	case DumbRenderer:
