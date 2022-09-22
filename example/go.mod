@@ -25,5 +25,3 @@ require (
 )
 
 replace github.com/londek/reactea => ../
-
-replace github.com/charmbracelet/bubbletea => ../../bubbletea
