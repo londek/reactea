@@ -120,11 +120,6 @@ type InvisibleComponent struct{}
 
 func (c *InvisibleComponent) Render(int, int) string { return "" }
 
-type UpdateViewer interface {
-	Update(tea.Msg) []tea.Cmd
-	View(tea.Msg, int, int) (string, []tea.Cmd)
-}
-
 type NoProps struct{}
 
 // Destroys app before quiting
