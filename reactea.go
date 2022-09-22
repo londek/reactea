@@ -32,7 +32,7 @@ type Component[TProps any] interface {
 
 	// It's called when component is about to be destroyed
 	//
-	// Note: It's parent component job to call it and
+	// Note: It's parent component's job to call it so
 	// relying on it outside of reactea builtins is
 	// not reliable
 	Destroy()
