@@ -55,8 +55,10 @@ func (r Route) Push(element string) Route {
 	return append(r, element)
 }
 
-func (r Route) Copy() (dst Route) {
-	return append(dst, r...)
+func (r Route) Copy() Route {
+	dst := make(Route, len(r))
+	copy(dst, r)
+	return dst
 }
 
 func (r Route) String() string {
