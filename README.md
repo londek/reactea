@@ -10,7 +10,7 @@ For me, personally - It's a must in project with multiple pages and component co
 
 ## Installation
 
-`go get github.com/londek/reactea`
+`go get -u github.com/londek/reactea`
 
 ## Info
 
