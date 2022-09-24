@@ -23,3 +23,33 @@ The goal is to create components which are
 - easy to lift the state up
 
 Most info is currently in source code so I suggest checking it out
+
+## Reactea Routes API
+
+Routes API allows developers for easy creation of multi-page apps.
+Routes are kind of substitute for window.Location inside bubbletea
+
+### reactea.CurrentRoute() Route
+
+Returns **copy** of current route
+
+### reactea.LastRoute() Route
+
+Returns **copy** of last route
+
+### reactea.WasRouteChanged() bool
+
+returns `LastRoute() != CurrentRoute()`
+
+## Router Component
+
+Router Component is basic implementation of how routing could look in your application.
+It doesn't support wildcards yet or relative pathing. All data is provided from within props
+
+### router.Props
+
+router.Props is a map of route initializers keyed by routes serialized to strings following format `r1/r2/r3...etc`
+
+What is `RouteInitializer`?
+
+`RouteInitializer` is function that initializes the current route component
