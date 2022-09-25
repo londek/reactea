@@ -3,7 +3,7 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/londek/reactea.svg)](https://pkg.go.dev/github.com/londek/reactea)
 ![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability-percentage/Londek/reactea)
 
-Rather simple **Bubbletea companion** for **handling hierarchy** and support for **lifting state up.**
+Rather simple **Bubbletea companion** for **handling hierarchy** and support for **lifting state up.**\
 It Reactifies Bubbletea philosophy and makes it especially easy to work with in bigger projects.
 
 For me, personally - It's a must in project with multiple pages and component communication
@@ -16,8 +16,7 @@ Check our example code [right here!](/example)
 
 ## General info
 
-Always return `reactea.Destroy` instead of `tea.Quit` in order to follow our convention
-
+Always return `reactea.Destroy` instead of `tea.Quit` in order to follow our convention\
 The goal is to create components which are
 
 - dimensions-aware (especially unify all setSize conventions)
@@ -27,17 +26,17 @@ The goal is to create components which are
 - easier to code
 - all of that without code duplication
 
-The point of library is not to make 150% use of Go performance, because either way Bubbletea refreshrate is only 60hz and 50 allocations won't really hurt anyone.
+The point of library is not to make 150% use of Go performance, because either way Bubbletea\
+refresh rate is only 60hz and 50 allocations in entire **runtime** won't really hurt anyone.\
 Most info is currently in source code so I suggest checking it out
 
 ## Component lifecycle
 
-<img alt="Component lifecycle image"
-    style="background-color: white; padding: 20px; border-radius: 10px;"
-    src=".github/lifecycle-diagram.png">
+![Component lifecycle image](.github/lifecycle-diagram.png)
 
 reactea takes pointer approach for components
-making state modifiable in any lifecycle method
+making state modifiable in any lifecycle method\
+**There are also 2 additional lifecycle methods: AfterUpdate() and UpdateProps()**
 
 ### AfterUpdate()
 
