@@ -61,11 +61,10 @@ Check our example code [right here!](/example)
 
 Stateless components are represented by following function types
 
-| Support for    | Renderer | ProplessRenderer | DumbRenderer |   |
-|----------------|----------|------------------|--------------|---|
-| **Properties** | ✅        | ❌                | ❌            |   |
-| **Dimensions** | ✅        | ✅                | ❌            |   |
-|                |          |                  |              |   |
+| Support for    | Renderer | ProplessRenderer | DumbRenderer |
+|----------------|----------|------------------|--------------|
+| **Properties** | ✅        | ❌                | ❌            |
+| **Dimensions** | ✅        | ✅                | ❌            |
 
 There are many utility functions for transforming stateless into stateful components or for rendering any component without knowing its type (`reactea.RenderAny`, `reactea.RenderPropless`)
 
