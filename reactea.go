@@ -18,7 +18,7 @@ import (
 // first-run, Init() is, and critical logic should be there
 //
 // Note: Lifecycle is fully controlled by parent component
-// making graph above fully theoritical and possibly
+// making graph above fully theoretical and possibly
 // invalid for third-party components
 
 type Component[TProps any] interface {
