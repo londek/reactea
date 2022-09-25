@@ -8,21 +8,66 @@ It Reactifies Bubbletea philosophy and makes it especially easy to work with in 
 
 For me, personally - It's a must in project with multiple pages and component communication
 
+Check our example code [right here!](/example)
+
 ## Installation
 
 `go get -u github.com/londek/reactea`
 
-## Info
+## General info
 
 Always return `reactea.Destroy` instead of `tea.Quit` in order to follow our convention
 
 The goal is to create components which are
 
-- dimensions-aware
+- dimensions-aware (especially unify all setSize conventions)
 - propful
 - easy to lift the state up
+- able to communicate with parent without importing it (I spent too many hours solving import cycles hehe)
+- easier to code
+- all of that without code duplication
 
+The point of library is not to make 150% use of Go performance, because either way Bubbletea refreshrate is only 60hz and 50 allocations won't really hurt anyone.
 Most info is currently in source code so I suggest checking it out
+
+## Component lifecycle
+
+<img alt="Component lifecycle image"
+    style="background-color: white; padding: 20px; border-radius: 10px;"
+    src=".github/lifecycle-diagram.png">
+
+reactea takes pointer approach for components
+making state modifiable in any lifecycle method
+
+### AfterUpdate()
+
+AfterUpdate is only lifecycle method that does not depend on parent. It's called right after root component finishes Update(). Components that want it executed should queue itself by `reactea.AfterUpdate(component)`
+
+### UpdateProps()
+
+UpdateProps is lifecycle method that derives state from props, It can happen anytime during lifecycle. Usually called by Init()
+
+### Notes
+
+Update **IS NOT** guaranteed to be called on first-run, Init() for most part is, and critical logic should be there
+
+Lifecycle is **fully controlled by parent component** making graph above fully theoritical and possibly invalid for third-party components
+
+## Example code
+
+Check our example code [right here!](/example)
+
+## Stateless components
+
+Stateless components are represented by following function types
+
+| Support for    | Renderer | ProplessRenderer | DumbRenderer |   |
+|----------------|----------|------------------|--------------|---|
+| **Properties** | ✅        | ❌                | ❌            |   |
+| **Dimensions** | ✅        | ✅                | ❌            |   |
+|                |          |                  |              |   |
+
+There are many utility functions for transforming stateless into stateful components or for rendering any component without knowing its type (`reactea.RenderAny`, `reactea.RenderPropless`)
 
 ## Reactea Routes API
 
