@@ -63,7 +63,7 @@ Check our example code [right here!](/example)
 Stateless components are represented by following function types
 
 |   | Renderer | ProplessRenderer | DumbRenderer |
-|----------------|----------|------------------|--------------|
+|----------------|:----------:|:------------------:|:--------------:|
 | **Properties** | ✅        | ❌                | ❌            |
 | **Dimensions** | ✅        | ✅                | ❌            |
 | **Type** | `func(TProps, int, int) string`        | `func(int, int) string`                | `func() string`           |
