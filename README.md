@@ -17,7 +17,6 @@ Check our example code [right here!](/example)
 
 ## General info
 
-Always return `reactea.Destroy` instead of `tea.Quit` in order to follow our convention\
 The goal is to create components which are
 
 - dimensions-aware (especially unify all setSize conventions)
@@ -27,9 +26,11 @@ The goal is to create components which are
 - easier to code
 - all of that without code duplication
 
-The point of library is not to make 150% use of Go performance, because either way Bubbletea\
+The extreme performance is not main goal of this package, because either way Bubbletea\
 refresh rate is only 60hz and 50 allocations in entire **runtime** won't really hurt anyone.\
 Most info is currently in source code so I suggest checking it out
+
+Always return `reactea.Destroy` instead of `tea.Quit` in order to follow our convention\
 
 ## Component lifecycle
 
@@ -37,21 +38,21 @@ Most info is currently in source code so I suggest checking it out
 
 reactea takes pointer approach for components
 making state modifiable in any lifecycle method\
-**There are also 2 additional lifecycle methods: AfterUpdate() and UpdateProps()**
+**There are also 2 additional lifecycle methods: [AfterUpdate()](#afterupdate) and [UpdateProps()](#updateprops)**
 
 ### AfterUpdate()
 
-AfterUpdate is only lifecycle method that does not depend on parent. It's called right after root component finishes Update(). Components that want it executed should queue itself by `reactea.AfterUpdate(component)`
+AfterUpdate is the only lifecycle method that is not controlled by parent. It's called right after root component finishes Update(). Components should queue itself with `reactea.AfterUpdate(component)` in Update()
 
 ### UpdateProps()
 
-UpdateProps is lifecycle method that derives state from props, It can happen anytime during lifecycle. Usually called by Init()
+UpdateProps() is lifecycle method that derives state from props, It can happen anytime during lifecycle. Usually called by Init()
 
 ### Notes
 
 Update **IS NOT** guaranteed to be called on first-run, Init() for most part is, and critical logic should be there
 
-Lifecycle is **fully controlled by parent component** making graph above fully theoritical and possibly invalid for third-party components
+Lifecycle is **(almost, see [AfterUpdate()](#afterupdate)) fully controlled by parent component** making graph above fully theoritical and possibly invalid for third-party components
 
 ## Example code
 
@@ -65,7 +66,7 @@ Stateless components are represented by following function types
 |----------------|----------|------------------|--------------|
 | **Properties** | ✅        | ❌                | ❌            |
 | **Dimensions** | ✅        | ✅                | ❌            |
-| **Type** | func(TProps, int, int) string        | func(int, int) string                | func() string           |
+| **Type** | `func(TProps, int, int) string`        | `func(int, int) string`                | `func() string`           |
 
 There are many utility functions for transforming stateless into stateful components or for rendering any component without knowing its type (`reactea.RenderAny`, `reactea.RenderPropless`)
 
