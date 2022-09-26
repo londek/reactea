@@ -42,15 +42,15 @@ making state modifiable in any lifecycle method\
 
 ### AfterUpdate()
 
-AfterUpdate is the only lifecycle method that is not controlled by parent. It's called right after root component finishes Update(). Components should queue itself with `reactea.AfterUpdate(component)` in Update()
+`AfterUpdate()` is the only lifecycle method that is not controlled by parent. It's called right after root component finishes `Update()`. Components should queue itself with `reactea.AfterUpdate(component)` in `Update()`
 
 ### UpdateProps()
 
-UpdateProps() is lifecycle method that derives state from props, It can happen anytime during lifecycle. Usually called by Init()
+`UpdateProps()` is lifecycle method that derives state from props, It can happen anytime during lifecycle. Usually called by `Init()`
 
 ### Notes
 
-Update **IS NOT** guaranteed to be called on first-run, Init() for most part is, and critical logic should be there
+`Update()` **IS NOT** guaranteed to be called on first-run, `Init()` for most part is, and critical logic should be there
 
 Lifecycle is **(almost, see [AfterUpdate()](#afterupdate)) fully controlled by parent component** making graph above fully theoretical and possibly invalid for third-party components
 
