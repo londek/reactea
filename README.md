@@ -52,7 +52,7 @@ UpdateProps() is lifecycle method that derives state from props, It can happen a
 
 Update **IS NOT** guaranteed to be called on first-run, Init() for most part is, and critical logic should be there
 
-Lifecycle is **(almost, see [AfterUpdate()](#afterupdate)) fully controlled by parent component** making graph above fully theoritical and possibly invalid for third-party components
+Lifecycle is **(almost, see [AfterUpdate()](#afterupdate)) fully controlled by parent component** making graph above fully theoretical and possibly invalid for third-party components
 
 ## Example code
 
