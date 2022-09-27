@@ -70,8 +70,12 @@ type SomeComponent interface {
 // (or the other way around ProplessRenderer = Component.Render)
 // So the naming is infact valid for any type of
 // components in reactea
+//
+// Why not Renderer[TProps]? It would have to be type alias
+// there are no type aliases yet for generics, but they are
+// planned for Go 1.20. Something to keep in mind for future
 type AnyComponent[TProps any] interface {
-	Renderer[TProps] | AnyProplessComponent
+	func(TProps, int, int) string | AnyProplessComponent
 }
 
 // I decided to give it a name "Component" and not "Renderer"
@@ -86,14 +90,18 @@ type AnyProplessComponent interface {
 // Ultra shorthand for components = just renderer
 // One could say it's a stateless component
 // Also note that it doesn't handle any IO by itself
+//
+// TODO: Change to type alias after type aliases for generics
+// support is released (planned Go 1.20). For now explicit
+// type conversion is required
 type Renderer[TProps any] func(TProps, int, int) string
 
 // SUPEEEEEER shorthand for components
-type ProplessRenderer func(int, int) string
+type ProplessRenderer = func(int, int) string
 
 // Doesn't have state, props, even scalling for
 // target dimensions = DumbRenderer, or Stringer
-type DumbRenderer func() string
+type DumbRenderer = func() string
 
 // The most basic form of reactea component
 // It implements all not required methods
