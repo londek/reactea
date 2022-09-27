@@ -37,6 +37,9 @@ Most info is currently in source code so I suggest checking it out
 
 Always return `reactea.Destroy` instead of `tea.Quit` in order to follow our convention\
 
+Go as of now doesn't support type aliases for generics, so Renderer\[TProps\] has to be explicitely casted.\
+It's planned for Go 1.20
+
 ## Component lifecycle
 
 ![Component lifecycle image](.github/lifecycle-diagram.png)
