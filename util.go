@@ -1,6 +1,7 @@
 package reactea
 
-func RenderAny[TProps any, TRenderer AnyComponent[TProps]](renderer TRenderer, props TProps, width, height int) string {
+// Renders all AnyRenderers in one function
+func RenderAny[TProps any, TRenderer AnyRenderer[TProps]](renderer TRenderer, props TProps, width, height int) string {
 	switch renderer := any(renderer).(type) {
 	// TODO: Change to Renderer[TProps] along with type-aliases
 	// for generics feature (Planned Go 1.20)
@@ -15,53 +16,28 @@ func RenderAny[TProps any, TRenderer AnyComponent[TProps]](renderer TRenderer, p
 	return ""
 }
 
-func RenderPropless[TRenderer AnyProplessComponent](renderer TRenderer, width, height int) string {
-	switch renderer := any(renderer).(type) {
-	case ProplessRenderer:
-		return renderer(width, height)
-	case DumbRenderer:
-		return renderer()
-	}
-
-	return ""
-}
-
-// Wrapper function
+// Wraps propful into propless renderer
 func PropfulToLess[TProps any](renderer Renderer[TProps], props TProps) ProplessRenderer {
 	return func(width, height int) string {
 		return renderer(props, width, height)
 	}
 }
 
-// Transformer for Propless -> SomeComponent
+// Transformer for AnyRenderer -> Component
 
-type proplessWrapper struct {
+type transformer[TProps any, TRenderer AnyRenderer[TProps]] struct {
 	BasicComponent
+	BasicPropfulComponent[TProps]
 
-	Renderer ProplessRenderer
+	renderer TRenderer
 }
 
-func (c *proplessWrapper) Render(width, height int) string {
-	return c.Renderer(width, height)
+func (c *transformer[TProps, TRenderer]) Render(width, height int) string {
+	return RenderAny(c.renderer, c.props, width, height)
 }
 
-func ProplessToSomeComponent(renderer ProplessRenderer) SomeComponent {
-	return &proplessWrapper{Renderer: renderer}
-}
-
-// Transformer for Propful -> SomeComponent
-
-type propfulWrapper[TProps any] struct {
-	BasicComponent
-
-	Renderer Renderer[TProps]
-	Props    TProps
-}
-
-func (c *propfulWrapper[TProps]) Render(width, height int) string {
-	return c.Renderer(c.Props, width, height)
-}
-
-func PropfulToSomeComponent[TProps any](renderer Renderer[TProps], props TProps) SomeComponent {
-	return &propfulWrapper[TProps]{Renderer: renderer, Props: props}
+// Componentifies AnyRenderer
+// Returns uninitialized component with renderer taking care of .Render()
+func Componentify[TProps any, TRenderer AnyRenderer[TProps]](renderer TRenderer) Component[TProps] {
+	return &transformer[TProps, TRenderer]{renderer: renderer}
 }
