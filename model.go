@@ -24,8 +24,8 @@ func (m model) Init() tea.Cmd {
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	lastRoute = currentRoute
 	isUpdate = true
+	wasRouteChanged = false
 
 	switch msg := msg.(type) {
 	case destroyAppMsg:
@@ -42,17 +42,18 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, nil
 	}
 
-	cmd := m.root.Update(msg)
+	rootCmd := m.root.Update(msg)
 
 	isUpdate = false
-	wasRouteChanged = !currentRoute.Equal(lastRoute)
+
+	afterUpdatesCmd := handleAfterUpdates()
 
 	// Guarantee rerender if route was changed
 	if wasRouteChanged {
-		return m, tea.Batch(updatedRoute, cmd, handleAfterUpdates())
+		return m, tea.Batch(updatedRoute, rootCmd, afterUpdatesCmd)
 	}
 
-	return m, tea.Batch(cmd, handleAfterUpdates())
+	return m, tea.Batch(rootCmd, afterUpdatesCmd)
 }
 
 func (m model) View() string {

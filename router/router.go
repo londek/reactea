@@ -58,13 +58,13 @@ func (c *Component) Render(width, height int) string {
 		return c.lastComponent.Render(width, height)
 	}
 
-	return fmt.Sprintf("Couldn't route for '%s'", reactea.CurrentRoute())
+	return fmt.Sprintf("Couldn't route for \"%s\"", reactea.CurrentRoute())
 }
 
 func (c *Component) initializeRoute() tea.Cmd {
 	var cmd tea.Cmd
 
-	if initializer, ok := c.Props()[reactea.CurrentRoute().String()]; ok {
+	if initializer, ok := c.Props()[reactea.CurrentRoute()]; ok {
 		c.lastComponent, cmd = initializer()
 	} else if initializer, ok := c.Props()["default"]; ok {
 		c.lastComponent, cmd = initializer()
