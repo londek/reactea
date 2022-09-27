@@ -2,7 +2,9 @@ package reactea
 
 func RenderAny[TProps any, TRenderer AnyComponent[TProps]](renderer TRenderer, props TProps, width, height int) string {
 	switch renderer := any(renderer).(type) {
-	case Renderer[TProps]:
+	// TODO: Change to Renderer[TProps] along with type-aliases
+	// for generics feature (Planned Go 1.20)
+	case func(TProps, int, int) string:
 		return renderer(props, width, height)
 	case ProplessRenderer:
 		return renderer(width, height)
