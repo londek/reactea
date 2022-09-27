@@ -40,7 +40,7 @@ func (c *Component) Update(msg tea.Msg) tea.Cmd {
 			// Lifted state power! Woohooo
 			c.Props().SetText(c.textinput.Value())
 
-			reactea.SetCurrentRoute(reactea.RouteOf("display-name"))
+			reactea.SetCurrentRoute("display-name")
 			return nil
 		}
 	}

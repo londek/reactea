@@ -35,7 +35,8 @@ func (c *Component) Init(reactea.NoProps) tea.Cmd {
 		},
 		"display-name": func() (reactea.SomeComponent, tea.Cmd) {
 			// Don't worry, usually it doesn't look like that!
-			return reactea.PropfulToComponent(displayname.Renderer, c.text), nil
+			// Most times calling renderer works well ;)
+			return reactea.SomeComponentify(displayname.Renderer, c.text), nil
 		},
 	})
 }
