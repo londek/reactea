@@ -24,6 +24,7 @@ func (m model) Init() tea.Cmd {
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	lastRoute = currentRoute
 	isUpdate = true
 
 	switch msg := msg.(type) {
@@ -41,15 +42,13 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, nil
 	}
 
-	var cmd tea.Cmd
-	cmd = m.root.Update(msg)
+	cmd := m.root.Update(msg)
 
 	isUpdate = false
 	wasRouteChanged = !currentRoute.Equal(lastRoute)
 
 	// Guarantee rerender if route was changed
 	if wasRouteChanged {
-		lastRoute = currentRoute
 		return m, tea.Batch(updatedRoute, cmd, handleAfterUpdates())
 	}
 
