@@ -25,19 +25,40 @@ func PropfulToLess[TProps any](renderer Renderer[TProps], props TProps) Propless
 
 // Transformer for AnyRenderer -> Component
 
-type transformer[TProps any, TRenderer AnyRenderer[TProps]] struct {
+type componentTransformer[TProps any, TRenderer AnyRenderer[TProps]] struct {
 	BasicComponent
 	BasicPropfulComponent[TProps]
 
 	renderer TRenderer
 }
 
-func (c *transformer[TProps, TRenderer]) Render(width, height int) string {
+func (c *componentTransformer[TProps, TRenderer]) Render(width, height int) string {
 	return RenderAny(c.renderer, c.props, width, height)
 }
 
 // Componentifies AnyRenderer
 // Returns uninitialized component with renderer taking care of .Render()
 func Componentify[TProps any, TRenderer AnyRenderer[TProps]](renderer TRenderer) Component[TProps] {
-	return &transformer[TProps, TRenderer]{renderer: renderer}
+	return &componentTransformer[TProps, TRenderer]{renderer: renderer}
+}
+
+// Transformer for AnyRenderer -> Component
+
+type someComponentTransformer[TProps any, TRenderer AnyRenderer[TProps]] struct {
+	BasicComponent
+
+	renderer TRenderer
+	props    TProps
+}
+
+func (c *someComponentTransformer[TProps, TRenderer]) Render(width, height int) string {
+	return RenderAny(c.renderer, c.props, width, height)
+}
+
+// I don't care about props, just give me SomeComponent
+func SomeComponentify[TProps any, TRenderer AnyRenderer[TProps]](renderer TRenderer, initialProps TProps) SomeComponent {
+	return &someComponentTransformer[TProps, TRenderer]{
+		renderer: renderer,
+		props:    initialProps,
+	}
 }
