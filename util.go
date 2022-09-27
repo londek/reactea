@@ -45,7 +45,7 @@ func (c *proplessWrapper) Render(width, height int) string {
 	return c.Renderer(width, height)
 }
 
-func ProplessToComponent(renderer ProplessRenderer) SomeComponent {
+func ProplessToSomeComponent(renderer ProplessRenderer) SomeComponent {
 	return &proplessWrapper{Renderer: renderer}
 }
 
@@ -62,6 +62,6 @@ func (c *propfulWrapper[TProps]) Render(width, height int) string {
 	return c.Renderer(c.Props, width, height)
 }
 
-func PropfulToComponent[TProps any](renderer Renderer[TProps], props TProps) SomeComponent {
+func PropfulToSomeComponent[TProps any](renderer Renderer[TProps], props TProps) SomeComponent {
 	return &propfulWrapper[TProps]{Renderer: renderer, Props: props}
 }
