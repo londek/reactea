@@ -117,7 +117,7 @@ type InvisibleComponent struct{}
 
 func (c *InvisibleComponent) Render(int, int) string { return "" }
 
-type NoProps struct{}
+type NoProps = struct{}
 
 // Destroys app before quiting
 func Destroy() tea.Msg {
