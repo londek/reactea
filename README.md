@@ -73,16 +73,16 @@ There are many utility functions for transforming stateless into stateful compon
 
 ## Reactea Routes API
 
-Routes API allows developers for easy creation of multi-page apps.
-Routes are kind of substitute for window.Location inside bubbletea
+Routes API allows developers for easy development of multi-page apps.
+They are kind of substitute for window.Location inside bubbletea
 
 ### reactea.CurrentRoute() Route
 
-Returns **copy** of current route
+Returns current route
 
 ### reactea.LastRoute() Route
 
-Returns **copy** of last route
+Returns last route
 
 ### reactea.WasRouteChanged() bool
 
@@ -95,7 +95,7 @@ It doesn't support wildcards yet or relative pathing. All data is provided from 
 
 ### router.Props
 
-router.Props is a map of route initializers keyed by routes serialized to strings following format `r1/r2/r3...etc`
+router.Props is a map of route initializers keyed by routes
 
 What is `RouteInitializer`?
 
