@@ -1,13 +1,14 @@
 # reactea
 
+[![CI](https://github.com/Londek/reactea/actions/workflows/ci.yml/badge.svg)](https://github.com/Londek/reactea/actions/workflows/ci.yml)
 [![Go Reference](https://pkg.go.dev/badge/github.com/londek/reactea.svg)](https://pkg.go.dev/github.com/londek/reactea)
-![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability-percentage/Londek/reactea)
+[![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability-percentage/Londek/reactea)](https://img.shields.io/codeclimate/maintainability-percentage/Londek/reactea)
 [![Go Report Card](https://goreportcard.com/badge/github.com/londek/reactea)](https://goreportcard.com/report/github.com/londek/reactea)
 
 Rather simple **Bubbletea companion** for **handling hierarchy** and support for **lifting state up.**\
 It Reactifies Bubbletea philosophy and makes it especially easy to work with in bigger projects.
 
-For me, personally - It's a must in project with multiple pages and component communication
+For me, personally - **It's a must** in project with multiple pages and component communication
 
 Check our example code [right here!](/example)
 
@@ -62,11 +63,11 @@ Check our example code [right here!](/example)
 
 Stateless components are represented by following function types
 
-|   | Renderer[TProps any] | ProplessRenderer | DumbRenderer |
-|----------------|:----------:|:------------------:|:--------------:|
-| **Properties** | ✅        | ❌                | ❌            |
-| **Dimensions** | ✅        | ✅                | ❌            |
-| **Arguments** | `TProps, int, int`        | `int, int`                | ❌           |
+|                | Renderer[TProps any]     | ProplessRenderer   | DumbRenderer  |
+|----------------|:------------------------:|:------------------:|:-------------:|
+| **Properties** | ✅                       | ❌                | ❌            |
+| **Dimensions** | ✅                       | ✅                | ❌            |
+| **Arguments** | `TProps, int, int`        | `int, int`         | ❌            |
 
 There are many utility functions for transforming stateless into stateful components or for rendering any component without knowing its type (`reactea.RenderAny`, `reactea.RenderPropless`)
 
