@@ -1,9 +1,6 @@
 package reactea
 
-// I'm sorry gophers, I did it for compile-time safety
-// Hopefully nobody is ever gonna get headache
-// because of this
-func RenderAny[TRenderer AnyComponent[TProps], TProps any](renderer TRenderer, props TProps, width, height int) string {
+func RenderAny[TProps any, TRenderer AnyComponent[TProps]](renderer TRenderer, props TProps, width, height int) string {
 	switch renderer := any(renderer).(type) {
 	case Renderer[TProps]:
 		return renderer(props, width, height)
@@ -16,9 +13,6 @@ func RenderAny[TRenderer AnyComponent[TProps], TProps any](renderer TRenderer, p
 	return ""
 }
 
-// I'm sorry gophers, I did it for compile-time safety
-// Hopefully nobody is ever gonna get headache
-// because of this
 func RenderPropless[TRenderer AnyProplessComponent](renderer TRenderer, width, height int) string {
 	switch renderer := any(renderer).(type) {
 	case ProplessRenderer:
