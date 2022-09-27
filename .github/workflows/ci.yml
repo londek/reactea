@@ -44,7 +44,9 @@ jobs:
         with:
           # The report file must be there, otherwise Code Climate won't find it
           coverageCommand: go test -v -coverprofile=cover.out ./...
-          coverageLocations: ${{github.workspace}}/cover.out
+          coverageLocations: |
+            ${{github.workspace}}/cover.out
+          debug: true
 
   lint:
     runs-on: ubuntu-latest
