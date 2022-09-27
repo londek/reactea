@@ -16,6 +16,10 @@ Check our example code [right here!](/example)
 
 `go get -u github.com/londek/reactea`
 
+## Example code
+
+There is no tutorial yet so I suggest [checking our example!](/example)
+
 ## General info
 
 The goal is to create components which are
@@ -47,17 +51,13 @@ making state modifiable in any lifecycle method\
 
 ### UpdateProps()
 
-`UpdateProps()` is lifecycle method that derives state from props, It can happen anytime during lifecycle. Usually called by `Init()`
+`UpdateProps()` is a lifecycle method that derives state from props, It can happen anytime during lifecycle. Usually called by `Init()`
 
 ### Notes
 
 `Update()` **IS NOT** guaranteed to be called on first-run, `Init()` for most part is, and critical logic should be there
 
 Lifecycle is **(almost, see [AfterUpdate()](#afterupdate)) fully controlled by parent component** making graph above fully theoretical and possibly invalid for third-party components
-
-## Example code
-
-Check our example code [right here!](/example)
 
 ## Stateless components
 
