@@ -65,25 +65,14 @@ type SomeComponent interface {
 	AfterUpdate() tea.Cmd
 }
 
-// I decided to give it a name "Component" and not "Renderer"
-// Because Component.Render is itself ProplessRenderer
-// (or the other way around ProplessRenderer = Component.Render)
-// So the naming is infact valid for any type of
-// components in reactea
-//
 // Why not Renderer[TProps]? It would have to be type alias
 // there are no type aliases yet for generics, but they are
 // planned for Go 1.20. Something to keep in mind for future
-type AnyComponent[TProps any] interface {
-	func(TProps, int, int) string | AnyProplessComponent
+type AnyRenderer[TProps any] interface {
+	func(TProps, int, int) string | AnyProplessRenderer
 }
 
-// I decided to give it a name "Component" and not "Renderer"
-// Because Component.Render is itself ProplessRenderer
-// (or the other way around ProplessRenderer = Component.Render)
-// So the naming is infact valid for any type of
-// components in reactea
-type AnyProplessComponent interface {
+type AnyProplessRenderer interface {
 	ProplessRenderer | DumbRenderer
 }
 
