@@ -51,23 +51,23 @@ func TestComponent(t *testing.T) {
 	}
 
 	if strings.Contains(out.String(), "default") {
-		t.Errorf("TestComponent did not echo!")
+		t.Errorf("did not echo")
 	}
 
 	if !strings.Contains(out.String(), "~") {
-		t.Errorf("TestComponent invalid echo!")
+		t.Errorf("invalid echo")
 	}
 
 	if WasRouteChanged() {
-		t.Errorf("TestComponent current route was changed!")
+		t.Errorf("current route was changed")
 	}
 
 	if CurrentRoute() != "test/test/test" {
-		t.Errorf("TestComponent current route does not equal \"test/test/test\", got \"%s\"", CurrentRoute())
+		t.Errorf("current route is wrong, expected \"test/test/test\", got \"%s\"", CurrentRoute())
 	}
 
 	if props := root.Props(); !reflect.DeepEqual(props, NoProps{}) {
-		t.Errorf("TestComponent props does not equal zero NoProps, got \"%s\"", props)
+		t.Errorf("props is not zero-value of NoProps, got \"%s\"", props)
 	}
 }
 
@@ -75,6 +75,6 @@ func TestInvisibleComponent(t *testing.T) {
 	component := &InvisibleComponent{}
 
 	if result := component.Render(1, 1); result != "" {
-		t.Errorf("TestInvisibleComponent expected empty string, got \"%s\"", result)
+		t.Errorf("expected empty string, got \"%s\"", result)
 	}
 }

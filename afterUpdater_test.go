@@ -53,10 +53,10 @@ func TestAfterUpdater(t *testing.T) {
 	}
 
 	if strings.Contains(out.String(), "Bad Test!") {
-		t.Errorf("TestAfterUpdater got bad test")
+		t.Errorf("got bad test")
 	}
 
 	if !strings.Contains(out.String(), "Hello Tests!") {
-		t.Errorf("TestAfterUpdater invalid render")
+		t.Errorf("invalid render")
 	}
 }

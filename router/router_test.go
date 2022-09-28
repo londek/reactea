@@ -70,7 +70,7 @@ func TestDefault(t *testing.T) {
 	}
 
 	if !strings.Contains(out.String(), "Hello Default!") {
-		t.Fatalf("TestDefault no default route message")
+		t.Fatalf("no default route message")
 	}
 }
 
@@ -117,11 +117,11 @@ func TestNonDefault(t *testing.T) {
 	}
 
 	if strings.Contains(out.String(), "Hello Default!") {
-		t.Fatalf("TestNonDefault got default route message")
+		t.Fatalf("got default route message")
 	}
 
 	if !strings.Contains(out.String(), "Hello Tests!") {
-		t.Fatalf("TestNonDefault got invalid route message")
+		t.Fatalf("got invalid route message")
 	}
 }
 
@@ -148,6 +148,6 @@ func TestNotFound(t *testing.T) {
 	}
 
 	if !strings.Contains(out.String(), "Couldn't route for") {
-		t.Fatalf("TestNonDefault got invalid route message")
+		t.Fatalf("got invalid route message")
 	}
 }
