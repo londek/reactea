@@ -67,3 +67,29 @@ func TestComponentify(t *testing.T) {
 		t.Errorf("DumbRenderer Componentify transformed value doesn't render correctly, got \"%s\"", result)
 	}
 }
+
+func TestSomeComponentify(t *testing.T) {
+	renderer := func(NoProps, int, int) string {
+		return "working"
+	}
+
+	proplessRenderer := func(int, int) string {
+		return "working"
+	}
+
+	dumbRenderer := func() string {
+		return "working"
+	}
+
+	if result := SomeComponentify(renderer, NoProps{}).Render(1, 1); result != "working" {
+		t.Errorf("Renderer Componentify transformed value doesn't render correctly, got \"%s\"", result)
+	}
+
+	if result := SomeComponentify(proplessRenderer, NoProps{}).Render(1, 1); result != "working" {
+		t.Errorf("ProplessRenderer Componentify transformed value doesn't render correctly, got \"%s\"", result)
+	}
+
+	if result := SomeComponentify(dumbRenderer, NoProps{}).Render(1, 1); result != "working" {
+		t.Errorf("DumbRenderer Componentify transformed value doesn't render correctly, got \"%s\"", result)
+	}
+}
