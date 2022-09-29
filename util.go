@@ -1,10 +1,12 @@
 package reactea
 
 // Renders all AnyRenderers in one function
+//
+// Note: If youj are using ProplessRenderer/DumbRenderer just pass
 func RenderAny[TProps any, TRenderer AnyRenderer[TProps]](renderer TRenderer, props TProps, width, height int) string {
 	switch renderer := any(renderer).(type) {
-	// TODO: Change to Renderer[TProps] along with type-aliases
-	// for generics feature (Planned Go 1.20)
+	// TODO: Change to Renderer[TProps] along with
+	// generics type-aliases feature (Planned Go 1.20)
 	case func(TProps, int, int) string:
 		return renderer(props, width, height)
 	case ProplessRenderer:
@@ -56,6 +58,7 @@ func (c *someComponentTransformer[TProps, TRenderer]) Render(width, height int) 
 }
 
 // I don't care about props, just give me SomeComponent
+// You should never have to use it
 func SomeComponentify[TProps any, TRenderer AnyRenderer[TProps]](renderer TRenderer, initialProps TProps) SomeComponent {
 	return &someComponentTransformer[TProps, TRenderer]{
 		renderer: renderer,
