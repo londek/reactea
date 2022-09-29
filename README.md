@@ -1,6 +1,6 @@
 # reactea
 
-[![CI](https://github.com/Londek/reactea/actions/workflows/ci.yml/badge.svg)](https://github.com/Londek/reactea/actions/workflows/ci.yml)
+[![build](https://github.com/londek/reactea/actions/workflows/build.yml/badge.svg)](https://github.com/londek/reactea/actions/workflows/build.yml)
 ![Codecov](https://img.shields.io/codecov/c/github/Londek/reactea)
 [![Go Reference](https://pkg.go.dev/badge/github.com/londek/reactea.svg)](https://pkg.go.dev/github.com/londek/reactea)
 [![Code Climate maintainability](https://img.shields.io/codeclimate/maintainability-percentage/Londek/reactea)](https://img.shields.io/codeclimate/maintainability-percentage/Londek/reactea)
