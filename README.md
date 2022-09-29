@@ -1,5 +1,6 @@
 # reactea
 
+[![Latest](https://img.shields.io/github/v/tag/londek/reactea?label=latest)](https://img.shields.io/github/v/tag/londek/reactea?label=latest)
 [![build](https://github.com/londek/reactea/actions/workflows/build.yml/badge.svg)](https://github.com/londek/reactea/actions/workflows/build.yml)
 ![Codecov](https://img.shields.io/codecov/c/github/Londek/reactea)
 [![Go Reference](https://pkg.go.dev/badge/github.com/londek/reactea.svg)](https://pkg.go.dev/github.com/londek/reactea)
