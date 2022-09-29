@@ -2,7 +2,8 @@ package reactea
 
 // Renders all AnyRenderers in one function
 //
-// Note: If youj are using ProplessRenderer/DumbRenderer just pass
+// Note: If you are using ProplessRenderer/DumbRenderer just pass
+// reactea.NoProps{} or struct{}
 func RenderAny[TProps any, TRenderer AnyRenderer[TProps]](renderer TRenderer, props TProps, width, height int) string {
 	switch renderer := any(renderer).(type) {
 	// TODO: Change to Renderer[TProps] along with
