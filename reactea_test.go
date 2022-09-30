@@ -87,10 +87,8 @@ func TestComponent(t *testing.T) {
 }
 
 func TestNew(t *testing.T) {
-	var in bytes.Buffer
-
 	t.Run("New", func(t *testing.T) {
-		program := tea.NewProgram(New(&testDefaultComponent{}), tea.WithInput(&in))
+		program := tea.NewProgram(New(&testDefaultComponent{}), WithoutInput(), tea.WithoutRenderer())
 
 		go program.Quit()
 
@@ -100,7 +98,7 @@ func TestNew(t *testing.T) {
 	})
 
 	t.Run("NewProgram", func(t *testing.T) {
-		program := NewProgram(&testDefaultComponent{}, tea.WithInput(&in))
+		program := NewProgram(&testDefaultComponent{}, WithoutInput(), tea.WithoutRenderer())
 
 		go program.Quit()
 
