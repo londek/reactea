@@ -1,8 +1,6 @@
 package reactea
 
-import (
-	tea "github.com/charmbracelet/bubbletea"
-)
+import tea "github.com/charmbracelet/bubbletea"
 
 // Useful for constraining some actions to update-stage only
 var isUpdate bool
@@ -32,7 +30,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.root.Destroy()
 		return m, tea.Quit
 	// We want component to know at what size should it render
-	// and unify size handling across all reactea components
+	// and unify size handling across all Reactea components
 	// That's why we don't forward WindowSizeMsg, but tell
 	// target width and height with Render()
 	//
