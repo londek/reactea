@@ -3,7 +3,7 @@ package reactea
 // Renders all AnyRenderers in one function
 //
 // Note: If you are using ProplessRenderer/DumbRenderer just pass
-// reactea.NoProps{} or struct{}
+// reactea.NoProps{} or struct{}{}
 func RenderAny[TProps any, TRenderer AnyRenderer[TProps]](renderer TRenderer, props TProps, width, height int) string {
 	switch renderer := any(renderer).(type) {
 	// TODO: Change to Renderer[TProps] along with
@@ -43,26 +43,4 @@ func (c *componentTransformer[TProps, TRenderer]) Render(width, height int) stri
 // Returns uninitialized component with renderer taking care of .Render()
 func Componentify[TProps any, TRenderer AnyRenderer[TProps]](renderer TRenderer) Component[TProps] {
 	return &componentTransformer[TProps, TRenderer]{renderer: renderer}
-}
-
-// Transformer for AnyRenderer -> Component
-
-type someComponentTransformer[TProps any, TRenderer AnyRenderer[TProps]] struct {
-	BasicComponent
-
-	renderer TRenderer
-	props    TProps
-}
-
-func (c *someComponentTransformer[TProps, TRenderer]) Render(width, height int) string {
-	return RenderAny(c.renderer, c.props, width, height)
-}
-
-// I don't care about props, just give me SomeComponent
-// You should never have to use it
-func SomeComponentify[TProps any, TRenderer AnyRenderer[TProps]](renderer TRenderer, initialProps TProps) SomeComponent {
-	return &someComponentTransformer[TProps, TRenderer]{
-		renderer: renderer,
-		props:    initialProps,
-	}
 }
