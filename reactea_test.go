@@ -5,6 +5,7 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -40,18 +41,27 @@ func (c *testComponenent) Render(width int, height int) string {
 }
 
 func TestComponent(t *testing.T) {
-	var in, out bytes.Buffer
+	var in, out = &bytes.Buffer{}, &bytes.Buffer{}
 
-	in.WriteString("~~~x")
+	in.WriteString("~~~")
 
 	root := &testComponenent{
 		echoKey: "default",
 	}
 
-	program := NewProgram(root, tea.WithInput(&in), tea.WithOutput(&out))
+	program := NewProgram(root, tea.WithInput(in), tea.WithOutput(out))
 
 	// Test for window size
-	go program.Send(tea.WindowSizeMsg{Width: 1, Height: 1})
+	go func() {
+		// Simulate initial window size
+		program.Send(tea.WindowSizeMsg{Width: 1, Height: 1})
+
+		// Give time to catch up
+		time.Sleep(50 * time.Millisecond)
+
+		// Simulate pressing X
+		program.Send(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'x'}, Alt: false})
+	}()
 
 	if err := program.Start(); err != nil {
 		t.Fatal(err)
