@@ -11,8 +11,7 @@ It Reactifies Bubble Tea philosophy and makes it especially easy to work with in
 
 For me, personally - **It's a must** in project with multiple pages and component communication
 
-Check our quickstart [right here](#quickstart)\
-or other examples [here!](/examples)
+Check our quickstart [right here](#quickstart) or other examples [here!](/examples)
 
 ## Installation
 
