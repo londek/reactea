@@ -33,10 +33,10 @@ func (c *Component) Init(reactea.NoProps) tea.Cmd {
 				SetText: c.setText,
 			})
 		},
-		"display-name": func() (reactea.SomeComponent, tea.Cmd) {
-			// Don't worry, usually it doesn't look like that!
-			// Most times calling renderer works well ;)
-			return reactea.SomeComponentify(displayname.Renderer, c.text), nil
+		"displayname": func() (reactea.SomeComponent, tea.Cmd) {
+			component := reactea.Componentify[string](displayname.Renderer)
+
+			return component, component.Init(c.text)
 		},
 	})
 }
