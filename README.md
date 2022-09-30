@@ -216,6 +216,16 @@ if err := program.Start(); err != nil {
 
 ![Component lifecycle image](.github/lifecycle-diagram.png)
 
+Reactea component lifecycle consists of 6 methods (while Bubble Tea only 3)
+|Method|Purpose|
+|-|-|
+| `Init(TProps) tea.Cmd` | It's called first. All critical stuff should happen here. It also supports IO through tea.Cmd |
+| `Update(tea.Msg) tea.Cmd` | It reacts to Bubble Tea IO and should update state accordingly |
+| `AfterUpdate() tea.Cmd` | It's called after root component finishes `Update()`. [Components should queue themselves](#afterupdate) |
+| `Render(int, int) string` | It renders the UI. The two arguments are width and height, they should be calculated by parent |
+| `Destroy()` | It's called whenever Component is about to be GC-ed. Please note that it's parent's responsibility to call `Destroy()` |
+| `UpdateProps(TProps)` | Derives state from given properties. Usually called from `Init()` |
+
 Reactea takes pointer approach for components making state modifiable in any lifecycle method\
 **There are also 2 additional lifecycle methods: [AfterUpdate()](#afterupdate) and [UpdateProps()](#updateprops)**
 
