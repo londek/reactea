@@ -160,14 +160,14 @@ func New() *Component {
 func (c *Component) Init(reactea.NoProps) tea.Cmd {
     // Does it remind you of something? react-router!
     return c.mainRouter.Init(map[string]router.RouteInitializer{
-        "default": func() (reactea.SomeComponent, tea.Cmd) {
+        "default": func(router.Params) (reactea.SomeComponent, tea.Cmd) {
             component := input.New()
 
             return component, component.Init(input.Props{
                 SetText: c.setText, // Can also use "lambdas" (function can be created here)
             })
         },
-        "displayname": func() (reactea.SomeComponent, tea.Cmd) {
+        "displayname": func(router.Params) (reactea.SomeComponent, tea.Cmd) {
             // RouteInitializer wants SomeComponent so we have to convert
             // Stateless component (renderer) to Component
             component := reactea.Componentify[string](displayname.Renderer)
