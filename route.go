@@ -1,8 +1,6 @@
 package reactea
 
-import (
-	tea "github.com/charmbracelet/bubbletea"
-)
+import tea "github.com/charmbracelet/bubbletea"
 
 // Global Route object, substitute of window.location
 // Feel free to use standard path package
@@ -31,11 +29,9 @@ func SetCurrentRoute(newRoute string) {
 	currentRoute = newRoute
 }
 
-type updatedRoutesMsg struct{}
-
 // It might be important to do so in some scenarios.
 // Basically causes rerender so ALL components are
 // aware of changed routes
 func updatedRoute() tea.Msg {
-	return updatedRoutesMsg{}
+	return nil
 }
