@@ -85,3 +85,25 @@ func TestComponent(t *testing.T) {
 		t.Errorf("expected lastHeigth 1, but got %d", root.lastWidth)
 	}
 }
+
+func TestNew(t *testing.T) {
+	t.Run("New", func(t *testing.T) {
+		program := tea.NewProgram(New(&testDefaultComponent{}))
+
+		go program.Quit()
+
+		if err := program.Start(); err != nil {
+			t.Fatal(err)
+		}
+	})
+
+	t.Run("NewProgram", func(t *testing.T) {
+		program := NewProgram(&testDefaultComponent{})
+
+		go program.Quit()
+
+		if err := program.Start(); err != nil {
+			t.Fatal(err)
+		}
+	})
+}
