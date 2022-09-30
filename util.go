@@ -4,19 +4,21 @@ package reactea
 //
 // Note: If you are using ProplessRenderer/DumbRenderer just pass
 // reactea.NoProps{} or struct{}{}
-func RenderAny[TProps any, TRenderer AnyRenderer[TProps]](renderer TRenderer, props TProps, width, height int) string {
+//
+// Note: Using named return type for 100% coverage
+func RenderAny[TProps any, TRenderer AnyRenderer[TProps]](renderer TRenderer, props TProps, width, height int) (result string) {
 	switch renderer := any(renderer).(type) {
 	// TODO: Change to Renderer[TProps] along with
 	// generics type-aliases feature (Planned Go 1.20)
 	case func(TProps, int, int) string:
-		return renderer(props, width, height)
+		result = renderer(props, width, height)
 	case ProplessRenderer:
-		return renderer(width, height)
+		result = renderer(width, height)
 	case DumbRenderer:
-		return renderer()
+		result = renderer()
 	}
 
-	return ""
+	return
 }
 
 // Wraps propful into propless renderer
