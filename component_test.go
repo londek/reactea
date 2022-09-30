@@ -35,7 +35,7 @@ func TestDefaultComponent(t *testing.T) {
 
 		time.Sleep(20 * time.Millisecond)
 
-		program.Kill()
+		program.Quit()
 	}()
 
 	if err := program.Start(); err != nil {
