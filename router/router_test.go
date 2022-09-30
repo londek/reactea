@@ -2,6 +2,7 @@ package router
 
 import (
 	"bytes"
+	"fmt"
 	"strings"
 	"testing"
 
@@ -48,7 +49,7 @@ func TestDefault(t *testing.T) {
 
 	root := &testComponenent{
 		testRoutes: map[string]RouteInitializer{
-			"default": func() (reactea.SomeComponent, tea.Cmd) {
+			"default": func(Params) (reactea.SomeComponent, tea.Cmd) {
 				renderer := func() string {
 					return "Hello Default!"
 				}
@@ -77,14 +78,14 @@ func TestNonDefault(t *testing.T) {
 
 	root := &testComponenent{
 		testRoutes: map[string]RouteInitializer{
-			"default": func() (reactea.SomeComponent, tea.Cmd) {
+			"default": func(Params) (reactea.SomeComponent, tea.Cmd) {
 				renderer := func() string {
 					return "Hello Default!"
 				}
 
 				return reactea.Componentify[reactea.NoProps](renderer), nil
 			},
-			"test/test": func() (reactea.SomeComponent, tea.Cmd) {
+			"test/test": func(Params) (reactea.SomeComponent, tea.Cmd) {
 				renderer := func() string {
 					return "Hello Tests!"
 				}
@@ -117,14 +118,14 @@ func TestRouteChange(t *testing.T) {
 
 	root := &testComponenent{
 		testRoutes: map[string]RouteInitializer{
-			"default": func() (reactea.SomeComponent, tea.Cmd) {
+			"default": func(Params) (reactea.SomeComponent, tea.Cmd) {
 				renderer := func() string {
 					return "Hello Default!"
 				}
 
 				return reactea.Componentify[reactea.NoProps](renderer), nil
 			},
-			"test/test": func() (reactea.SomeComponent, tea.Cmd) {
+			"test/test": func(Params) (reactea.SomeComponent, tea.Cmd) {
 				renderer := func() string {
 					return "Hello Tests!"
 				}
@@ -176,5 +177,58 @@ func TestNotFound(t *testing.T) {
 
 	if !strings.Contains(out.String(), "Couldn't route for") {
 		t.Fatalf("got invalid route message")
+	}
+}
+
+func TestRouteWithParam(t *testing.T) {
+	var in, out bytes.Buffer
+
+	in.WriteString("123")
+
+	root := &testComponenent{
+		testRoutes: map[string]RouteInitializer{
+			"default": func(Params) (reactea.SomeComponent, tea.Cmd) {
+				renderer := func() string {
+					return "Hello Default!"
+				}
+
+				return reactea.Componentify[reactea.NoProps](renderer), nil
+			},
+			"test/:foo": func(params Params) (reactea.SomeComponent, tea.Cmd) {
+				renderer := func() string {
+					return fmt.Sprintf("Hello Tests! Param foo is %s", params["foo"])
+				}
+
+				return reactea.Componentify[reactea.NoProps](renderer), nil
+			},
+		},
+		testUpdater: func(c *testComponenent) tea.Cmd {
+			if c.updateN == 0 {
+				reactea.SetCurrentRoute("test/wellDone")
+
+				return nil
+			} else {
+				return reactea.Destroy
+			}
+		},
+		router: New(),
+	}
+
+	program := reactea.NewProgram(root, tea.WithInput(&in), tea.WithOutput(&out))
+
+	if err := program.Start(); err != nil {
+		t.Fatal(err)
+	}
+
+	if strings.Contains(out.String(), "Hello Default!") {
+		t.Fatalf("got default route message")
+	}
+
+	if !strings.Contains(out.String(), "Hello Tests!") {
+		t.Fatalf("got invalid route message")
+	}
+
+	if !strings.Contains(out.String(), "Hello Tests! Param foo is wellDone") {
+		t.Fatalf("got valid route message, but most likely wrong param")
 	}
 }

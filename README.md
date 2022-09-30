@@ -11,7 +11,8 @@ It Reactifies Bubble Tea philosophy and makes it especially easy to work with in
 
 For me, personally - **It's a must** in project with multiple pages and component communication
 
-Check our example code [right here!](/example)
+Check our quickstart [right here](#quickstart)\
+or other examples [here!](/examples)
 
 ## Installation
 
@@ -37,7 +38,7 @@ Always return `reactea.Destroy` instead of `tea.Quit` in order to follow our con
 As of now Go doesn't support type aliases for generics, so `Renderer[TProps]` has to be explicitly casted.\
 It's planned for Go 1.20
 
-## [Quickstart](/example)
+## [Quickstart](/examples/quickstart)
 
 Reactea unlike Bubble Tea implements two-way communication, very React-like communication.\
 If you have experience with React you are gonna love Reactea straight away!
@@ -255,7 +256,7 @@ Stateless components are represented by following function types
 
 There are many utility functions for transforming stateless into stateful components or for rendering any component without knowing its type (`reactea.RenderAny`)
 
-## Reactea Routes API
+## Routes API
 
 Routes API allows developers for easy development of multi-page apps.
 They are kind of substitute for window.Location inside Bubble Tea
@@ -271,6 +272,16 @@ Returns last route
 ### reactea.WasRouteChanged() bool
 
 returns `LastRoute() != CurrentRoute()`
+
+## Reactea Routes now support params
+
+Params have been introduced in order to allow routes like: `teams/123/player/4`
+
+Params have to follow regex `^:.*$`\
+`^` being beginning of current path level (`/^level/`)\
+`$`being end of current path level (`/level$/`)
+
+Note that params support wildcards with single `:`, like `teams/:/player`. `teams/123/player`, `teams/456/player` etc will be matched no matter what and param will be ignored in param map.
 
 ## Router Component
 

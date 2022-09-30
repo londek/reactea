@@ -7,7 +7,8 @@ import (
 	"github.com/londek/reactea"
 )
 
-type RouteInitializer func() (reactea.SomeComponent, tea.Cmd)
+type Params = map[string]string
+type RouteInitializer func(Params) (reactea.SomeComponent, tea.Cmd)
 
 type Component struct {
 	reactea.BasicComponent
@@ -65,10 +66,24 @@ func (c *Component) initializeRoute() tea.Cmd {
 	var cmd tea.Cmd
 
 	if initializer, ok := c.Props()[reactea.CurrentRoute()]; ok {
-		c.lastComponent, cmd = initializer()
+		c.lastComponent, cmd = initializer(nil)
+	} else if initializer, params, ok := c.findMatchingRouteInitializer(); ok {
+		c.lastComponent, cmd = initializer(params)
 	} else if initializer, ok := c.Props()["default"]; ok {
-		c.lastComponent, cmd = initializer()
+		c.lastComponent, cmd = initializer(nil)
 	}
 
 	return cmd
+}
+
+func (c *Component) findMatchingRouteInitializer() (RouteInitializer, Params, bool) {
+	currentRoute := reactea.CurrentRoute()
+
+	for placeholder, initializer := range c.Props() {
+		if params, ok := reactea.RouteMatchesPlaceholder(currentRoute, placeholder); ok {
+			return initializer, params, true
+		}
+	}
+
+	return nil, nil, false
 }
