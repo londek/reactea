@@ -1,4 +1,4 @@
-# reactea
+# Reactea
 
 [![Latest](https://img.shields.io/github/v/tag/londek/reactea?label=latest)](https://img.shields.io/github/v/tag/londek/reactea?label=latest)
 [![build](https://github.com/londek/reactea/actions/workflows/build.yml/badge.svg)](https://github.com/londek/reactea/actions/workflows/build.yml)
@@ -6,8 +6,8 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/londek/reactea.svg)](https://pkg.go.dev/github.com/londek/reactea)
 [![Go Report Card](https://goreportcard.com/badge/github.com/londek/reactea)](https://goreportcard.com/report/github.com/londek/reactea)
 
-Rather simple **Bubbletea companion** for **handling hierarchy** and support for **lifting state up.**\
-It Reactifies Bubbletea philosophy and makes it especially easy to work with in bigger projects.
+Rather simple **Bubble Tea companion** for **handling hierarchy** and support for **lifting state up.**\
+It Reactifies Bubble Tea philosophy and makes it especially easy to work with in bigger projects.
 
 For me, personally - **It's a must** in project with multiple pages and component communication
 
@@ -16,10 +16,6 @@ Check our example code [right here!](/example)
 ## Installation
 
 `go get -u github.com/londek/reactea`
-
-## Example code
-
-There is no tutorial yet so I suggest [checking our example!](/example)
 
 ## General info
 
@@ -32,21 +28,195 @@ The goal is to create components which are
 - easier to code
 - all of that without code duplication
 
-The extreme performance is not main goal of this package, because either way Bubbletea\
+The extreme performance is not main goal of this package, because either way Bubble Tea\
 refresh rate is only 60hz and 50 allocations in entire **runtime** won't really hurt anyone.\
 Most info is currently in source code so I suggest checking it out
 
-Always return `reactea.Destroy` instead of `tea.Quit` in order to follow our convention\
+Always return `reactea.Destroy` instead of `tea.Quit` in order to follow our convention
 
 As of now Go doesn't support type aliases for generics, so Renderer\[TProps\] has to be explicitely casted.\
 It's planned for Go 1.20
+
+## [Quickstart](/example)
+
+Reactea unlike Bubble Tea implements two-way communication, very React-like communication.\
+If you have experience with React you are gonna love Reactea straight away!
+
+While it may look in following tutorial that Reactea overcomplicates things, trust me, for major projects it's a lifesaver!
+
+In this tutorial we are going to make application that consists of 2 pages.
+
+- The `input` (aka `index`, in reactea `default`) page for inputting your name
+- The `displayname` page for displaying your name
+
+### [Lifecycle](#component-lifecycle)
+
+More detailed docs about component lifecycle can be found [here](#component-lifecycle), we are only gonna go through basics.
+
+Reactea component lifecycle consists of 6 methods (while Bubble Tea only 3)
+|Method|Purpose|
+|-|-|
+| `Init(TProps) tea.Cmd` | It's called first. All critical stuff should happen here. It also supports IO through tea.Cmd |
+| `Update(tea.Msg) tea.Cmd` | It reacts to Bubble Tea IO and should update state accordingly |
+| `AfterUpdate() tea.Cmd` | It's called after root component finishes `Update()`. [Components should queue themselves](#afterupdate) |
+| `Render(int, int) string` | It renders the UI. The two arguments are width and height, they should be calculated by parent |
+| `Destroy()` | It's called whenever Component is about to be GC-ed. Please note that it's parent's responsibility to call `Destroy()` |
+| `UpdateProps(TProps)` | Derives state from given properties. Usually called from `Init()` |
+
+Your first application should consist only of `Update` and `Render`, all other methods will be implemented by `reactea.BasicComponent` and `reactea.BasicPropfulComponent`.
+
+Let's get to work!
+
+### The `input` page
+
+`/pages/input/input.go`
+
+```go
+type Component struct {
+    reactea.BasicComponent                // It implements AfterUpdate() for us, so we don't have to care!
+    reactea.BasicPropfulComponent[Props]  // It implements props backend - UpdateProps() and Props()
+
+    textinput textinput.Model             // Input for inputting name
+}
+
+type Props struct {
+    SetText func(string)  // SetText function for lifting state up
+}
+
+func New() *Component {
+    return &Component{textinput: textinput.New()}
+}
+
+func (c *Component) Init(props Props) tea.Cmd {
+    // Always derive props in Init()! If you are not replacing Init(),
+    // reactea.BasicPropfulComponent will take care of it
+    c.UpdateProps(props)
+    
+    return c.textinput.Focus()
+}
+
+func (c *Component) Update(msg tea.Msg) tea.Cmd {
+    switch msg := msg.(type) {
+    case tea.KeyMsg:
+        if msg.Type == tea.KeyEnter {
+            // Lifted state power! Woohooo
+            c.Props().SetText(c.textinput.Value())
+
+            // Navigate to displayname, please
+            reactea.SetCurrentRoute("displayname")
+            return nil
+        }
+    }
+
+    var cmd tea.Cmd
+    c.textinput, cmd = c.textinput.Update(msg)
+    return cmd
+}
+
+// Here we are not using width and height, but you can!
+func (c *Component) Render(int, int) string {
+    return fmt.Sprintf("Enter your name: %s\nAnd press [ Enter ]", c.textinput.View())
+}
+```
+
+#### The `displayname` page
+
+`/pages/displayname/displayname.go`
+
+```go
+import (
+ "fmt"
+)
+
+// Our prop(s) is a string itself!
+type Props = string
+
+// Stateless components?!?!
+func Renderer(text Props, width, height int) string {
+ return fmt.Sprintf("OMG! Hello %s!", text)
+}
+```
+
+### Main component
+
+`/app/app.go`
+
+```go
+type Component struct {
+    reactea.BasicComponent                          // It implements AfterUpdate()
+    reactea.BasicPropfulComponent[reactea.NoProps]  // It implements props backend - UpdateProps() and Props()
+
+    mainRouter reactea.Component[router.Props]      // Our router
+
+    text string // The name
+}
+
+func New() *Component {
+    return &Component{
+        mainRouter: router.New(),
+    }
+}
+
+func (c *Component) Init(reactea.NoProps) tea.Cmd {
+    // Does it remind you of something? react-router!
+    return c.mainRouter.Init(map[string]router.RouteInitializer{
+        "default": func() (reactea.SomeComponent, tea.Cmd) {
+            component := input.New()
+
+            return component, component.Init(input.Props{
+                SetText: c.setText, // Can also use "lambdas" (function can be created here)
+            })
+        },
+        "displayname": func() (reactea.SomeComponent, tea.Cmd) {
+            // RouteInitializer wants SomeComponent so we have to convert
+            // Stateless component (renderer) to Component
+            component := reactea.Componentify[string](displayname.Renderer)
+
+            return component, component.Init(c.text)
+        },
+    })
+}
+
+func (c *Component) Update(msg tea.Msg) tea.Cmd {
+    switch msg := msg.(type) {
+    case tea.KeyMsg:
+        // ctrl+c support 
+        if msg.String() == "ctrl+c" {
+            return reactea.Destroy
+        }
+    }
+
+    return c.mainRouter.Update(msg)
+}
+
+func (c *Component) Render(width, height int) string {
+    return c.mainRouter.Render(width, height)
+}
+
+func (c *Component) setText(text string) {
+    c.text = text
+}
+```
+
+#### Main
+
+`main.go`
+
+```go
+// reactea.NewProgram initializes program with
+// "translation layer", so Reactea components work
+program := reactea.NewProgram(app.New())
+
+if err := program.Start(); err != nil {
+    panic(err)
+}
+```
 
 ## Component lifecycle
 
 ![Component lifecycle image](.github/lifecycle-diagram.png)
 
-reactea takes pointer approach for components
-making state modifiable in any lifecycle method\
+Reactea takes pointer approach for components making state modifiable in any lifecycle method\
 **There are also 2 additional lifecycle methods: [AfterUpdate()](#afterupdate) and [UpdateProps()](#updateprops)**
 
 ### AfterUpdate()
@@ -78,7 +248,7 @@ There are many utility functions for transforming stateless into stateful compon
 ## Reactea Routes API
 
 Routes API allows developers for easy development of multi-page apps.
-They are kind of substitute for window.Location inside bubbletea
+They are kind of substitute for window.Location inside Bubble Tea
 
 ### reactea.CurrentRoute() Route
 
