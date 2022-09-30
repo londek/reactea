@@ -14,6 +14,8 @@ type testComponenent struct {
 	BasicPropfulComponent[NoProps]
 
 	echoKey string
+
+	lastWidth, lastHeight int
 }
 
 func (c *testComponenent) Update(msg tea.Msg) tea.Cmd {
@@ -31,7 +33,9 @@ func (c *testComponenent) Update(msg tea.Msg) tea.Cmd {
 	return nil
 }
 
-func (c *testComponenent) Render(int, int) string {
+func (c *testComponenent) Render(width int, height int) string {
+	c.lastWidth, c.lastHeight = width, height
+
 	return c.echoKey
 }
 
@@ -44,7 +48,10 @@ func TestComponent(t *testing.T) {
 		echoKey: "default",
 	}
 
-	program := tea.NewProgram(New(root), tea.WithInput(&in), tea.WithOutput(&out))
+	program := NewProgram(root, tea.WithInput(&in), tea.WithOutput(&out))
+
+	// Test for window size
+	go program.Send(tea.WindowSizeMsg{Width: 1, Height: 1})
 
 	if err := program.Start(); err != nil {
 		t.Fatal(err)
@@ -69,12 +76,12 @@ func TestComponent(t *testing.T) {
 	if props := root.Props(); !reflect.DeepEqual(props, NoProps{}) {
 		t.Errorf("props is not zero-value of NoProps, got \"%s\"", props)
 	}
-}
 
-func TestInvisibleComponent(t *testing.T) {
-	component := &InvisibleComponent{}
+	if root.lastWidth != 1 {
+		t.Errorf("expected lastWidth 1, but got %d", root.lastWidth)
+	}
 
-	if result := component.Render(1, 1); result != "" {
-		t.Errorf("expected empty string, got \"%s\"", result)
+	if root.lastHeight != 1 {
+		t.Errorf("expected lastHeigth 1, but got %d", root.lastWidth)
 	}
 }
