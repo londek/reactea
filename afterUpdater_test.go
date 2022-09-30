@@ -36,7 +36,7 @@ func (c *testAfterUpdaterComponenent) Render(int, int) string {
 	return c.text
 }
 
-func TestAfterUpdater(t *testing.T) {
+func TestAfterUpdate(t *testing.T) {
 	var in, out bytes.Buffer
 
 	in.WriteString("123")
@@ -46,7 +46,7 @@ func TestAfterUpdater(t *testing.T) {
 		text:     "Bad Test!",
 	}
 
-	program := tea.NewProgram(New(root), tea.WithInput(&in), tea.WithOutput(&out))
+	program := NewProgram(root, tea.WithInput(&in), tea.WithOutput(&out))
 
 	if err := program.Start(); err != nil {
 		t.Fatal(err)
@@ -58,5 +58,13 @@ func TestAfterUpdater(t *testing.T) {
 
 	if !strings.Contains(out.String(), "Hello Tests!") {
 		t.Errorf("invalid render")
+	}
+}
+
+func TestAfterUpdateNil(t *testing.T) {
+	AfterUpdate(nil)
+
+	if len(afterUpdaters) != 0 {
+		t.Errorf("expected afterUpdaters slice to have len 0, but got %d", len(afterUpdaters))
 	}
 }

@@ -28,9 +28,7 @@ func New() *Component {
 func (c *Component) Init(props Props) tea.Cmd {
 	c.UpdateProps(props)
 
-	c.textinput.Focus()
-
-	return textinput.Blink
+	return c.textinput.Focus()
 }
 
 func (c *Component) Update(msg tea.Msg) tea.Cmd {
@@ -40,7 +38,8 @@ func (c *Component) Update(msg tea.Msg) tea.Cmd {
 			// Lifted state power! Woohooo
 			c.Props().SetText(c.textinput.Value())
 
-			reactea.SetCurrentRoute("display-name")
+			reactea.SetCurrentRoute("displayname")
+
 			return nil
 		}
 	}
