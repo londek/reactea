@@ -19,11 +19,13 @@ func (*testDefaultComponent) Render(int, int) string {
 	return "test passed"
 }
 func TestDefaultComponent(t *testing.T) {
-	var out bytes.Buffer
+	var in, out bytes.Buffer
 
 	component := &testDefaultComponent{}
 
-	program := NewProgram(component, tea.WithOutput(&out))
+	// Have to use WithInput so Github Actions test doesn't fail
+	// /dev/tty is restricted.
+	program := NewProgram(component, tea.WithInput(&in), tea.WithOutput(&out))
 
 	go func() {
 		t.Run("afterUpdate", func(t *testing.T) {
