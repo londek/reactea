@@ -8,7 +8,7 @@ import (
 
 type Props = int
 
-func Renderer(playerId Props, width, height int) string {
+func Render(playerId Props, width, height int) string {
 	if player, ok := data.Players[playerId]; ok {
 		return fmt.Sprintf("Name: %s. Year of birth: %d. Team: %s.\nPress ctrl+c to exit or U to go back!", player.Name, player.YearOfBirth, player.Team)
 	} else {

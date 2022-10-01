@@ -46,7 +46,7 @@ func (c *Component) Update(msg tea.Msg) tea.Cmd {
 				return nil
 			}
 
-			reactea.SetCurrentRoute(fmt.Sprintf("player/%d", n))
+			reactea.SetCurrentRoute(fmt.Sprintf("players/%d", n))
 			return nil
 		}
 	}

@@ -10,6 +10,6 @@ type Props = string
 // Stateless components?!?!
 // Here we are not using width and height, but you can!
 // Using lipgloss styles for example
-func Renderer(text Props, width, height int) string {
+func Render(text Props, width, height int) string {
 	return fmt.Sprintf("OMG! Hello %s!", text)
 }

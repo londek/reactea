@@ -35,7 +35,7 @@ func (c *Component) Init(reactea.NoProps) tea.Cmd {
 			})
 		},
 		"displayname": func(router.Params) (reactea.SomeComponent, tea.Cmd) {
-			component := reactea.Componentify[string](displayname.Renderer)
+			component := reactea.Componentify[string](displayname.Render)
 
 			return component, component.Init(c.text)
 		},
