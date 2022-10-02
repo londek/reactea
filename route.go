@@ -41,6 +41,7 @@ func SetCurrentRoute(newRoute string) {
 // ^ being beginning of current path level (/^level/)
 // $ being end of current path level (/level$/)
 //
+// Note: Entire matched route can be accessed with key "$"
 // Note: that it allows for defining wildcards with foo/:/bar
 // Note: Duplicate params will result in overwrite of first param
 func RouteMatchesPlaceholder(route string, placeholder string) (params map[string]string, ok bool) {
@@ -53,7 +54,9 @@ func RouteMatchesPlaceholder(route string, placeholder string) (params map[strin
 		return
 	}
 
-	params = make(map[string]string, len(placeholderLevels))
+	params = make(map[string]string, len(placeholderLevels)+1)
+
+	params["$"] = route
 
 	for i, routeLevel := range routeLevels {
 		placeholderLevel := placeholderLevels[i]

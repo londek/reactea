@@ -22,15 +22,15 @@ func TestRoutePlaceholderMatching(t *testing.T) {
 		route, placeholder string
 		expected           map[string]string
 	}{
-		{"", "", map[string]string{}},
+		{"", "", map[string]string{"$": ""}},
 		{"teams/foo", "teams", nil},
 		{"", "teams", nil},
 		{"teams", "", nil},
-		{"teams", "teams", map[string]string{}},
-		{"teams/123", "teams/:teamId", map[string]string{"teamId": "123"}},
-		{"teams/foo/234", "teams/:/:teamId", map[string]string{"teamId": "234"}},
-		{"teams/123/234", "teams/:teamId/:teamId", map[string]string{"teamId": "234"}},
-		{"teams/123/234", "teams/:teamId/:playerId", map[string]string{"teamId": "123", "playerId": "234"}},
+		{"teams", "teams", map[string]string{"$": "teams"}},
+		{"teams/123", "teams/:teamId", map[string]string{"$": "teams/123", "teamId": "123"}},
+		{"teams/foo/234", "teams/:/:teamId", map[string]string{"$": "teams/foo/234", "teamId": "234"}},
+		{"teams/123/234", "teams/:teamId/:teamId", map[string]string{"$": "teams/123/234", "teamId": "234"}},
+		{"teams/123/234", "teams/:teamId/:playerId", map[string]string{"$": "teams/123/234", "teamId": "123", "playerId": "234"}},
 	}
 
 	for _, testCase := range testCases {
