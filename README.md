@@ -23,7 +23,7 @@ Check our quickstart [right here](#quickstart) or other examples [here!](/exampl
 
 ## General info
 
-The goal is to create components which are
+The goal is to create components that are
 
 - dimensions-aware (especially unify all setSize conventions)
 - propful
