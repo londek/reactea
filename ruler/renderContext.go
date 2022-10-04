@@ -1,8 +1,6 @@
 package ruler
 
 import (
-	"fmt"
-
 	"github.com/AvraamMavridis/randomcolor"
 	"github.com/charmbracelet/lipgloss"
 )
@@ -13,13 +11,33 @@ func Debug() {
 	debug = true
 }
 
-type Renderer = func(*RenderContext)
+type RenderedElement struct {
+	inline  bool
+	element string
+}
+
+type RenderedElements []RenderedElement
+
+func (re RenderedElements) Join() (result string) {
+	result += re[0].element
+
+	for _, element := range re[1:] {
+		if !element.inline {
+			result += "\n"
+		}
+
+		result += element.element
+	}
+
+	return
+}
+
+type Renderer interface{ Render(*RenderContext) }
 
 // RenderContext represents current level in Renderer context tree (reactea's Component tree)
 // In TUI terms you could say RenderContext is block
 type RenderContext struct {
-	axis      Axis
-	direction Direction
+	display display
 
 	width, height                 LengthNumber
 	widthAttr, heightAttr         LengthAttribute
@@ -47,8 +65,6 @@ func ReverseSlice[T any](s []T) {
 	}
 }
 
-type SizeContextOption func(*RenderContext)
-
 func Height[T Length](height T) {
 	// switch any(height).(type) {
 	// case LengthNumber:
@@ -64,74 +80,64 @@ func (rc *RenderContext) Propagate(child *RenderContext) {
 	rc.parent.Propagate(rc)
 }
 
-func (rc *RenderContext) Add(renderer Renderer, opts ...SizeContextOption) *RenderContext {
+func (rc *RenderContext) Add(renderer Renderer) *RenderContext {
 	child := rc.Child()
 
-	rc.Apply(opts...)
-
-	renderer(child)
+	renderer.Render(child)
 
 	rc.childrenContexts = append(rc.childrenContexts, child)
 
 	return child
 }
 
-func (rc *RenderContext) AddParagraph(text string, opts ...SizeContextOption) *RenderContext {
-	return rc.Add(func(rc *RenderContext) {
-		rc.Value(text)
-	}, opts...)
-}
-
 func (rc RenderContext) String() (result string) {
-	var elements []string
-
 	if len(rc.childrenContexts) == 0 {
 		return rc.value
-	} else {
-		for _, x := range rc.childrenContexts {
-			elements = append(elements, x.String())
+	}
+
+	elements := make(RenderedElements, 0, len(rc.childrenContexts))
+
+	for _, child := range rc.childrenContexts {
+		element := child.String()
+
+		if debug {
+			element = lipgloss.NewStyle().ColorWhitespace(true).Background(lipgloss.Color(randomcolor.GetRandomColorInHex())).Render(element)
+		}
+
+		switch child.display {
+		case Block:
+
+			elements = append(elements, RenderedElement{false, element})
+		case Inline:
+			elements = append(elements, RenderedElement{true, element})
+		case InlineBlock:
+		default:
+			panic("unsupported display")
 		}
 	}
 
-	if rc.direction == MaxToMin {
-		ReverseSlice(elements)
-	}
+	return elements.Join()
 
-	fmt.Println(elements)
+	// if rc.display == Block {
+	// 	widthPerElement := int(rc.width)
+	// 	heightPerElement := int(rc.height) / len(elements)
 
-	if rc.axis == Vertical {
-		widthPerElement := int(rc.width)
-		heightPerElement := int(rc.height) / len(elements)
+	// 	fmt.Println(heightPerElement)
+	// 	fmt.Println(widthPerElement)
 
-		fmt.Println(heightPerElement)
-		fmt.Println(widthPerElement)
+	// 	for i := range elements {
+	// 		elements[i] = lipgloss.NewStyle().Width(widthPerElement).Height(heightPerElement).Render(elements[i])
+	// 		if debug {
+	// 			fmt.Println(randomcolor.GetRandomColorInHex())
+	// 			elements[i] = lipgloss.NewStyle().ColorWhitespace(true).Background(lipgloss.Color(randomcolor.GetRandomColorInHex())).Render(elements[i])
+	// 		}
+	// 	}
 
-		for i := range elements {
-			elements[i] = lipgloss.NewStyle().Width(widthPerElement).Height(heightPerElement).Render(elements[i])
-			if debug {
-				fmt.Println(randomcolor.GetRandomColorInHex())
-				elements[i] = lipgloss.NewStyle().ColorWhitespace(true).Background(lipgloss.Color(randomcolor.GetRandomColorInHex())).Render(elements[i])
-			}
-		}
+	// 	result = lipgloss.JoinVertical(lipgloss.Left, elements...)
+	// } else {
 
-		result = lipgloss.JoinVertical(lipgloss.Left, elements...)
-	} else {
-		widthPerElement := int(rc.width) / len(elements)
-		heightPerElement := int(rc.height)
-		fmt.Println(heightPerElement)
-		fmt.Println(widthPerElement)
-		for i := range elements {
-			elements[i] = lipgloss.NewStyle().Width(widthPerElement).Height(heightPerElement).Render(elements[i])
-			if debug {
-				fmt.Println(randomcolor.GetRandomColorInHex())
-				elements[i] = lipgloss.NewStyle().ColorWhitespace(true).Background(lipgloss.Color(randomcolor.GetRandomColorInHex())).Render(elements[i])
-			}
-		}
-
-		result = lipgloss.JoinHorizontal(lipgloss.Left, elements...)
-	}
-
-	return
+	// }
+	// return
 }
 
 func (rc *RenderContext) Child() *RenderContext {
@@ -142,10 +148,14 @@ func (rc *RenderContext) Value(value string) {
 	rc.value = value
 }
 
-func (rc *RenderContext) Apply(opts ...SizeContextOption) {
-	for _, opt := range opts {
-		opt(rc)
+func (rc RenderContext) TreeString(indent string) string {
+	result := indent + "- " + rc.display.String() + "\n"
+
+	for _, child := range rc.childrenContexts {
+		result += child.TreeString("  " + indent)
 	}
+
+	return result
 }
 
 /*

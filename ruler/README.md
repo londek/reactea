@@ -4,6 +4,7 @@ Ruler is Reactea children, maybe it will make it to it's very own module, for no
 Goals of `ruler` are:
 
 - Providing easy API for width, height mathematics
+- Providing CSS-like component rendering techniques
 
 ## But why?
 
