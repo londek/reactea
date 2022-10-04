@@ -1,6 +1,8 @@
 # Ruler
 
-Ruler is Reactea children, maybe it will make it to it's very own module, for now future of it is uncertain
+### Soon package rename
+
+Ruler is Reactea children, maybe it will make it to it's very own module, for now its future is uncertain.
 Goals of `ruler` are:
 
 - Providing easy API for width, height mathematics
