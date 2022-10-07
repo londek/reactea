@@ -79,6 +79,9 @@ func RouteMatchesPlaceholder(route string, placeholder string) (map[string]strin
 				paramName := placeholderLevel[3:]
 				params[paramName] = ""
 				break
+			} else {
+				// We are out of bounds and placeholder doesn't want optional data
+				return nil, false
 			}
 		}
 

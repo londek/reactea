@@ -26,6 +26,7 @@ func TestRoutePlaceholderMatching(t *testing.T) {
 	}{
 		{"", "", map[string]string{"$": ""}},
 		{"teams/foo", "teams", nil},
+		{"teams", "teams/foo", nil},
 		{"", "teams", nil},
 		{"teams", "", nil},
 		{"teams", "teams", map[string]string{"$": "teams"}},
