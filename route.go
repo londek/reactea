@@ -1,6 +1,7 @@
 package reactea
 
 import (
+	"fmt"
 	"path"
 	"strings"
 
@@ -42,42 +43,78 @@ func SetCurrentRoute(newRoute string) {
 // $ being end of current path level (/level$/)
 //
 // Note: Entire matched route can be accessed with key "$"
-// Note: that it allows for defining wildcards with foo/:/bar
+// Note: Placeholders can be optional => foo/?:/?: will match foo/bar and foo and foo/bar/baz
+// Note: The most outside placeholders can be optional recursive => foo/+?: will match foo/bar and foo and foo/bar/baz
+// Note: It allows for defining wildcards with foo/:/bar
 // Note: Duplicate params will result in overwrite of first param
-func RouteMatchesPlaceholder(route string, placeholder string) (params map[string]string, ok bool) {
+func RouteMatchesPlaceholder(route string, placeholder string) (map[string]string, bool) {
 	var (
 		routeLevels       = strings.Split(path.Clean(route), "/")
 		placeholderLevels = strings.Split(path.Clean(placeholder), "/")
 	)
 
-	if len(routeLevels) != len(placeholderLevels) {
-		return
+	if len(routeLevels) > len(placeholderLevels) && !strings.HasPrefix(placeholderLevels[len(placeholderLevels)-1], "+?:") {
+		return nil, false
 	}
 
-	params = make(map[string]string, len(placeholderLevels)+1)
+	params := make(map[string]string, len(placeholderLevels)+1)
 
 	params["$"] = route
 
-	for i, routeLevel := range routeLevels {
-		placeholderLevel := placeholderLevels[i]
+	for i, placeholderLevel := range placeholderLevels {
+		if i > len(routeLevels)-1 {
+			if strings.HasPrefix(placeholderLevel, "?:") {
+				if placeholderLevel == "?:" {
+					continue // wildcard
+				}
 
-		if len(placeholderLevel) > 0 && placeholderLevel[0] == ':' {
+				paramName := placeholderLevel[2:]
+				params[paramName] = ""
+				continue
+			} else if strings.HasPrefix(placeholderLevel, "+?:") {
+				if placeholderLevel == "+?:" {
+					break
+				}
+
+				paramName := placeholderLevel[3:]
+				params[paramName] = ""
+				break
+			}
+		}
+
+		routeLevel := routeLevels[i]
+
+		if strings.HasPrefix(placeholderLevel, ":") {
 			if placeholderLevel == ":" {
 				continue // wildcard
 			}
 
 			paramName := placeholderLevel[1:]
 			params[paramName] = routeLevel
+		} else if strings.HasPrefix(placeholderLevel, "?:") {
+			if placeholderLevel == "?:" {
+				continue // wildcard
+			}
+
+			paramName := placeholderLevel[2:]
+			params[paramName] = routeLevel
+		} else if strings.HasPrefix(placeholderLevel, "+?:") {
+			fmt.Println(placeholderLevel)
+			if placeholderLevel == "+?:" {
+				break
+			}
+
+			paramName := placeholderLevel[3:]
+			params[paramName] = strings.Join(routeLevels[i:], "/")
+			break
 		} else {
 			if routeLevel != placeholderLevel {
-				return
+				return nil, false
 			}
 		}
 	}
 
-	ok = true
-
-	return
+	return params, true
 }
 
 // It might be important to do so in some scenarios.
