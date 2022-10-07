@@ -1,7 +1,6 @@
 package reactea
 
 import (
-	"fmt"
 	"path"
 	"strings"
 
@@ -102,7 +101,6 @@ func RouteMatchesPlaceholder(route string, placeholder string) (map[string]strin
 			paramName := placeholderLevel[2:]
 			params[paramName] = routeLevel
 		} else if strings.HasPrefix(placeholderLevel, "+?:") {
-			fmt.Println(placeholderLevel)
 			if placeholderLevel == "+?:" {
 				break
 			}
