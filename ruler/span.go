@@ -1,8 +1,12 @@
 package ruler
 
-type Span string
+func Span(s string) span {
+	return span(s)
+}
 
-func (s Span) Render(rc *RenderContext) {
+type span string
+
+func (s span) Render(rc *RenderContext) {
 	rc.display = Inline
 
 	rc.Value(string(s))

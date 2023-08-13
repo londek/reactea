@@ -32,7 +32,15 @@ func (re RenderedElements) Join() (result string) {
 	return
 }
 
-type Renderer interface{ Render(*RenderContext) }
+type ConstantRenderer interface{ Render(*RenderContext) string }
+type ResponsiveRenderer interface {
+	Render(*RenderContext) ConstantRenderer
+}
+
+type Defaulter interface {
+	DefaultWidth()
+	DefaultHeight()
+}
 
 // RenderContext represents current level in Renderer context tree (reactea's Component tree)
 // In TUI terms you could say RenderContext is block
@@ -80,7 +88,7 @@ func (rc *RenderContext) Propagate(child *RenderContext) {
 	rc.parent.Propagate(rc)
 }
 
-func (rc *RenderContext) Add(renderer Renderer) *RenderContext {
+func (rc *RenderContext) Add(renderer ConstantRenderer) *RenderContext {
 	child := rc.Child()
 
 	renderer.Render(child)

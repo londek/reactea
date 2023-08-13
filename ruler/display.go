@@ -22,7 +22,4 @@ const (
 	Block display = iota
 	Inline
 	InlineBlock
-
-	DynamicInlineBlock
-	DynamicBlock
 )

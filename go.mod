@@ -1,14 +1,15 @@
 module github.com/londek/reactea
 
-go 1.18
-
-require github.com/charmbracelet/bubbletea v0.24.2
+go 1.21
 
 require (
-	github.com/AvraamMavridis/randomcolor v0.0.0-20180822172341-208aff70bf2c // indirect
-	github.com/charmbracelet/lipgloss v0.6.1-0.20220930064401-ae7c84f7b158 // indirect
+	github.com/AvraamMavridis/randomcolor v0.0.0-20180822172341-208aff70bf2c
+	github.com/charmbracelet/bubbletea v0.22.1
+	github.com/charmbracelet/lipgloss v0.6.1-0.20220930064401-ae7c84f7b158
+)
+
+require (
 	github.com/containerd/console v1.0.3 // indirect
-	github.com/gookit/color v1.5.2 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/mattn/go-isatty v0.0.18 // indirect
 	github.com/mattn/go-localereader v0.0.1 // indirect
@@ -18,7 +19,6 @@ require (
 	github.com/muesli/reflow v0.3.0 // indirect
 	github.com/muesli/termenv v0.15.1 // indirect
 	github.com/rivo/uniseg v0.4.2 // indirect
-	github.com/xo/terminfo v0.0.0-20210125001918-ca9a967f8778 // indirect
 	golang.org/x/sys v0.0.0-20220919091848-fb04ddd9f9c8 // indirect
 	golang.org/x/term v0.0.0-20220919170432-7a66f970e087 // indirect
 	golang.org/x/text v0.3.7 // indirect
