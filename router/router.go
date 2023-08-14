@@ -14,7 +14,8 @@ type Component struct {
 	reactea.BasicComponent
 	reactea.BasicPropfulComponent[Props]
 
-	lastComponent reactea.SomeComponent
+	lastComponent   reactea.SomeComponent
+	lastPlaceholder string
 }
 
 type Props map[string]RouteInitializer
@@ -26,7 +27,7 @@ func New() *Component {
 func (c *Component) Init(props Props) tea.Cmd {
 	c.UpdateProps(props)
 
-	return c.initializeRoute()
+	return c.initRoute()
 }
 
 func (c *Component) Update(msg tea.Msg) tea.Cmd {
@@ -40,8 +41,14 @@ func (c *Component) Update(msg tea.Msg) tea.Cmd {
 }
 
 func (c *Component) AfterUpdate() tea.Cmd {
-	// If last route != currentRoute we want to reinitialize the component
+	// If last route was changed we want to reuse the component
 	if !reactea.WasRouteChanged() {
+		return nil
+	}
+
+	// If last placeholder was wildcard and current route still matches
+	// that wildcard, we want to reuse the component
+	if _, ok := reactea.RouteMatchesPlaceholder(reactea.CurrentRoute(), c.lastPlaceholder); ok && c.lastPlaceholder != "" {
 		return nil
 	}
 
@@ -51,7 +58,7 @@ func (c *Component) AfterUpdate() tea.Cmd {
 
 	c.lastComponent = nil
 
-	return c.initializeRoute()
+	return c.initRoute()
 }
 
 func (c *Component) Render(width, height int) string {
@@ -62,13 +69,12 @@ func (c *Component) Render(width, height int) string {
 	return fmt.Sprintf("Couldn't route for \"%s\"", reactea.CurrentRoute())
 }
 
-func (c *Component) initializeRoute() tea.Cmd {
+func (c *Component) initRoute() tea.Cmd {
 	var cmd tea.Cmd
 
-	if initializer, ok := c.Props()[reactea.CurrentRoute()]; ok {
-		c.lastComponent, cmd = initializer(nil)
-	} else if initializer, params, ok := c.findMatchingRouteInitializer(); ok {
+	if initializer, params, placeholder, ok := c.findMatchingRouteInitializer(); ok {
 		c.lastComponent, cmd = initializer(params)
+		c.lastPlaceholder = placeholder
 	} else if initializer, ok := c.Props()["default"]; ok {
 		c.lastComponent, cmd = initializer(nil)
 	}
@@ -76,14 +82,14 @@ func (c *Component) initializeRoute() tea.Cmd {
 	return cmd
 }
 
-func (c *Component) findMatchingRouteInitializer() (RouteInitializer, Params, bool) {
+func (c *Component) findMatchingRouteInitializer() (RouteInitializer, Params, string, bool) {
 	currentRoute := reactea.CurrentRoute()
 
 	for placeholder, initializer := range c.Props() {
 		if params, ok := reactea.RouteMatchesPlaceholder(currentRoute, placeholder); ok {
-			return initializer, params, true
+			return initializer, params, placeholder, true
 		}
 	}
 
-	return nil, nil, false
+	return nil, nil, "", false
 }
