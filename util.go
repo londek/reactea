@@ -2,9 +2,11 @@ package reactea
 
 import tea "github.com/charmbracelet/bubbletea"
 
+type RerenderMsg struct{}
+
 // Utility tea.Cmd for requesting rerender (or reupdate)
 func Rerender() tea.Msg {
-	return nil
+	return RerenderMsg{}
 }
 
 // Renders all AnyRenderers in one function
