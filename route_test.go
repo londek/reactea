@@ -28,8 +28,8 @@ type testNavigateComponenent struct {
 	BasicComponent
 	BasicPropfulComponent[NoProps]
 
-	routesHistory []string
-	step          int
+	routeHistory []string
+	step         int
 }
 
 func (c *testNavigateComponenent) Init(props NoProps) tea.Cmd {
@@ -39,38 +39,40 @@ func (c *testNavigateComponenent) Init(props NoProps) tea.Cmd {
 }
 
 // Expecting:
-// / -> /foo -> /foo/bar -> /baz -> / -> /foo -> /foo/bar -> /test -> /test -> /test -> /foo -> /bar
+// / -> /foo -> /foo/bar -> /baz -> / -> /foo -> /bar -> /test -> / -> / -> /foo -> /bar
 func (c *testNavigateComponenent) Update(msg tea.Msg) tea.Cmd {
-	c.routesHistory = append(c.routesHistory, CurrentRoute())
-
 	switch c.step {
 	case 0:
-		Navigate("foo")
+		// Don't navigate
 	case 1:
-		Navigate("foo/bar")
-	case 2:
-		Navigate("/baz")
-	case 3:
-		Navigate("..")
-	case 4:
-		Navigate("./foo")
-	case 5:
-		Navigate(".//bar")
-	case 6:
-		Navigate("../../test")
-	case 7:
-		Navigate("/")
-	case 8:
-		Navigate("")
-	case 9:
-		Navigate(".")
-	case 10:
 		Navigate("foo")
+	case 2:
+		Navigate("foo/bar")
+	case 3:
+		Navigate("/baz")
+	case 4:
+		Navigate("..")
+	case 5:
+		Navigate("./foo")
+	case 6:
+		Navigate(".//bar")
+	case 7:
+		Navigate("../../test")
+	case 8:
+		Navigate("/")
+	case 9:
+		Navigate("")
+	case 10:
+		Navigate(".")
 	case 11:
+		Navigate("foo")
+	case 12:
 		Navigate("bar")
 	default:
 		return Destroy
 	}
+
+	c.routeHistory = append(c.routeHistory, CurrentRoute())
 
 	c.step += 1
 
@@ -89,7 +91,25 @@ func TestNavigate(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	t.Log(strings.Join(root.routesHistory, " - "))
+	expectedRouteHistory := []string{
+		"/",
+		"/foo",
+		"/foo/bar",
+		"/baz",
+		"/",
+		"/foo",
+		"/bar",
+		"/test",
+		"/",
+		"/",
+		"/",
+		"/foo",
+		"/bar",
+	}
+
+	if strings.Join(root.routeHistory, " - ") != strings.Join(expectedRouteHistory, " - ") {
+		t.Errorf("wrong route history, expected \"%s\", got \"%s\". Note that routes are delimited by \" - \"", strings.Join(expectedRouteHistory, " - "), strings.Join(root.routeHistory, " - "))
+	}
 }
 
 func TestRoutePlaceholderMatching(t *testing.T) {
