@@ -22,6 +22,10 @@ func CurrentRoute() string {
 	return currentRoute
 }
 
+func LastRoute() string {
+	return lastRoute
+}
+
 func WasRouteChanged() bool {
 	return wasRouteChanged
 }
