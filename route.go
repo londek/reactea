@@ -30,7 +30,7 @@ func WasRouteChanged() bool {
 	return wasRouteChanged
 }
 
-func SetRoute(target string) {
+func SetRoute(target string) tea.Cmd {
 	if !isUpdate {
 		panic("tried updating global route not in update")
 	}
@@ -45,14 +45,15 @@ func SetRoute(target string) {
 	}
 
 	currentRoute = target
+	return nil
 }
 
-func Navigate(target string) {
+func Navigate(target string) tea.Cmd {
 	var currentRouteLevels []string
 
 	if len(target) == 0 {
 		// Just don't navigate if no target was given
-		return
+		return nil
 	}
 
 	// Check whether target is absolute
@@ -75,7 +76,7 @@ func Navigate(target string) {
 		}
 	}
 
-	SetRoute("/" + strings.Join(currentRouteLevels, "/"))
+	return SetRoute("/" + strings.Join(currentRouteLevels, "/"))
 }
 
 // Checks whether route (e.g. /teams/123/12) matches
