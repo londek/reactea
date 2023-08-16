@@ -38,7 +38,7 @@ func TestDefaultComponent(t *testing.T) {
 		program.Quit()
 	}()
 
-	if err := program.Start(); err != nil {
+	if _, err := program.Run(); err != nil {
 		t.Fatal(err)
 	}
 

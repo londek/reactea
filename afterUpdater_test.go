@@ -48,7 +48,7 @@ func TestAfterUpdate(t *testing.T) {
 
 	program := NewProgram(root, tea.WithInput(&in), tea.WithOutput(&out))
 
-	if err := program.Start(); err != nil {
+	if _, err := program.Run(); err != nil {
 		t.Fatal(err)
 	}
 

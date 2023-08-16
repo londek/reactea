@@ -63,7 +63,7 @@ func TestComponent(t *testing.T) {
 		program.Send(tea.KeyMsg{Type: tea.KeyRunes, Runes: []rune{'x'}, Alt: false})
 	}()
 
-	if err := program.Start(); err != nil {
+	if _, err := program.Run(); err != nil {
 		t.Fatal(err)
 	}
 
@@ -102,7 +102,7 @@ func TestNew(t *testing.T) {
 
 		go program.Quit()
 
-		if err := program.Start(); err != nil {
+		if _, err := program.Run(); err != nil {
 			t.Fatal(err)
 		}
 	})
@@ -112,7 +112,7 @@ func TestNew(t *testing.T) {
 
 		go program.Quit()
 
-		if err := program.Start(); err != nil {
+		if _, err := program.Run(); err != nil {
 			t.Fatal(err)
 		}
 	})

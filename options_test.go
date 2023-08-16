@@ -16,7 +16,7 @@ func TestOptions(t *testing.T) {
 
 		go program.Quit()
 
-		if err := program.Start(); err != nil {
+		if _, err := program.Run(); err != nil {
 			t.Fatal(err)
 		}
 	})

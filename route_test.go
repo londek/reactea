@@ -85,7 +85,7 @@ func TestNavigate(t *testing.T) {
 	root := &testNavigateComponenent{}
 	program := NewProgram(root, tea.WithoutRenderer(), WithoutInput())
 
-	if err := program.Start(); err != nil {
+	if _, err := program.Run(); err != nil {
 		t.Fatal(err)
 	}
 

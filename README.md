@@ -210,7 +210,7 @@ func (c *Component) setText(text string) {
 // "translation layer", so Reactea components work
 program := reactea.NewProgram(app.New())
 
-if err := program.Start(); err != nil {
+if _, err := program.Run(); err != nil {
     panic(err)
 }
 ```

@@ -62,7 +62,7 @@ func TestDefault(t *testing.T) {
 
 	program := reactea.NewProgram(root, tea.WithInput(&in), tea.WithOutput(&out))
 
-	if err := program.Start(); err != nil {
+	if _, err := program.Run(); err != nil {
 		t.Fatal(err)
 	}
 
@@ -98,7 +98,7 @@ func TestNonDefault(t *testing.T) {
 
 	program := reactea.NewProgram(root, reactea.WithRoute("/test/test"), tea.WithInput(&in), tea.WithOutput(&out))
 
-	if err := program.Start(); err != nil {
+	if _, err := program.Run(); err != nil {
 		t.Fatal(err)
 	}
 
@@ -147,7 +147,7 @@ func TestRouteChange(t *testing.T) {
 
 	program := reactea.NewProgram(root, tea.WithInput(&in), tea.WithOutput(&out))
 
-	if err := program.Start(); err != nil {
+	if _, err := program.Run(); err != nil {
 		t.Fatal(err)
 	}
 
@@ -171,7 +171,7 @@ func TestNotFound(t *testing.T) {
 
 	program := reactea.NewProgram(root, tea.WithInput(&in), tea.WithOutput(&out))
 
-	if err := program.Start(); err != nil {
+	if _, err := program.Run(); err != nil {
 		t.Fatal(err)
 	}
 
@@ -216,7 +216,7 @@ func TestRouteWithParam(t *testing.T) {
 
 	program := reactea.NewProgram(root, tea.WithInput(&in), tea.WithOutput(&out))
 
-	if err := program.Start(); err != nil {
+	if _, err := program.Run(); err != nil {
 		t.Fatal(err)
 	}
 
