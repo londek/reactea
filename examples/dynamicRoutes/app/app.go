@@ -35,7 +35,7 @@ func (c *Component) Init(reactea.NoProps) tea.Cmd {
 			return component, component.Init(reactea.NoProps{})
 		},
 		// We are using dynamic routes (route params) in this example
-		"players/:playerId": func(params router.Params) (reactea.SomeComponent, tea.Cmd) {
+		"/players/:playerId": func(params router.Params) (reactea.SomeComponent, tea.Cmd) {
 			component := reactea.Componentify[int](displayplayer.Render)
 
 			playerId, _ := strconv.Atoi(params["playerId"])
@@ -52,7 +52,7 @@ func (c *Component) Update(msg tea.Msg) tea.Cmd {
 		case "ctrl+c":
 			return reactea.Destroy
 		case "u":
-			reactea.SetCurrentRoute("")
+			reactea.SetCurrentRoute("/")
 		}
 	}
 
