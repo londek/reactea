@@ -135,7 +135,7 @@ func TestRouteChange(t *testing.T) {
 		},
 		testUpdater: func(c *testComponenent) tea.Cmd {
 			if c.updateN == 0 {
-				reactea.SetCurrentRoute("/test/test")
+				reactea.SetRoute("/test/test")
 
 				return nil
 			} else {
@@ -204,7 +204,7 @@ func TestRouteWithParam(t *testing.T) {
 		},
 		testUpdater: func(c *testComponenent) tea.Cmd {
 			if c.updateN == 0 {
-				reactea.SetCurrentRoute("/test/wellDone")
+				reactea.SetRoute("/test/wellDone")
 
 				return nil
 			} else {

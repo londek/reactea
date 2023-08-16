@@ -38,7 +38,7 @@ func (c *Component) Update(msg tea.Msg) tea.Cmd {
 			// Lifted state power! Woohooo
 			c.Props().SetText(c.textinput.Value())
 
-			reactea.SetCurrentRoute("/displayname")
+			reactea.SetRoute("/displayname")
 
 			return nil
 		}

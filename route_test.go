@@ -21,7 +21,7 @@ func TestRoutePanic(t *testing.T) {
 
 	NewProgram(&testComponenent{}, tea.WithoutRenderer())
 
-	SetCurrentRoute("/shouldFail")
+	SetRoute("/shouldFail")
 }
 
 type testNavigateComponenent struct {

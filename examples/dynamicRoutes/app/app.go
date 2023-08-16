@@ -52,7 +52,7 @@ func (c *Component) Update(msg tea.Msg) tea.Cmd {
 		case "ctrl+c":
 			return reactea.Destroy
 		case "u":
-			reactea.SetCurrentRoute("/")
+			reactea.SetRoute("/")
 		}
 	}
 

@@ -26,7 +26,7 @@ func WasRouteChanged() bool {
 	return wasRouteChanged
 }
 
-func SetCurrentRoute(target string) {
+func SetRoute(target string) {
 	if !isUpdate {
 		panic("tried updating global route not in update")
 	}
@@ -71,7 +71,7 @@ func Navigate(target string) {
 		}
 	}
 
-	SetCurrentRoute("/" + strings.Join(currentRouteLevels, "/"))
+	SetRoute("/" + strings.Join(currentRouteLevels, "/"))
 }
 
 // Checks whether route (e.g. /teams/123/12) matches

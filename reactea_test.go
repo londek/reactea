@@ -29,7 +29,7 @@ func (c *testComponenent) Update(msg tea.Msg) tea.Cmd {
 		c.echoKey = msg.String()
 	}
 
-	SetCurrentRoute("/test/test/test")
+	SetRoute("/test/test/test")
 
 	return nil
 }
