@@ -12,7 +12,8 @@ func NewProgram(root Component[NoProps], options ...tea.ProgramOption) *tea.Prog
 	// Ensure globals are default, useful for tests and
 	// running programs SEQUENTIALLY in same runtime
 	isUpdate = false
-	currentRoute = ""
+	currentRoute = "/"
+	lastRoute = "/"
 	wasRouteChanged = false
 	afterUpdaters = nil
 
