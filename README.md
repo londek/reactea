@@ -38,8 +38,7 @@ Most info is currently in source code so I suggest checking it out
 
 Always return `reactea.Destroy` instead of `tea.Quit` in order to follow our convention
 
-As of now Go doesn't support type aliases for generics, so `Renderer[TProps]` has to be explicitly casted.\
-It's planned for Go 1.20
+As of now Go doesn't support type aliases for generics, so `Renderer[TProps]` has to be explicitly casted.
 
 ## [Quickstart](/examples/quickstart)
 
@@ -50,8 +49,8 @@ While it may look in following tutorial that Reactea overcomplicates things, tru
 
 In this tutorial we are going to make application that consists of 2 pages.
 
-- The `input` (aka `index`, in reactea `default`) page for inputting your name
-- The `displayname` page for displaying your name
+- The `/input` (aka `index`, in reactea `default`) page for inputting your name
+- The `/displayname` page for displaying your name
 
 ### [Lifecycle](#component-lifecycle)
 
@@ -61,17 +60,17 @@ Reactea component lifecycle consists of 6 methods (while Bubble Tea only 3)
 |Method|Purpose|
 |-|-|
 | `Init(TProps) tea.Cmd` | It's called first. All critical stuff should happen here. It also supports IO through tea.Cmd |
-| `Update(tea.Msg) tea.Cmd` | It reacts to Bubble Tea IO and should update state accordingly |
+| `Update(tea.Msg) tea.Cmd` | It reacts to Bubble Tea IO and updates state accordingly |
 | `AfterUpdate() tea.Cmd` | It's called after root component finishes `Update()`. [Components should queue themselves](#afterupdate) |
 | `Render(int, int) string` | It renders the UI. The two arguments are width and height, they should be calculated by parent |
-| `Destroy()` | It's called whenever Component is about to be GC-ed. Please note that it's parent's responsibility to call `Destroy()` |
+| `Destroy()` | It's called whenever Component is about to end it's lifecycle. Please note that it's parent's responsibility to call `Destroy()` |
 | `UpdateProps(TProps)` | Derives state from given properties. Usually called from `Init()` |
 
 Your first application should consist only of `Update` and `Render`, all other methods will be implemented by `reactea.BasicComponent` and `reactea.BasicPropfulComponent`.
 
 Let's get to work!
 
-### The `input` page
+### The `/input` page
 
 `/pages/input/input.go`
 
@@ -107,7 +106,7 @@ func (c *Component) Update(msg tea.Msg) tea.Cmd {
             c.Props().SetText(c.textinput.Value())
 
             // Navigate to displayname, please
-            reactea.SetCurrentRoute("displayname")
+            reactea.SetRoute("/displayname")
             return nil
         }
     }
@@ -123,7 +122,7 @@ func (c *Component) Render(int, int) string {
 }
 ```
 
-#### The `displayname` page
+#### The `/displayname` page
 
 `/pages/displayname/displayname.go`
 
@@ -171,9 +170,9 @@ func (c *Component) Init(reactea.NoProps) tea.Cmd {
                 SetText: c.setText, // Can also use "lambdas" (function can be created here)
             })
         },
-        "displayname": func(router.Params) (reactea.SomeComponent, tea.Cmd) {
-            // RouteInitializer wants SomeComponent so we have to convert
-            // Stateless component (renderer) to Component
+        "/displayname": func(router.Params) (reactea.SomeComponent, tea.Cmd) {
+            // RouteInitializer requires SomeComponent so we have to convert
+            // Stateless component (renderer) to SomeComponent
             component := reactea.Componentify[string](displayname.Renderer)
 
             return component, component.Init(c.text)

@@ -48,7 +48,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	// Guarantee rerender if route was changed
 	if wasRouteChanged {
-		return m, tea.Batch(updatedRoute, rootCmd, afterUpdatesCmd)
+		return m, tea.Batch(updatedRoute(lastRoute), rootCmd, afterUpdatesCmd)
 	}
 
 	return m, tea.Batch(rootCmd, afterUpdatesCmd)

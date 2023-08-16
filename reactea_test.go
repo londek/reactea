@@ -29,7 +29,7 @@ func (c *testComponenent) Update(msg tea.Msg) tea.Cmd {
 		c.echoKey = msg.String()
 	}
 
-	SetCurrentRoute("test/test/test")
+	SetRoute("/test/test/test")
 
 	return nil
 }
@@ -79,8 +79,8 @@ func TestComponent(t *testing.T) {
 		t.Errorf("current route was changed")
 	}
 
-	if CurrentRoute() != "test/test/test" {
-		t.Errorf("current route is wrong, expected \"test/test/test\", got \"%s\"", CurrentRoute())
+	if CurrentRoute() != "/test/test/test" {
+		t.Errorf("current route is wrong, expected \"/test/test/test\", got \"%s\"", CurrentRoute())
 	}
 
 	if props := root.Props(); !reflect.DeepEqual(props, NoProps{}) {
