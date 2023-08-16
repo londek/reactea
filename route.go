@@ -55,12 +55,12 @@ func Navigate(target string) {
 		return
 	}
 
-	// Check whether route is absolute
-	if currentRoute[0] == '/' {
+	// Check whether target is absolute
+	if target[0] == '/' {
 		currentRouteLevels = []string{}
 	} else {
 		currentRouteLevels = strings.Split(currentRoute, "/")
-		currentRouteLevels = currentRouteLevels[:len(currentRouteLevels)-1]
+		currentRouteLevels = currentRouteLevels[1 : len(currentRouteLevels)-1]
 	}
 
 	for _, targetLevel := range strings.Split(target, "/") {

@@ -67,7 +67,9 @@ func (c *testNavigateComponenent) Update(msg tea.Msg) tea.Cmd {
 	case 11:
 		Navigate("foo")
 	case 12:
-		Navigate("bar")
+		Navigate("foo/bar")
+	case 13:
+		Navigate("baz")
 	default:
 		return Destroy
 	}
@@ -104,7 +106,8 @@ func TestNavigate(t *testing.T) {
 		"/",
 		"/",
 		"/foo",
-		"/bar",
+		"/foo/bar",
+		"/foo/baz",
 	}
 
 	if strings.Join(root.routeHistory, " - ") != strings.Join(expectedRouteHistory, " - ") {
