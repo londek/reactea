@@ -1,5 +1,12 @@
 package reactea
 
+import tea "github.com/charmbracelet/bubbletea"
+
+// Utility tea.Cmd for requesting rerender (or reupdate)
+func Rerender() tea.Msg {
+	return nil
+}
+
 // Renders all AnyRenderers in one function
 //
 // Note: If you are using ProplessRenderer/DumbRenderer just pass
