@@ -38,14 +38,15 @@ type Renderer interface{ Render(*Context) }
 
 func New() *Context {
 	return &Context{
-		display:   Inline,
-		width:     defaultLength,
-		height:    defaultLength,
-		maxWidth:  defaultLength,
-		maxHeight: defaultLength,
-		minWidth:  defaultLength,
-		minHeight: defaultLength,
-		margin:    zeroMargin,
+		display:      Inline,
+		width:        defaultLength,
+		height:       defaultLength,
+		maxWidth:     defaultLength,
+		maxHeight:    defaultLength,
+		minWidth:     defaultLength,
+		minHeight:    defaultLength,
+		margin:       zeroMargin,
+		wrappingMode: ClipContent,
 	}
 }
 
@@ -68,11 +69,18 @@ type Context struct {
 
 	margin margin
 
+	wrappingMode WrappingMode
+
 	renderer ResponsiveRenderer
 
 	childrenContexts []*Context
 
 	parent *Context
+}
+
+func (rc *Context) WrappingMode(wrappingMode WrappingMode) *Context {
+	rc.wrappingMode = wrappingMode
+	return rc
 }
 
 func (rc *Context) MinWidth(minWidth any) *Context {

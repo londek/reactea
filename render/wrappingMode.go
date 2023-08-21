@@ -1,14 +1,14 @@
 package render
 
-type Strategy uint8
+type WrappingMode uint8
 
 const (
 	// Cut extra content
-	Cut Strategy = iota
+	ClipContent WrappingMode = iota
 
 	// Keep extra content
-	Keep
+	KeepContent
 
 	// Wrap extra content
-	Wrap
+	WrapContent
 )
