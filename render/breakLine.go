@@ -2,8 +2,8 @@ package render
 
 type Breakline struct{}
 
-func (br Breakline) Render(c *Context) {
-	c.display = Inline
+func (br Breakline) Render(rc *Context) {
+	rc.display = Inline
 
-	c.Value("\n")
+	rc.Value("\n")
 }
