@@ -75,69 +75,69 @@ type Context struct {
 	parent *Context
 }
 
-func (rc *Context) MinWidth(minWidth any) *Context {
-	rc.minWidth = Length(minWidth)
-	return rc
+func (c *Context) MinWidth(minWidth any) *Context {
+	c.minWidth = Length(minWidth)
+	return c
 }
 
-func (rc *Context) Width(width any) *Context {
-	rc.width = Length(width)
-	return rc
+func (c *Context) Width(width any) *Context {
+	c.width = Length(width)
+	return c
 }
 
-func (rc *Context) MaxWidth(maxWidth any) *Context {
-	rc.maxWidth = Length(maxWidth)
-	return rc
+func (c *Context) MaxWidth(maxWidth any) *Context {
+	c.maxWidth = Length(maxWidth)
+	return c
 }
 
-func (rc *Context) MinHeight(minHeight any) *Context {
-	rc.minHeight = Length(minHeight)
-	return rc
+func (c *Context) MinHeight(minHeight any) *Context {
+	c.minHeight = Length(minHeight)
+	return c
 }
 
-func (rc *Context) Height(height any) *Context {
-	rc.height = Length(height)
-	return rc
+func (c *Context) Height(height any) *Context {
+	c.height = Length(height)
+	return c
 }
 
-func (rc *Context) MaxHeight(maxHeight any) *Context {
-	rc.maxHeight = Length(maxHeight)
-	return rc
+func (c *Context) MaxHeight(maxHeight any) *Context {
+	c.maxHeight = Length(maxHeight)
+	return c
 }
 
-func (rc *Context) Margin(margin margin) *Context {
-	rc.margin = margin
-	return rc
+func (c *Context) Margin(margin margin) *Context {
+	c.margin = margin
+	return c
 }
 
-// Shorthand for rc.MinWidth and rc.MinHeight
-func (rc *Context) MinSize(minWidth, minHeight any) *Context {
-	rc.minWidth = Length(minWidth)
-	rc.minHeight = Length(minHeight)
-	return rc
+// Shorthand for c.MinWidth and c.MinHeight
+func (c *Context) MinSize(minWidth, minHeight any) *Context {
+	c.minWidth = Length(minWidth)
+	c.minHeight = Length(minHeight)
+	return c
 }
 
-// Shorthand for rc.Width and rc.Height
-func (rc *Context) Size(width, height any) *Context {
-	rc.width = Length(width)
-	rc.height = Length(height)
-	return rc
+// Shorthand for c.Width and c.Height
+func (c *Context) Size(width, height any) *Context {
+	c.width = Length(width)
+	c.height = Length(height)
+	return c
 }
 
-// Shorthand for rc.MaxWidth and rc.MaxHeight
-func (rc *Context) MaxSize(maxWidth, maxHeight any) *Context {
-	rc.maxWidth = Length(maxWidth)
-	rc.maxHeight = Length(maxHeight)
-	return rc
+// Shorthand for c.MaxWidth and c.MaxHeight
+func (c *Context) MaxSize(maxWidth, maxHeight any) *Context {
+	c.maxWidth = Length(maxWidth)
+	c.maxHeight = Length(maxHeight)
+	return c
 }
 
-func (rc *Context) Add(renderer Renderer) *Context {
+func (c *Context) Add(renderer Renderer) *Context {
 	child := New()
-	child.parent = rc
+	child.parent = c
 
 	renderer.Render(child)
 
-	rc.childrenContexts = append(rc.childrenContexts, child)
+	c.childrenContexts = append(c.childrenContexts, child)
 
 	return child
 }
@@ -145,35 +145,35 @@ func (rc *Context) Add(renderer Renderer) *Context {
 // Creates container element and returns it
 // Container behaves just like *render.Context
 // but has Value() disabled
-func (rc *Context) Container() container {
+func (c *Context) Container() container {
 	child := New()
-	child.parent = rc
+	child.parent = c
 
 	container := container{child}
 
-	rc.childrenContexts = append(rc.childrenContexts, container.Context)
+	c.childrenContexts = append(c.childrenContexts, container.Context)
 
 	return container
 }
 
-// Shorthand for rc.Add(render.Paragraph())
-func (rc *Context) Paragraph(items ...any) *Context {
-	return rc.Add(Paragraph(fmt.Sprint(items...)))
+// Shorthand for c.Add(render.Paragraph())
+func (c *Context) Paragraph(items ...any) *Context {
+	return c.Add(Paragraph(fmt.Sprint(items...)))
 }
 
-// Shorthand for rc.Add(render.Span())
-func (rc *Context) Span(items ...any) *Context {
-	return rc.Add(Span(fmt.Sprint(items...)))
+// Shorthand for c.Add(render.Span())
+func (c *Context) Span(items ...any) *Context {
+	return c.Add(Span(fmt.Sprint(items...)))
 }
 
-// Shorthand for rc.Add(render.Breakline{})
-func (rc *Context) Breakline() *Context {
-	return rc.Add(Breakline{})
+// Shorthand for c.Add(render.Breakline{})
+func (c *Context) Breakline() *Context {
+	return c.Add(Breakline{})
 }
 
-func (rc *Context) Render(availableWidthMaster, availableHeightMaster int) (result string) {
-	if rc.contextType == RenderableKind {
-		return rc.renderer(availableWidthMaster, availableHeightMaster)
+func (c *Context) Render(availableWidthMaster, availableHeightMaster int) (result string) {
+	if c.contextType == RenderableKind {
+		return c.renderer(availableWidthMaster, availableHeightMaster)
 	}
 
 	var b strings.Builder
@@ -183,7 +183,7 @@ func (rc *Context) Render(availableWidthMaster, availableHeightMaster int) (resu
 	availableHeightContext := availableHeightMaster
 
 	breakLine := false
-	for i, child := range rc.childrenContexts {
+	for i, child := range c.childrenContexts {
 		var rendered string
 
 		switch child.display {
@@ -244,24 +244,24 @@ func (rc *Context) Render(availableWidthMaster, availableHeightMaster int) (resu
 	return b.String()
 }
 
-func (rc *Context) String() string {
-	return fmt.Sprintf("display: %s | maxWidth: %s - width: %s - minWidth: %s | maxHeight: %s - height: %s - minWidth: %s | kind: %s | margin: %s", rc.display, rc.maxWidth, rc.width, rc.minWidth, rc.maxHeight, rc.height, rc.minWidth, rc.contextType, rc.margin)
+func (c *Context) String() string {
+	return fmt.Sprintf("display: %s | maxWidth: %s - width: %s - minWidth: %s | maxHeight: %s - height: %s - minWidth: %s | kind: %s | margin: %s", c.display, c.maxWidth, c.width, c.minWidth, c.maxHeight, c.height, c.minWidth, c.contextType, c.margin)
 }
 
-func (rc *Context) Value(value string) *Context {
-	return rc.Renderer(func(width, height int) string { return value })
+func (c *Context) Value(value string) *Context {
+	return c.Renderer(func(width, height int) string { return value })
 }
 
-func (rc *Context) Renderer(renderer ResponsiveRenderer) *Context {
-	rc.contextType = RenderableKind
-	rc.renderer = renderer
-	return rc
+func (c *Context) Renderer(renderer ResponsiveRenderer) *Context {
+	c.contextType = RenderableKind
+	c.renderer = renderer
+	return c
 }
 
-func (rc *Context) TreeString(indent string) string {
-	result := indent + "- " + rc.String() + "\n"
+func (c *Context) TreeString(indent string) string {
+	result := indent + "- " + c.String() + "\n"
 
-	for _, child := range rc.childrenContexts {
+	for _, child := range c.childrenContexts {
 		result += child.TreeString("  " + indent)
 	}
 

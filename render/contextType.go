@@ -7,8 +7,8 @@ const (
 	RenderableKind
 )
 
-func (kind Kind) String() string {
-	switch kind {
+func (k Kind) String() string {
+	switch k {
 	case ContainerKind:
 		return "ContainerKind"
 	case RenderableKind:

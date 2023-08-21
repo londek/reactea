@@ -21,8 +21,8 @@ const (
 	marginAttributeType
 )
 
-func (lType marginType) String() string {
-	switch lType {
+func (mt marginType) String() string {
+	switch mt {
 	case marginNumberType:
 		return "MarginNumber"
 	case marginPercentageType:
@@ -38,8 +38,8 @@ type margin struct {
 	Top, Right, Bottom, Left marginValue
 }
 
-func (margin margin) String() string {
-	return fmt.Sprintf("(top: %s - right: %s - bottom: %s - left: %s)", margin.Top, margin.Right, margin.Bottom, margin.Left)
+func (m margin) String() string {
+	return fmt.Sprintf("(top: %s - right: %s - bottom: %s - left: %s)", m.Top, m.Right, m.Bottom, m.Left)
 }
 
 func Margin(values ...any) margin {

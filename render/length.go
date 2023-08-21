@@ -21,8 +21,8 @@ const (
 	lengthAttributeType
 )
 
-func (lType lengthType) String() string {
-	switch lType {
+func (lt lengthType) String() string {
+	switch lt {
 	case lengthNumberType:
 		return "LengthNumber"
 	case lengthPercentageType:
@@ -80,8 +80,8 @@ const (
 	MaxContent
 )
 
-func (attr LengthAttribute) String() string {
-	switch attr {
+func (la LengthAttribute) String() string {
+	switch la {
 	case Auto:
 		return "Auto"
 	case MinContent:

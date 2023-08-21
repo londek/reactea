@@ -5,19 +5,19 @@ package ruler
 // - is displaying children
 type display int
 
-func (d display) String() (result string) {
+func (d display) String() string {
 	switch d {
 	case Block:
-		result = "block"
+		return "block"
 	case Inline:
-		result = "inline"
+		return "inline"
 	case InlineBlock:
-		result = "inlineblock"
+		return "inlineblock"
 	case Flex:
-		result = "flex"
+		return "flex"
+	default:
+		return "<unknown>"
 	}
-
-	return
 }
 
 const (

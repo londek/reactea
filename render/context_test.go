@@ -8,26 +8,26 @@ import (
 func TestContext(t *testing.T) {
 	Debug()
 
-	rc := New()
+	c := New()
 
-	rc.Span("abababab")
-	rc.Add(Span("123365464574"))
-	rc.Add(Span("foo bar foo baz"))
+	c.Span("abababab")
+	c.Add(Span("123365464574"))
+	c.Add(Span("foo bar foo baz"))
 
-	rc.Add(Breakline{})
+	c.Add(Breakline{})
 
-	rc.Add(Span("123365464574"))
-	rc.Add(Span("foo bar foo baz"))
-	rc.Breakline()
+	c.Add(Span("123365464574"))
+	c.Add(Span("foo bar foo baz"))
+	c.Breakline()
 
-	container := rc.Container()
+	container := c.Container()
 	container.Span("hello world")
 	container.Width(5)
 	container.Height(10)
 
-	rc.Add(Span("foo bar foo baz"))
-	rc.Add(Span("abababab"))
+	c.Add(Span("foo bar foo baz"))
+	c.Add(Span("abababab"))
 
-	fmt.Println(rc.Render(7, 50))
-	fmt.Println(rc.TreeString(""))
+	fmt.Println(c.Render(7, 50))
+	fmt.Println(c.TreeString(""))
 }
