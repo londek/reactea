@@ -26,6 +26,7 @@ Check our quickstart [right here](#quickstart) or other examples [here!](/exampl
 The goal is to create components that are
 
 - dimensions-aware (especially unify all setSize conventions)
+- move on from raw strings to higher level of abstraction
 - propful
 - easy to lift the state up
 - able to communicate with parent without importing it (I spent too many hours solving import cycles hehe)
@@ -117,8 +118,9 @@ func (c *Component) Update(msg tea.Msg) tea.Cmd {
 }
 
 // Here we are not using width and height, but you can!
-func (c *Component) Render(int, int) string {
-    return fmt.Sprintf("Enter your name: %s\nAnd press [ Enter ]", c.textinput.View())
+func (c *Component) Render(rc *render.Context) {
+    rc.Add(render.Paragraph("Enter your name: " + c.textinput.View()))
+    rc.Add(render.Paragraph("And press [ Enter ]"))
 }
 ```
 
