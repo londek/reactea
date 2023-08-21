@@ -118,21 +118,21 @@ func (rc *Context) Margin(margin margin) *Context {
 	return rc
 }
 
-// Shorthand for c.MinWidth and c.MinHeight
+// Shorthand for rc.MinWidth() and rc.MinHeight()
 func (rc *Context) MinSize(minWidth, minHeight any) *Context {
 	rc.minWidth = Length(minWidth)
 	rc.minHeight = Length(minHeight)
 	return rc
 }
 
-// Shorthand for c.Width and c.Height
+// Shorthand for rc.Width() and rc.Height()
 func (rc *Context) Size(width, height any) *Context {
 	rc.width = Length(width)
 	rc.height = Length(height)
 	return rc
 }
 
-// Shorthand for c.MaxWidth and c.MaxHeight
+// Shorthand for rc.MaxWidth() and rc.MaxHeight()
 func (rc *Context) MaxSize(maxWidth, maxHeight any) *Context {
 	rc.maxWidth = Length(maxWidth)
 	rc.maxHeight = Length(maxHeight)
@@ -164,17 +164,17 @@ func (rc *Context) Container() container {
 	return container
 }
 
-// Shorthand for c.Add(render.Paragraph())
+// Shorthand for rc.Add(render.Paragraph())
 func (rc *Context) Paragraph(items ...any) *Context {
 	return rc.Add(Paragraph(fmt.Sprint(items...)))
 }
 
-// Shorthand for c.Add(render.Span())
+// Shorthand for rc.Add(render.Span())
 func (rc *Context) Span(items ...any) *Context {
 	return rc.Add(Span(fmt.Sprint(items...)))
 }
 
-// Shorthand for c.Add(render.Breakline{})
+// Shorthand for rc.Add(render.Breakline{})
 func (rc *Context) Breakline() *Context {
 	return rc.Add(Breakline{})
 }
