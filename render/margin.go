@@ -90,3 +90,16 @@ func (mv marginValue) String() string {
 		return "<unknown>"
 	}
 }
+
+const (
+	AutoMargin MarginAttribute = -iota & 0xffffffff
+)
+
+func (ma MarginAttribute) String() string {
+	switch ma {
+	case AutoMargin:
+		return "Auto"
+	default:
+		return "<unknown>"
+	}
+}

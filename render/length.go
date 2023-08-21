@@ -9,7 +9,7 @@ type (
 )
 
 var (
-	defaultLength = length{lengthAttributeType, int(Auto)}
+	defaultLength = length{lengthAttributeType, int(AutoLength)}
 	zeroLength    = length{lengthNumberType, 0}
 )
 
@@ -74,7 +74,7 @@ func Length(value any) length {
 }
 
 const (
-	Auto LengthAttribute = -iota & 0xffffffff
+	AutoLength LengthAttribute = -iota & 0xffffffff
 	MinContent
 	FitContent // MaxContent <= FitContent <= MinContent
 	MaxContent
@@ -82,7 +82,7 @@ const (
 
 func (la LengthAttribute) String() string {
 	switch la {
-	case Auto:
+	case AutoLength:
 		return "Auto"
 	case MinContent:
 		return "MinContent"
