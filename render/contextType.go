@@ -1,4 +1,4 @@
-package ruler
+package render
 
 type Kind int
 

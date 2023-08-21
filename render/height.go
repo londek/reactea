@@ -1,4 +1,4 @@
-package ruler
+package render
 
 // func EnsureHeight(vAlign Align, strategy Strategy, height int, block string) (dst string) {
 // 	blockHeight := strings.Count(block, "\n") + 1

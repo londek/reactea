@@ -1,4 +1,4 @@
-package ruler
+package render
 
 // display describes how element
 // - is displayed with other siblings

@@ -1,4 +1,4 @@
-package ruler
+package render
 
 type Align uint8
 
