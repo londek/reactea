@@ -1,8 +1,8 @@
 package ruler
 
-type BreakLine struct{}
+type Breakline struct{}
 
-func (br BreakLine) Render(rc *renderContext) {
+func (br Breakline) Render(rc *Context) {
 	rc.display = Inline
 
 	rc.Value("\n")

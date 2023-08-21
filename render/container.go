@@ -1,11 +1,11 @@
 package ruler
 
 type container struct {
-	*renderContext
+	*Context
 }
 
 func Container() container {
-	return container{&renderContext{}}
+	return container{&Context{}}
 }
 
 func (container) Value(string) {} // forbidden, no-op
