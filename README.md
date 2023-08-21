@@ -8,8 +8,8 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/londek/reactea.svg)](https://pkg.go.dev/github.com/londek/reactea)
 [![Go Report Card](https://goreportcard.com/badge/github.com/londek/reactea)](https://goreportcard.com/report/github.com/londek/reactea)
 
-Rather simple **Bubble Tea companion** for **handling hierarchy** and support for **lifting state up.**\
-It Reactifies Bubble Tea philosophy and makes it especially easy to work with in bigger projects.
+Rather simple **Bubbletea companion** for **handling hierarchy**, support for **lifting state up.** and **responsive rendering**\
+It Reactifies Bubbletea philosophy and makes it especially easy to work with in bigger projects.
 
 For me, personally - **It's a must** in project with multiple pages and component communication
 
@@ -32,7 +32,7 @@ The goal is to create components that are
 - easier to code
 - all of that without code duplication
 
-The extreme performance is not main goal of this package, because either way Bubble Tea\
+The extreme performance is not main goal of this package, because either way Bubbletea\
 refresh rate is only 60hz and 50 allocations in entire **runtime** won't really hurt anyone.\
 Most info is currently in source code so I suggest checking it out
 
@@ -42,7 +42,7 @@ As of now Go doesn't support type aliases for generics, so `Renderer[TProps]` ha
 
 ## [Quickstart](/examples/quickstart)
 
-Reactea unlike Bubble Tea implements two-way communication, very React-like communication.\
+Reactea unlike Bubbletea implements two-way communication, very React-like communication.\
 If you have experience with React you are gonna love Reactea straight away!
 
 While it may look in following tutorial that Reactea overcomplicates things, trust me, for major projects it's a lifesaver!
@@ -56,11 +56,11 @@ In this tutorial we are going to make application that consists of 2 pages.
 
 More detailed docs about component lifecycle can be found [here](#component-lifecycle), we are only gonna go through basics.
 
-Reactea component lifecycle consists of 6 methods (while Bubble Tea only 3)
+Reactea component lifecycle consists of 6 methods (while Bubbletea only 3)
 |Method|Purpose|
 |-|-|
 | `Init(TProps) tea.Cmd` | It's called first. All critical stuff should happen here. It also supports IO through tea.Cmd |
-| `Update(tea.Msg) tea.Cmd` | It reacts to Bubble Tea IO and updates state accordingly |
+| `Update(tea.Msg) tea.Cmd` | It reacts to Bubbletea IO and updates state accordingly |
 | `AfterUpdate() tea.Cmd` | It's called after root component finishes `Update()`. [Components should queue themselves](#afterupdate) |
 | `Render(int, int) string` | It renders the UI. The two arguments are width and height, they should be calculated by parent |
 | `Destroy()` | It's called whenever Component is about to end it's lifecycle. Please note that it's parent's responsibility to call `Destroy()` |
@@ -219,11 +219,11 @@ if _, err := program.Run(); err != nil {
 
 ![Component lifecycle image](.github/lifecycle-diagram.png)
 
-Reactea component lifecycle consists of 6 methods (while Bubble Tea only 3)
+Reactea component lifecycle consists of 6 methods (while Bubbletea only 3)
 |Method|Purpose|
 |-|-|
 | `Init(TProps) tea.Cmd` | It's called first. All critical stuff should happen here. It also supports IO through tea.Cmd |
-| `Update(tea.Msg) tea.Cmd` | It reacts to Bubble Tea IO and updates state accordingly |
+| `Update(tea.Msg) tea.Cmd` | It reacts to Bubbletea IO and updates state accordingly |
 | `AfterUpdate() tea.Cmd` | It's called after root component finishes `Update()`. [Components should queue themselves](#afterupdate) |
 | `Render(int, int) string` | It renders the UI. The two arguments are width and height, they should be calculated by parent |
 | `Destroy()` | It's called whenever Component is about to end it's lifecycle. Please note that it's parent's responsibility to call `Destroy()` |
@@ -261,7 +261,7 @@ There are many utility functions for transforming stateless into stateful compon
 ## Routes API
 
 Routes API allows developers for easy development of multi-page apps.
-They are kind of substitute for window.Location inside Bubble Tea
+They are kind of substitute for window.Location inside Bubbletea
 
 ### reactea.CurrentRoute() Route
 
