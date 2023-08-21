@@ -13,13 +13,16 @@ func (d display) String() (result string) {
 		result = "inline"
 	case InlineBlock:
 		result = "inlineblock"
+	case Flex:
+		result = "flex"
 	}
 
 	return
 }
 
 const (
-	Block display = iota
-	Inline
+	Inline display = iota
+	Block
 	InlineBlock
+	Flex
 )
