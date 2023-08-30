@@ -25,12 +25,16 @@ type SomeModalComponent[TReturn any] interface {
 	Return(TReturn)
 }
 
+//lint:ignore U1000 This function is used, but through interface
 func (modal *Modal[T]) initModal(resultChan chan<- T) {
 	modal.resultChan = resultChan
 }
 
-func (modal *Modal[T]) Return(result T) {
+// Returns nil tea.Cmd that allows for following syntactic sugar:
+// return modal.Return(result)
+func (modal *Modal[T]) Return(result T) tea.Cmd {
 	modal.resultChan <- result
+	return nil
 }
 
 func ShowProps[T, U any](controller *Controller, modal ModalComponent[T, U], props U) T {

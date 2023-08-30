@@ -11,8 +11,7 @@ import (
 
 // Component fully implemented by embedding premade structs
 type testDefaultComponent struct {
-	BasicComponent
-	BasicPropfulComponent[NoProps]
+	BasicComponent[NoProps]
 }
 
 func (*testDefaultComponent) Render(int, int) string {

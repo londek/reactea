@@ -8,8 +8,7 @@ import (
 )
 
 type Controller struct {
-	reactea.BasicComponent
-	reactea.BasicPropfulComponent[reactea.NoProps]
+	reactea.BasicComponent[reactea.NoProps]
 
 	initCmd tea.Cmd
 	modal   reactea.SomeComponent

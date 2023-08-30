@@ -40,8 +40,7 @@ func PropfulToLess[TProps any](renderer Renderer[TProps], props TProps) Propless
 // Transformer for AnyRenderer -> Component
 
 type componentTransformer[TProps any, TRenderer AnyRenderer[TProps]] struct {
-	BasicComponent
-	BasicPropfulComponent[TProps]
+	BasicComponent[TProps]
 
 	renderer TRenderer
 }

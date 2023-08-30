@@ -25,8 +25,7 @@ func TestRoutePanic(t *testing.T) {
 }
 
 type testNavigateComponenent struct {
-	BasicComponent
-	BasicPropfulComponent[NoProps]
+	BasicComponent[NoProps]
 
 	routeHistory []string
 	step         int

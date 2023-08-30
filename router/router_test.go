@@ -11,8 +11,7 @@ import (
 )
 
 type testComponenent struct {
-	reactea.BasicComponent
-	reactea.BasicPropfulComponent[reactea.NoProps]
+	reactea.BasicComponent[reactea.NoProps]
 
 	router *Component
 

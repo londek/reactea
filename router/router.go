@@ -11,8 +11,7 @@ type Params = map[string]string
 type RouteInitializer func(Params) (reactea.SomeComponent, tea.Cmd)
 
 type Component struct {
-	reactea.BasicComponent
-	reactea.BasicPropfulComponent[Props]
+	reactea.BasicComponent[Props]
 
 	lastComponent   reactea.SomeComponent
 	lastPlaceholder string

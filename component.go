@@ -90,25 +90,28 @@ type ProplessRenderer = func(int, int) string
 // target dimensions = DumbRenderer, or Stringer
 type DumbRenderer = func() string
 
-// The most basic form of Reactea Component
-// It implements all not required methods
-// so you don't have to
-type BasicComponent struct{}
-
-func (c *BasicComponent) Destroy()                   {}
-func (c *BasicComponent) Update(msg tea.Msg) tea.Cmd { return nil }
-func (c *BasicComponent) AfterUpdate() tea.Cmd       { return nil }
-
-// Stores props in struct.
-// If you want to derive state from UpdateProps()
-// you're probably looking at wrong thing
-type BasicPropfulComponent[TProps any] struct {
+// Basic component that implements all methods
+// required by reactea.Component[TProps]
+// except Render(int, int)
+type BasicComponent[TProps any] struct {
 	props TProps
 }
 
-func (c *BasicPropfulComponent[TProps]) Init(props TProps) tea.Cmd { c.UpdateProps(props); return nil }
-func (c *BasicPropfulComponent[TProps]) UpdateProps(props TProps)  { c.props = props }
-func (c *BasicPropfulComponent[TProps]) Props() TProps             { return c.props }
+func (c *BasicComponent[TProps]) Init(props TProps) tea.Cmd  { c.UpdateProps(props); return nil }
+func (c *BasicComponent[TProps]) Destroy()                   {}
+func (c *BasicComponent[TProps]) Update(msg tea.Msg) tea.Cmd { return nil }
+func (c *BasicComponent[TProps]) AfterUpdate() tea.Cmd       { return nil }
+func (c *BasicComponent[TProps]) UpdateProps(props TProps)   { c.props = props }
+func (c *BasicComponent[TProps]) Props() TProps              { return c.props }
+
+// The most basic form of Reactea Component
+// It implements all not required methods
+// so you don't have to
+type BasicProplessComponent struct{}
+
+func (c *BasicProplessComponent) Destroy()                   {}
+func (c *BasicProplessComponent) Update(msg tea.Msg) tea.Cmd { return nil }
+func (c *BasicProplessComponent) AfterUpdate() tea.Cmd       { return nil }
 
 // Utility component for displaying empty string on Render()
 type InvisibleComponent struct{}

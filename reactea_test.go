@@ -11,8 +11,7 @@ import (
 )
 
 type testComponenent struct {
-	BasicComponent
-	BasicPropfulComponent[NoProps]
+	BasicComponent[NoProps]
 
 	echoKey string
 
