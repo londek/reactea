@@ -13,7 +13,7 @@ type ModalComponent[TReturn, TProps any] interface {
 	reactea.Component[TProps]
 
 	initModal(chan<- TReturn)
-	Return(TReturn)
+	Return(TReturn) tea.Cmd
 }
 
 type SomeModalComponent[TReturn any] interface {
@@ -22,7 +22,7 @@ type SomeModalComponent[TReturn any] interface {
 	Init() tea.Cmd
 
 	initModal(chan<- TReturn)
-	Return(TReturn)
+	Return(TReturn) tea.Cmd
 }
 
 //lint:ignore U1000 This function is used, but through interface
