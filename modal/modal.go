@@ -37,7 +37,7 @@ func (modal *Modal[T]) Return(result T) tea.Cmd {
 	return nil
 }
 
-func ShowProps[T, U any](controller *Controller, modal ModalComponent[T, U], props U) T {
+func Show[T, U any](controller *Controller, modal ModalComponent[T, U], props U) T {
 	resultChan := make(chan T)
 
 	modal.initModal(resultChan)
@@ -50,7 +50,7 @@ func ShowProps[T, U any](controller *Controller, modal ModalComponent[T, U], pro
 	return result
 }
 
-func Show[T any](controller *Controller, modal SomeModalComponent[T]) T {
+func ShowPropless[T any](controller *Controller, modal SomeModalComponent[T]) T {
 	resultChan := make(chan T)
 
 	modal.initModal(resultChan)
