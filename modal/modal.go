@@ -62,5 +62,5 @@ func (c *Controller) Run(f func(*Controller) tea.Cmd) tea.Cmd {
 func Execute(f func(*Controller) tea.Cmd) (*Controller, tea.Cmd) {
 	c := NewController()
 
-	return c, tea.Batch(c.Init(), c.Run(f))
+	return c, c.Run(f)
 }
