@@ -8,24 +8,26 @@ import (
 )
 
 type Params = map[string]string
-type RouteInitializer func(Params) (reactea.SomeComponent, tea.Cmd)
+type RouteInitializer func(Params) (reactea.Component, tea.Cmd)
 
 type Component struct {
-	reactea.BasicComponent[Props]
+	reactea.BasicComponent
 
-	lastComponent   reactea.SomeComponent
+	Routes map[string]RouteInitializer
+
+	lastComponent   reactea.Component
 	lastPlaceholder string
 }
-
-type Props map[string]RouteInitializer
 
 func New() *Component {
 	return &Component{}
 }
 
-func (c *Component) Init(props Props) tea.Cmd {
-	c.UpdateProps(props)
+func NewWithRoutes(routes map[string]RouteInitializer) *Component {
+	return &Component{Routes: routes}
+}
 
+func (c *Component) Init() tea.Cmd {
 	return c.initRoute()
 }
 
@@ -74,7 +76,7 @@ func (c *Component) initRoute() tea.Cmd {
 	if initializer, params, placeholder, ok := c.findMatchingRouteInitializer(); ok {
 		c.lastComponent, cmd = initializer(params)
 		c.lastPlaceholder = placeholder
-	} else if initializer, ok := c.Props()["default"]; ok {
+	} else if initializer, ok := c.Routes["default"]; ok {
 		c.lastComponent, cmd = initializer(nil)
 	}
 
@@ -84,7 +86,7 @@ func (c *Component) initRoute() tea.Cmd {
 func (c *Component) findMatchingRouteInitializer() (RouteInitializer, Params, string, bool) {
 	currentRoute := reactea.CurrentRoute()
 
-	for placeholder, initializer := range c.Props() {
+	for placeholder, initializer := range c.Routes {
 		if params, ok := reactea.RouteMatchesPlaceholder(currentRoute, placeholder); ok {
 			return initializer, params, placeholder, true
 		}

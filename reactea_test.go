@@ -2,7 +2,6 @@ package reactea
 
 import (
 	"bytes"
-	"reflect"
 	"strings"
 	"testing"
 	"time"
@@ -11,7 +10,7 @@ import (
 )
 
 type testComponenent struct {
-	BasicComponent[NoProps]
+	BasicComponent
 
 	echoKey string
 
@@ -80,10 +79,6 @@ func TestComponent(t *testing.T) {
 
 	if CurrentRoute() != "/test/test/test" {
 		t.Errorf("current route is wrong, expected \"/test/test/test\", got \"%s\"", CurrentRoute())
-	}
-
-	if props := root.Props(); !reflect.DeepEqual(props, NoProps{}) {
-		t.Errorf("props is not zero-value of NoProps, got \"%s\"", props)
 	}
 
 	if root.lastWidth != 1 {

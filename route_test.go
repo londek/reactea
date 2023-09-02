@@ -25,15 +25,13 @@ func TestRoutePanic(t *testing.T) {
 }
 
 type testNavigateComponenent struct {
-	BasicComponent[NoProps]
+	BasicComponent
 
 	routeHistory []string
 	step         int
 }
 
-func (c *testNavigateComponenent) Init(props NoProps) tea.Cmd {
-	c.UpdateProps(props)
-
+func (c *testNavigateComponenent) Init() tea.Cmd {
 	return Rerender
 }
 

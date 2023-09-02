@@ -8,10 +8,10 @@ import (
 )
 
 type Controller struct {
-	reactea.BasicComponent[reactea.NoProps]
+	reactea.BasicComponent
 
 	initCmd tea.Cmd
-	modal   reactea.SomeComponent
+	modal   reactea.Component
 	mutex   sync.Mutex
 }
 
@@ -35,7 +35,7 @@ func (c *Controller) Render(width, height int) string {
 	return c.modal.Render(width, height)
 }
 
-func (c *Controller) show(modal reactea.SomeComponent, initCmd tea.Cmd) {
+func (c *Controller) show(modal reactea.Component, initCmd tea.Cmd) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
 

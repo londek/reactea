@@ -6,11 +6,11 @@ import (
 
 func TestRenderAny(t *testing.T) {
 	t.Run("renderer", func(t *testing.T) {
-		renderer := func(NoProps, int, int) string {
+		renderer := func(struct{}, int, int) string {
 			return "working"
 		}
 
-		if result := RenderAny(renderer, NoProps{}, 1, 1); result != "working" {
+		if result := RenderAny(renderer, struct{}{}, 1, 1); result != "working" {
 			t.Errorf("invalid result, expected \"working\", got \"%s\"", result)
 		}
 	})
@@ -20,7 +20,7 @@ func TestRenderAny(t *testing.T) {
 			return "working"
 		}
 
-		if result := RenderAny(proplessRenderer, NoProps{}, 1, 1); result != "working" {
+		if result := RenderAny(proplessRenderer, struct{}{}, 1, 1); result != "working" {
 			t.Errorf("invalid result, expected \"working\", got \"%s\"", result)
 		}
 	})
@@ -30,18 +30,18 @@ func TestRenderAny(t *testing.T) {
 			return "working"
 		}
 
-		if result := RenderAny(dumbRenderer, NoProps{}, 1, 1); result != "working" {
+		if result := RenderAny(dumbRenderer, struct{}{}, 1, 1); result != "working" {
 			t.Errorf("invalid result, expected \"working\", got \"%s\"", result)
 		}
 	})
 }
 
 func TestPropfulToLess(t *testing.T) {
-	renderer := func(NoProps, int, int) string {
+	renderer := func(struct{}, int, int) string {
 		return "working"
 	}
 
-	proplessRenderer := PropfulToLess(renderer, NoProps{})
+	proplessRenderer := PropfulToLess(renderer, struct{}{})
 
 	if result := proplessRenderer(1, 1); result != "working" {
 		t.Errorf("wrapped value doesn't render correctly, expected \"working\", got \"%s\"", result)
@@ -50,11 +50,11 @@ func TestPropfulToLess(t *testing.T) {
 
 func TestComponentify(t *testing.T) {
 	t.Run("renderer", func(t *testing.T) {
-		renderer := func(NoProps, int, int) string {
+		renderer := func(struct{}, int, int) string {
 			return "working"
 		}
 
-		if result := Componentify[NoProps](renderer).Render(1, 1); result != "working" {
+		if result := Componentify[struct{}](renderer).Render(1, 1); result != "working" {
 			t.Errorf("transformed value doesn't render correctly, expected \"working\", got \"%s\"", result)
 		}
 	})
@@ -64,7 +64,7 @@ func TestComponentify(t *testing.T) {
 			return "working"
 		}
 
-		if result := Componentify[NoProps](proplessRenderer).Render(1, 1); result != "working" {
+		if result := Componentify[struct{}](proplessRenderer).Render(1, 1); result != "working" {
 			t.Errorf("transformed value doesn't render correctly, expected \"working\", got \"%s\"", result)
 		}
 	})
@@ -74,7 +74,7 @@ func TestComponentify(t *testing.T) {
 			return "working"
 		}
 
-		if result := Componentify[NoProps](dumbRenderer).Render(1, 1); result != "working" {
+		if result := Componentify[struct{}](dumbRenderer).Render(1, 1); result != "working" {
 			t.Errorf("transformed value doesn't render correctly, expected \"working\", got \"%s\"", result)
 		}
 	})

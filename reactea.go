@@ -8,7 +8,7 @@ import tea "github.com/charmbracelet/bubbletea"
 //
 // Note: Return type is *tea.Program, Reactea doesn't have
 // it's own wrapper (reactea.Program) type, yet (?)
-func NewProgram(root Component[NoProps], options ...tea.ProgramOption) *tea.Program {
+func NewProgram(root Component, options ...tea.ProgramOption) *tea.Program {
 	// Ensure globals are default, useful for tests and
 	// running programs SEQUENTIALLY in same runtime
 	isUpdate = false

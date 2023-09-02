@@ -40,8 +40,9 @@ func PropfulToLess[TProps any](renderer Renderer[TProps], props TProps) Propless
 // Transformer for AnyRenderer -> Component
 
 type componentTransformer[TProps any, TRenderer AnyRenderer[TProps]] struct {
-	BasicComponent[TProps]
+	BasicComponent
 
+	props    TProps
 	renderer TRenderer
 }
 
@@ -51,6 +52,6 @@ func (c *componentTransformer[TProps, TRenderer]) Render(width, height int) stri
 
 // Componentifies AnyRenderer
 // Returns uninitialized component with renderer taking care of .Render()
-func Componentify[TProps any, TRenderer AnyRenderer[TProps]](renderer TRenderer) Component[TProps] {
+func Componentify[TProps any, TRenderer AnyRenderer[TProps]](renderer TRenderer) Component {
 	return &componentTransformer[TProps, TRenderer]{renderer: renderer}
 }

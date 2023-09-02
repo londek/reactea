@@ -9,17 +9,8 @@ type Modal[T any] struct {
 	resultChan chan<- ModalResult[T]
 }
 
-type ModalComponent[TReturn, TProps any] interface {
-	reactea.Component[TProps]
-
-	initModal(chan<- ModalResult[TReturn])
-	Return(ModalResult[TReturn]) tea.Cmd
-}
-
-type SomeModalComponent[TReturn any] interface {
-	reactea.SomeComponent
-
-	Init() tea.Cmd
+type ModalComponent[TReturn any] interface {
+	reactea.Component
 
 	initModal(chan<- ModalResult[TReturn])
 	Return(ModalResult[TReturn]) tea.Cmd
@@ -45,20 +36,7 @@ func (modal *Modal[T]) Error(err error) tea.Cmd {
 	return modal.Return(Error[T](err))
 }
 
-func Show[T, U any](controller *Controller, modal ModalComponent[T, U], props U) ModalResult[T] {
-	resultChan := make(chan ModalResult[T])
-
-	modal.initModal(resultChan)
-	controller.show(modal, modal.Init(props))
-
-	result := <-resultChan
-
-	controller.hide()
-
-	return result
-}
-
-func ShowPropless[T any](controller *Controller, modal SomeModalComponent[T]) ModalResult[T] {
+func Show[T any](controller *Controller, modal ModalComponent[T]) ModalResult[T] {
 	resultChan := make(chan ModalResult[T])
 
 	modal.initModal(resultChan)
@@ -84,5 +62,5 @@ func (c *Controller) Run(f func(*Controller) tea.Cmd) tea.Cmd {
 func Execute(f func(*Controller) tea.Cmd) (*Controller, tea.Cmd) {
 	c := NewController()
 
-	return c, tea.Batch(c.Init(reactea.NoProps{}), c.Run(f))
+	return c, tea.Batch(c.Init(), c.Run(f))
 }

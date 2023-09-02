@@ -11,18 +11,17 @@ import (
 )
 
 type testComponenent struct {
-	reactea.BasicComponent[reactea.NoProps]
+	reactea.BasicComponent
 
 	router *Component
 
-	testRoutes  map[string]RouteInitializer
 	testUpdater func(*testComponenent) tea.Cmd
 
 	updateN int
 }
 
-func (c *testComponenent) Init(reactea.NoProps) tea.Cmd {
-	return c.router.Init(c.testRoutes)
+func (c *testComponenent) Init() tea.Cmd {
+	return c.router.Init()
 }
 
 func (c *testComponenent) Update(msg tea.Msg) tea.Cmd {
@@ -47,16 +46,15 @@ func TestDefault(t *testing.T) {
 	in.WriteString("123")
 
 	root := &testComponenent{
-		testRoutes: map[string]RouteInitializer{
-			"default": func(Params) (reactea.SomeComponent, tea.Cmd) {
+		router: NewWithRoutes(map[string]RouteInitializer{
+			"default": func(Params) (reactea.Component, tea.Cmd) {
 				renderer := func() string {
 					return "Hello Default!"
 				}
 
-				return reactea.Componentify[reactea.NoProps](renderer), nil
+				return reactea.Componentify[struct{}](renderer), nil
 			},
-		},
-		router: New(),
+		}),
 	}
 
 	program := reactea.NewProgram(root, tea.WithInput(&in), tea.WithOutput(&out))
@@ -76,23 +74,22 @@ func TestNonDefault(t *testing.T) {
 	in.WriteString("123")
 
 	root := &testComponenent{
-		testRoutes: map[string]RouteInitializer{
-			"default": func(Params) (reactea.SomeComponent, tea.Cmd) {
+		router: NewWithRoutes(map[string]RouteInitializer{
+			"default": func(Params) (reactea.Component, tea.Cmd) {
 				renderer := func() string {
 					return "Hello Default!"
 				}
 
-				return reactea.Componentify[reactea.NoProps](renderer), nil
+				return reactea.Componentify[struct{}](renderer), nil
 			},
-			"/test/test": func(Params) (reactea.SomeComponent, tea.Cmd) {
+			"/test/test": func(Params) (reactea.Component, tea.Cmd) {
 				renderer := func() string {
 					return "Hello Tests!"
 				}
 
-				return reactea.Componentify[reactea.NoProps](renderer), nil
+				return reactea.Componentify[struct{}](renderer), nil
 			},
-		},
-		router: New(),
+		}),
 	}
 
 	program := reactea.NewProgram(root, reactea.WithRoute("/test/test"), tea.WithInput(&in), tea.WithOutput(&out))
@@ -116,22 +113,6 @@ func TestRouteChange(t *testing.T) {
 	in.WriteString("123")
 
 	root := &testComponenent{
-		testRoutes: map[string]RouteInitializer{
-			"default": func(Params) (reactea.SomeComponent, tea.Cmd) {
-				renderer := func() string {
-					return "Hello Default!"
-				}
-
-				return reactea.Componentify[reactea.NoProps](renderer), nil
-			},
-			"/test/test": func(Params) (reactea.SomeComponent, tea.Cmd) {
-				renderer := func() string {
-					return "Hello Tests!"
-				}
-
-				return reactea.Componentify[reactea.NoProps](renderer), nil
-			},
-		},
 		testUpdater: func(c *testComponenent) tea.Cmd {
 			if c.updateN == 0 {
 				reactea.SetRoute("/test/test")
@@ -141,7 +122,22 @@ func TestRouteChange(t *testing.T) {
 				return reactea.Destroy
 			}
 		},
-		router: New(),
+		router: NewWithRoutes(map[string]RouteInitializer{
+			"default": func(Params) (reactea.Component, tea.Cmd) {
+				renderer := func() string {
+					return "Hello Default!"
+				}
+
+				return reactea.Componentify[struct{}](renderer), nil
+			},
+			"/test/test": func(Params) (reactea.Component, tea.Cmd) {
+				renderer := func() string {
+					return "Hello Tests!"
+				}
+
+				return reactea.Componentify[struct{}](renderer), nil
+			},
+		}),
 	}
 
 	program := reactea.NewProgram(root, tea.WithInput(&in), tea.WithOutput(&out))
@@ -185,22 +181,6 @@ func TestRouteWithParam(t *testing.T) {
 	in.WriteString("123")
 
 	root := &testComponenent{
-		testRoutes: map[string]RouteInitializer{
-			"default": func(Params) (reactea.SomeComponent, tea.Cmd) {
-				renderer := func() string {
-					return "Hello Default!"
-				}
-
-				return reactea.Componentify[reactea.NoProps](renderer), nil
-			},
-			"/test/:foo": func(params Params) (reactea.SomeComponent, tea.Cmd) {
-				renderer := func() string {
-					return fmt.Sprintf("Hello Tests! Param foo is %s", params["foo"])
-				}
-
-				return reactea.Componentify[reactea.NoProps](renderer), nil
-			},
-		},
 		testUpdater: func(c *testComponenent) tea.Cmd {
 			if c.updateN == 0 {
 				reactea.SetRoute("/test/wellDone")
@@ -210,7 +190,22 @@ func TestRouteWithParam(t *testing.T) {
 				return reactea.Destroy
 			}
 		},
-		router: New(),
+		router: NewWithRoutes(map[string]RouteInitializer{
+			"default": func(Params) (reactea.Component, tea.Cmd) {
+				renderer := func() string {
+					return "Hello Default!"
+				}
+
+				return reactea.Componentify[struct{}](renderer), nil
+			},
+			"/test/:foo": func(params Params) (reactea.Component, tea.Cmd) {
+				renderer := func() string {
+					return fmt.Sprintf("Hello Tests! Param foo is %s", params["foo"])
+				}
+
+				return reactea.Componentify[struct{}](renderer), nil
+			},
+		}),
 	}
 
 	program := reactea.NewProgram(root, tea.WithInput(&in), tea.WithOutput(&out))

@@ -9,7 +9,7 @@ import (
 )
 
 type testAfterUpdaterComponenent struct {
-	BasicComponent[NoProps]
+	BasicComponent
 
 	firstRun bool
 	text     string

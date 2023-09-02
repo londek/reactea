@@ -6,19 +6,19 @@ import tea "github.com/charmbracelet/bubbletea"
 var isUpdate bool
 
 type model struct {
-	root Component[NoProps]
+	root Component
 
 	width, height int
 }
 
-func New(root Component[NoProps]) model {
+func New(root Component) model {
 	return model{
 		root: root,
 	}
 }
 
 func (m model) Init() tea.Cmd {
-	return m.root.Init(NoProps{})
+	return m.root.Init()
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
