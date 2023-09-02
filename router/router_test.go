@@ -52,7 +52,7 @@ func TestDefault(t *testing.T) {
 					return "Hello Default!"
 				}
 
-				return reactea.Componentify[struct{}](renderer)
+				return reactea.ComponentifyDumb(renderer)
 			},
 		}),
 	}
@@ -80,14 +80,14 @@ func TestNonDefault(t *testing.T) {
 					return "Hello Default!"
 				}
 
-				return reactea.Componentify[struct{}](renderer)
+				return reactea.ComponentifyDumb(renderer)
 			},
 			"/test/test": func(Params) reactea.Component {
 				renderer := func() string {
 					return "Hello Tests!"
 				}
 
-				return reactea.Componentify[struct{}](renderer)
+				return reactea.ComponentifyDumb(renderer)
 			},
 		}),
 	}
@@ -128,14 +128,14 @@ func TestRouteChange(t *testing.T) {
 					return "Hello Default!"
 				}
 
-				return reactea.Componentify[struct{}](renderer)
+				return reactea.ComponentifyDumb(renderer)
 			},
 			"/test/test": func(Params) reactea.Component {
 				renderer := func() string {
 					return "Hello Tests!"
 				}
 
-				return reactea.Componentify[struct{}](renderer)
+				return reactea.ComponentifyDumb(renderer)
 			},
 		}),
 	}
@@ -196,14 +196,14 @@ func TestRouteWithParam(t *testing.T) {
 					return "Hello Default!"
 				}
 
-				return reactea.Componentify[struct{}](renderer)
+				return reactea.ComponentifyDumb(renderer)
 			},
 			"/test/:foo": func(params Params) reactea.Component {
 				renderer := func() string {
 					return fmt.Sprintf("Hello Tests! Param foo is %s", params["foo"])
 				}
 
-				return reactea.Componentify[struct{}](renderer)
+				return reactea.ComponentifyDumb(renderer)
 			},
 		}),
 	}
