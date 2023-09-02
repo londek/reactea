@@ -41,10 +41,6 @@ func (modal *Modal[T]) Ok(result T) tea.Cmd {
 	return modal.Return(Ok[T](result))
 }
 
-func (modal *Modal[T]) Fail() tea.Cmd {
-	return modal.Return(Fail[T]())
-}
-
 func (modal *Modal[T]) Error(err error) tea.Cmd {
 	return modal.Return(Error[T](err))
 }
