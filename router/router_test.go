@@ -47,12 +47,12 @@ func TestDefault(t *testing.T) {
 
 	root := &testComponenent{
 		router: NewWithRoutes(map[string]RouteInitializer{
-			"default": func(Params) (reactea.Component, tea.Cmd) {
+			"default": func(Params) reactea.Component {
 				renderer := func() string {
 					return "Hello Default!"
 				}
 
-				return reactea.Componentify[struct{}](renderer), nil
+				return reactea.Componentify[struct{}](renderer)
 			},
 		}),
 	}
@@ -75,19 +75,19 @@ func TestNonDefault(t *testing.T) {
 
 	root := &testComponenent{
 		router: NewWithRoutes(map[string]RouteInitializer{
-			"default": func(Params) (reactea.Component, tea.Cmd) {
+			"default": func(Params) reactea.Component {
 				renderer := func() string {
 					return "Hello Default!"
 				}
 
-				return reactea.Componentify[struct{}](renderer), nil
+				return reactea.Componentify[struct{}](renderer)
 			},
-			"/test/test": func(Params) (reactea.Component, tea.Cmd) {
+			"/test/test": func(Params) reactea.Component {
 				renderer := func() string {
 					return "Hello Tests!"
 				}
 
-				return reactea.Componentify[struct{}](renderer), nil
+				return reactea.Componentify[struct{}](renderer)
 			},
 		}),
 	}
@@ -123,19 +123,19 @@ func TestRouteChange(t *testing.T) {
 			}
 		},
 		router: NewWithRoutes(map[string]RouteInitializer{
-			"default": func(Params) (reactea.Component, tea.Cmd) {
+			"default": func(Params) reactea.Component {
 				renderer := func() string {
 					return "Hello Default!"
 				}
 
-				return reactea.Componentify[struct{}](renderer), nil
+				return reactea.Componentify[struct{}](renderer)
 			},
-			"/test/test": func(Params) (reactea.Component, tea.Cmd) {
+			"/test/test": func(Params) reactea.Component {
 				renderer := func() string {
 					return "Hello Tests!"
 				}
 
-				return reactea.Componentify[struct{}](renderer), nil
+				return reactea.Componentify[struct{}](renderer)
 			},
 		}),
 	}
@@ -191,19 +191,19 @@ func TestRouteWithParam(t *testing.T) {
 			}
 		},
 		router: NewWithRoutes(map[string]RouteInitializer{
-			"default": func(Params) (reactea.Component, tea.Cmd) {
+			"default": func(Params) reactea.Component {
 				renderer := func() string {
 					return "Hello Default!"
 				}
 
-				return reactea.Componentify[struct{}](renderer), nil
+				return reactea.Componentify[struct{}](renderer)
 			},
-			"/test/:foo": func(params Params) (reactea.Component, tea.Cmd) {
+			"/test/:foo": func(params Params) reactea.Component {
 				renderer := func() string {
 					return fmt.Sprintf("Hello Tests! Param foo is %s", params["foo"])
 				}
 
-				return reactea.Componentify[struct{}](renderer), nil
+				return reactea.Componentify[struct{}](renderer)
 			},
 		}),
 	}
