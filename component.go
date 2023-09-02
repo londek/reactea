@@ -71,6 +71,9 @@ type ProplessRenderer = func(int, int) string
 // target dimensions = DumbRenderer, or Stringer
 type DumbRenderer = func() string
 
+// Alias for no props
+type NoProps = struct{}
+
 // Basic component that implements all methods
 // required by reactea.Component
 // except Render(int, int)
