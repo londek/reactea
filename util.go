@@ -30,6 +30,20 @@ func RenderAny[TProps any, TRenderer AnyRenderer[TProps]](renderer TRenderer, pr
 	return
 }
 
+// Renders all AnyProplessRenderers in one function
+//
+// Note: Using named return type for 100% coverage
+func RenderDumb[TRenderer AnyProplessRenderer](renderer TRenderer, width, height int) (result string) {
+	switch renderer := any(renderer).(type) {
+	case ProplessRenderer:
+		result = renderer(width, height)
+	case DumbRenderer:
+		result = renderer()
+	}
+
+	return
+}
+
 // Wraps propful into propless renderer
 func PropfulToLess[TProps any](renderer Renderer[TProps], props TProps) ProplessRenderer {
 	return func(width, height int) string {
@@ -54,4 +68,22 @@ func (c *componentTransformer[TProps, TRenderer]) Render(width, height int) stri
 // Returns uninitialized component with renderer taking care of .Render()
 func Componentify[TProps any, TRenderer AnyRenderer[TProps]](renderer TRenderer) Component {
 	return &componentTransformer[TProps, TRenderer]{renderer: renderer}
+}
+
+// Transformer for AnyProplessRenderer -> Component
+
+type dumbComponentTransformer[TRenderer AnyProplessRenderer] struct {
+	BasicComponent
+
+	renderer TRenderer
+}
+
+func (c *dumbComponentTransformer[T]) Render(width, height int) string {
+	return RenderDumb(c.renderer, width, height)
+}
+
+// Componentifies AnyProplessRenderer
+// Returns uninitialized component with renderer taking care of .Render()
+func ComponentifyDumb[TRenderer AnyProplessRenderer](renderer TRenderer) Component {
+	return &dumbComponentTransformer[TRenderer]{renderer: renderer}
 }
