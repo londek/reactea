@@ -67,7 +67,7 @@ func (c *Component) BeforeUpdate() {
 
 	c.lastComponent = nil
 
-	c.initRoute()
+	c.initCmd = c.initRoute()
 }
 
 func (c *Component) Render(width, height int) string {
@@ -82,11 +82,11 @@ func (c *Component) initRoute() tea.Cmd {
 	if initializer, params, placeholder, ok := c.findMatchingRouteInitializer(); ok {
 		c.lastPlaceholder = placeholder
 		c.lastComponent = initializer(params)
-		c.initCmd = c.lastComponent.Init()
+		return c.lastComponent.Init()
 	} else if initializer, ok := c.Routes["default"]; ok {
 		c.lastPlaceholder = placeholder
 		c.lastComponent = initializer(nil)
-		c.initCmd = c.lastComponent.Init()
+		return c.lastComponent.Init()
 	}
 
 	return nil

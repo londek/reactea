@@ -33,13 +33,10 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		return m, tea.Quit
 	// We want component to know at what size should it render
 	// and unify size handling across all Reactea components
-	// That's why we don't forward WindowSizeMsg, but tell
-	// target width and height with Render()
-	//
-	// Note: It also means no Update() before first render
+	// We pass WindowSizeMsg to root component just for
+	// sake of utility.
 	case tea.WindowSizeMsg:
 		m.width, m.height = msg.Width, msg.Height
-		return m, nil
 	}
 
 	rootCmd := m.root.Update(msg)
