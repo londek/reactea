@@ -51,6 +51,20 @@ func PropfulToLess[TProps any](renderer Renderer[TProps], props TProps) Propless
 	}
 }
 
+// Static component for displaying static text
+
+type staticComponent struct {
+	BasicComponent
+
+	content string
+}
+
+func (c *staticComponent) Render(int, int) string { return c.content }
+
+func StaticComponent(content string) Component {
+	return &staticComponent{content: content}
+}
+
 // Transformer for AnyRenderer -> Component
 
 type componentTransformer[TProps any, TRenderer AnyRenderer[TProps]] struct {
