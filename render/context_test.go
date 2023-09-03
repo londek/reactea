@@ -6,8 +6,6 @@ import (
 )
 
 func TestContext(t *testing.T) {
-	Debug()
-
 	c := New()
 
 	c.Span("abababab")
