@@ -12,15 +12,20 @@ type Controller struct {
 
 	initCmd tea.Cmd
 	modal   reactea.Component
-	mutex   sync.Mutex
+	cond    *sync.Cond
 }
 
 func NewController() *Controller {
-	return &Controller{}
+	return &Controller{
+		cond: sync.NewCond(&sync.Mutex{}),
+	}
 }
 
 func (c *Controller) Update(msg tea.Msg) tea.Cmd {
-	c.mutex.Lock()
+	c.cond.L.Lock()
+	for c.modal == nil {
+		c.cond.Wait()
+	}
 
 	if c.initCmd != nil {
 		initCmd := c.initCmd
@@ -32,8 +37,7 @@ func (c *Controller) Update(msg tea.Msg) tea.Cmd {
 }
 
 func (c *Controller) Render(width, height int) string {
-	defer c.mutex.Unlock()
-
+	defer c.cond.L.Unlock()
 	return c.modal.Render(width, height)
 }
 
@@ -44,11 +48,19 @@ func (c *Controller) Run(f func(*Controller) tea.Cmd) tea.Cmd {
 }
 
 func (c *Controller) show(modal reactea.Component, initCmd tea.Cmd) {
+	c.cond.L.Lock()
+	defer c.cond.L.Unlock()
+
 	c.modal = modal
 	c.initCmd = initCmd
+
+	c.cond.Broadcast()
 }
 
 func (c *Controller) hide() {
+	c.cond.L.Lock()
+	defer c.cond.L.Unlock()
+
 	c.modal.Destroy()
 	c.modal = nil
 }
