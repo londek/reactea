@@ -2,14 +2,10 @@ package reactea
 
 import tea "github.com/charmbracelet/bubbletea"
 
-type BeforeUpdater interface {
-	BeforeUpdate() tea.Cmd
-}
-
-var beforeUpdaters []BeforeUpdater
+var beforeUpdaters []Component
 
 // Queue component for AfterUpdate event
-func BeforeUpdate(beforeUpdater BeforeUpdater) {
+func BeforeUpdate(beforeUpdater Component) {
 	if beforeUpdater == nil {
 		return
 	}
