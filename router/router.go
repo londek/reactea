@@ -29,6 +29,7 @@ func NewWithRoutes(routes map[string]RouteInitializer) *Component {
 }
 
 func (c *Component) Init() tea.Cmd {
+	reactea.BeforeUpdate(c)
 	return c.initRoute()
 }
 
