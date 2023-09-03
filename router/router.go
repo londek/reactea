@@ -32,7 +32,7 @@ func (c *Component) Init() tea.Cmd {
 }
 
 func (c *Component) Update(msg tea.Msg) tea.Cmd {
-	reactea.AfterUpdate(c)
+	reactea.BeforeUpdate(c)
 
 	if c.lastComponent == nil {
 		return nil
@@ -41,7 +41,7 @@ func (c *Component) Update(msg tea.Msg) tea.Cmd {
 	return c.lastComponent.Update(msg)
 }
 
-func (c *Component) AfterUpdate() tea.Cmd {
+func (c *Component) BeforeUpdate() tea.Cmd {
 	// If last route was changed we want to reuse the component
 	if !reactea.WasRouteChanged() {
 		return nil

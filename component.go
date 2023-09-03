@@ -38,6 +38,12 @@ type Component interface {
 	// Reactea implementation methods, just use BasicComponent
 	// if you don't know what are you doing
 
+	// BeforeUpdate is stage useful for components like routers
+	// to prepare components, initialize them and wait for
+	// Update() to keep lifecycle in spec. Saying that you
+	// will probably never need to use it
+	BeforeUpdate() tea.Cmd
+
 	// AfterUpdate is stage useful for components like routers
 	// to prepare content. Saying that you will probably never
 	// need to use it
@@ -83,6 +89,7 @@ func (c *BasicComponent) Init() tea.Cmd              { return nil }
 func (c *BasicComponent) Destroy()                   {}
 func (c *BasicComponent) Update(msg tea.Msg) tea.Cmd { return nil }
 func (c *BasicComponent) AfterUpdate() tea.Cmd       { return nil }
+func (c *BasicComponent) BeforeUpdate() tea.Cmd      { return nil }
 
 // Utility component for displaying empty string on Render()
 type InvisibleComponent struct{}
