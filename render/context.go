@@ -5,12 +5,6 @@ import (
 	"strings"
 )
 
-var debug bool
-
-func Debug() {
-	debug = true
-}
-
 type RenderedElement struct {
 	inline  bool
 	element string
@@ -51,10 +45,10 @@ func New() *Context {
 }
 
 // So that we dont have to recalculate everything
-type cachedElement struct {
-	element       string
-	width, height int
-}
+// type cachedElement struct {
+// 	element       string
+// 	width, height int
+// }
 
 // Context represents current level in Renderer context tree (reactea's Component tree)
 // In TUI terms you could say Context is block

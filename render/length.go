@@ -8,10 +8,7 @@ type (
 	LengthAttribute  int
 )
 
-var (
-	defaultLength = length{lengthAttributeType, int(AutoLength)}
-	zeroLength    = length{lengthNumberType, 0}
-)
+var defaultLength = length{lengthAttributeType, int(AutoLength)}
 
 type lengthType int
 
