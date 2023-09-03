@@ -22,7 +22,7 @@ func (m model) Init() tea.Cmd {
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	beforeUpdatesCmd := handleBeforeUpdates()
+	handleBeforeUpdates()
 
 	isUpdate = true
 	wasRouteChanged = false
@@ -50,10 +50,10 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	// Guarantee rerender if route was changed
 	if wasRouteChanged {
-		return m, tea.Batch(updatedRoute(lastRoute), rootCmd, afterUpdatesCmd, beforeUpdatesCmd)
+		return m, tea.Batch(updatedRoute(lastRoute), rootCmd, afterUpdatesCmd)
 	}
 
-	return m, tea.Batch(rootCmd, afterUpdatesCmd, beforeUpdatesCmd)
+	return m, tea.Batch(rootCmd, afterUpdatesCmd)
 }
 
 func (m model) View() string {
