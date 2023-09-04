@@ -91,16 +91,6 @@ func TestComponent(t *testing.T) {
 }
 
 func TestNew(t *testing.T) {
-	t.Run("New", func(t *testing.T) {
-		program := tea.NewProgram(New(&testDefaultComponent{}), WithoutInput(), tea.WithoutRenderer())
-
-		go program.Quit()
-
-		if _, err := program.Run(); err != nil {
-			t.Fatal(err)
-		}
-	})
-
 	t.Run("NewProgram", func(t *testing.T) {
 		program := NewProgram(&testDefaultComponent{}, WithoutInput(), tea.WithoutRenderer())
 
