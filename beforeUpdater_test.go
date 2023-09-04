@@ -25,8 +25,9 @@ func (c *testBeforeUpdaterComponenent) Update(msg tea.Msg) tea.Cmd {
 	return Destroy
 }
 
-func (c *testBeforeUpdaterComponenent) BeforeUpdate() {
+func (c *testBeforeUpdaterComponenent) BeforeUpdate() tea.Cmd {
 	c.text = "Hello Tests!"
+	return nil
 }
 
 func (c *testBeforeUpdaterComponenent) Render(int, int) string {
