@@ -6,15 +6,10 @@ import tea "github.com/charmbracelet/bubbletea"
 var isUpdate bool
 
 type model struct {
-	root Component
+	program *tea.Program
+	root    Component
 
 	width, height int
-}
-
-func New(root Component) model {
-	return model{
-		root: root,
-	}
 }
 
 func (m model) Init() tea.Cmd {
@@ -22,7 +17,7 @@ func (m model) Init() tea.Cmd {
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	handleBeforeUpdates()
+	m.execute(handleBeforeUpdates())
 
 	isUpdate = true
 	wasRouteChanged = false
@@ -39,20 +34,31 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.width, m.height = msg.Width, msg.Height
 	}
 
-	rootCmd := m.root.Update(msg)
+	m.execute(m.root.Update(msg))
 
 	isUpdate = false
 
-	afterUpdatesCmd := handleAfterUpdates()
+	m.execute(handleAfterUpdates())
 
 	// Guarantee rerender if route was changed
 	if wasRouteChanged {
-		return m, tea.Batch(updatedRoute(lastRoute), rootCmd, afterUpdatesCmd)
+		return m, updatedRoute(lastRoute)
 	}
 
-	return m, tea.Batch(rootCmd, afterUpdatesCmd)
+	return m, nil
 }
 
 func (m model) View() string {
 	return m.root.Render(m.width, m.height)
+}
+
+func (m model) execute(cmd tea.Cmd) {
+	if cmd == nil {
+		return
+	}
+
+	go func() {
+		msg := cmd()
+		m.program.Send(msg)
+	}()
 }

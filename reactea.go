@@ -17,5 +17,9 @@ func NewProgram(root Component, options ...tea.ProgramOption) *tea.Program {
 	wasRouteChanged = false
 	afterUpdaters = nil
 
-	return tea.NewProgram(model{root, 0, 0}, options...)
+	m := &model{nil, root, 0, 0}
+	program := tea.NewProgram(m, options...)
+	m.program = program
+
+	return program
 }
