@@ -16,7 +16,6 @@ type Component struct {
 	Routes map[string]RouteInitializer
 
 	lastComponent   reactea.Component
-	initCmd         tea.Cmd
 	lastPlaceholder string
 }
 
@@ -40,25 +39,19 @@ func (c *Component) Update(msg tea.Msg) tea.Cmd {
 		return nil
 	}
 
-	if c.initCmd != nil {
-		initCmd := c.initCmd
-		c.initCmd = nil
-		return tea.Sequence(initCmd, c.lastComponent.Update(msg))
-	}
-
 	return c.lastComponent.Update(msg)
 }
 
-func (c *Component) BeforeUpdate() {
+func (c *Component) BeforeUpdate() tea.Cmd {
 	// If last route was changed we want to reuse the component
 	if !reactea.WasRouteChanged() {
-		return
+		return nil
 	}
 
 	// If last placeholder was wildcard and current route still matches
 	// that wildcard, we want to reuse the component
 	if _, ok := reactea.RouteMatchesPlaceholder(reactea.CurrentRoute(), c.lastPlaceholder); ok && c.lastPlaceholder != "" {
-		return
+		return nil
 	}
 
 	if c.lastComponent != nil {
@@ -67,7 +60,7 @@ func (c *Component) BeforeUpdate() {
 
 	c.lastComponent = nil
 
-	c.initCmd = c.initRoute()
+	return c.initRoute()
 }
 
 func (c *Component) Render(width, height int) string {
