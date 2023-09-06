@@ -4,7 +4,7 @@ import tea "github.com/charmbracelet/bubbletea"
 
 var beforeUpdaters []Component
 
-// Queue component for AfterUpdate event
+// Queue component for BeforeUpdate event
 func BeforeUpdate(beforeUpdater Component) {
 	if beforeUpdater == nil {
 		return
@@ -16,7 +16,7 @@ func BeforeUpdate(beforeUpdater Component) {
 func handleBeforeUpdates() tea.Cmd {
 	if beforeUpdaters == nil {
 		// Meaning it hasn't been updated, we could
-		// len(afterUpdaters) == 0 but there is no
+		// len(beforeUpdaters) == 0 but there is no
 		// reason to because it will either be nil
 		// or slice with elements
 		return nil
@@ -24,8 +24,8 @@ func handleBeforeUpdates() tea.Cmd {
 
 	cmds := make([]tea.Cmd, len(beforeUpdaters))
 
-	for _, beforeUpdater := range beforeUpdaters {
-		beforeUpdater.BeforeUpdate()
+	for i, beforeUpdater := range beforeUpdaters {
+		cmds[i] = beforeUpdater.BeforeUpdate()
 	}
 
 	beforeUpdaters = nil
