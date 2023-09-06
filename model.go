@@ -1,6 +1,8 @@
 package reactea
 
-import tea "github.com/charmbracelet/bubbletea"
+import (
+	tea "github.com/charmbracelet/bubbletea"
+)
 
 // Useful for constraining some actions to update-stage only
 var isUpdate bool
@@ -59,6 +61,15 @@ func (m model) execute(cmd tea.Cmd) {
 
 	go func() {
 		msg := cmd()
-		m.program.Send(msg)
+		switch msg := msg.(type) {
+		case tea.BatchMsg:
+			for _, cmd := range msg {
+				go func(cmd tea.Cmd) {
+					m.program.Send(cmd())
+				}(cmd)
+			}
+		default:
+			m.program.Send(msg)
+		}
 	}()
 }
