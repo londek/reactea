@@ -48,9 +48,3 @@ func Show[T any](controller *Controller, modal ModalComponent[T]) ModalResult[T]
 
 	return result
 }
-
-func Execute(f func(*Controller) tea.Cmd) (*Controller, tea.Cmd) {
-	c := NewController()
-
-	return c, c.Run(f)
-}
