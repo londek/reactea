@@ -2,11 +2,7 @@ module github.com/londek/reactea
 
 go 1.21
 
-require (
-	github.com/AvraamMavridis/randomcolor v0.0.0-20180822172341-208aff70bf2c
-	github.com/charmbracelet/bubbletea v0.24.2
-	github.com/charmbracelet/lipgloss v0.6.1-0.20220930064401-ae7c84f7b158
-)
+require github.com/charmbracelet/bubbletea v0.24.2
 
 require (
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
