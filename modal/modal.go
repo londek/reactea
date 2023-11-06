@@ -58,3 +58,25 @@ func Show[T any](c *Controller, modal ModalComponent[T]) ModalResult[T] {
 
 	return result
 }
+
+func Get[T any](c *Controller, modal ModalComponent[T]) T {
+	c.w.Signal()
+
+	resultChan := make(chan ModalResult[T])
+
+	modal.initModal(resultChan, c)
+
+	c.cond.L.Lock()
+
+	c.modal = modal
+	c.initCmd = modal.Init()
+
+	c.cond.Broadcast()
+	c.cond.L.Unlock()
+
+	result := <-resultChan
+
+	c.shouldDestruct = true
+
+	return result.Return
+}
