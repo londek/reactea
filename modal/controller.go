@@ -10,57 +10,82 @@ import (
 type Controller struct {
 	reactea.BasicComponent
 
-	initCmd tea.Cmd
-	modal   reactea.Component
-	cond    *sync.Cond
+	initFunc   func(*Controller) func() tea.Cmd
+	escapeFunc func() tea.Cmd // Called when modal flow is ended
+
+	rendered       string
+	initCmd        tea.Cmd
+	shouldDestruct bool
+
+	modal    reactea.Component
+	locked   bool
+	cond     *sync.Cond
+	w        waiter
+	runMutex sync.Mutex
 }
 
-func NewController() *Controller {
+func NewController(initFunc func(*Controller) func() tea.Cmd) *Controller {
 	return &Controller{
-		cond: sync.NewCond(&sync.Mutex{}),
+		initFunc: initFunc,
+		cond:     sync.NewCond(&sync.Mutex{}),
+		w:        make(waiter),
 	}
 }
 
+func (c *Controller) Init() tea.Cmd {
+	return c.Run(c.initFunc)
+}
+
 func (c *Controller) Update(msg tea.Msg) tea.Cmd {
+	var initCmd, updateCmd, escapeCmd tea.Cmd
+
 	c.cond.L.Lock()
+	c.locked = true
 	for c.modal == nil {
 		c.cond.Wait()
 	}
 
-	if c.initCmd != nil {
-		initCmd := c.initCmd
-		c.initCmd = nil
-		return tea.Sequence(initCmd, c.modal.Update(msg))
+	updateCmd = c.modal.Update(msg)
+
+	if c.escapeFunc != nil {
+		escapeFunc := c.escapeFunc
+		c.escapeFunc = nil
+		escapeCmd = escapeFunc()
 	}
 
-	return c.modal.Update(msg)
+	if c.initCmd != nil {
+		initCmd = c.initCmd
+		c.initCmd = nil
+	}
+
+	return tea.Batch(initCmd, updateCmd, escapeCmd)
 }
 
 func (c *Controller) Render(width, height int) string {
-	defer c.cond.L.Unlock()
-	return c.modal.Render(width, height)
-}
-
-func (c *Controller) Run(f func(*Controller) tea.Cmd) tea.Cmd {
-	return func() tea.Msg {
-		return f(c)
+	if c.locked {
+		defer c.cond.L.Unlock()
+		c.locked = false
 	}
+
+	c.rendered = c.modal.Render(width, height)
+
+	if c.shouldDestruct {
+		c.modal.Destroy()
+		c.modal = nil
+		c.shouldDestruct = false
+	}
+
+	return c.rendered
 }
 
-func (c *Controller) show(modal reactea.Component, initCmd tea.Cmd) {
-	c.cond.L.Lock()
-	defer c.cond.L.Unlock()
+func (c *Controller) Run(f func(*Controller) func() tea.Cmd) tea.Cmd {
+	return func() tea.Msg {
+		c.runMutex.Lock()
+		defer c.runMutex.Unlock()
 
-	c.modal = modal
-	c.initCmd = initCmd
+		c.escapeFunc = f(c)
+		c.w.Signal()
 
-	c.cond.Broadcast()
-}
-
-func (c *Controller) hide() {
-	c.cond.L.Lock()
-	defer c.cond.L.Unlock()
-
-	c.modal.Destroy()
-	c.modal = nil
+		return nil
+	}
 }
