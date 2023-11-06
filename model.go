@@ -25,9 +25,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	wasRouteChanged = false
 
 	switch msg := msg.(type) {
-	case destroyAppMsg:
-		m.root.Destroy()
-		return m, tea.Quit
 	// We want component to know at what size should it render
 	// and unify size handling across all Reactea components
 	// We pass WindowSizeMsg to root component just for
@@ -62,11 +59,12 @@ func (m model) execute(cmd tea.Cmd) {
 	go func() {
 		msg := cmd()
 		switch msg := msg.(type) {
+		case destroyAppMsg:
+			m.root.Destroy()
+			m.program.Send(tea.QuitMsg{})
 		case tea.BatchMsg:
 			for _, cmd := range msg {
-				go func(cmd tea.Cmd) {
-					m.program.Send(cmd())
-				}(cmd)
+				m.execute(cmd)
 			}
 		default:
 			m.program.Send(msg)
