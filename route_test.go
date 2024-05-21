@@ -19,71 +19,67 @@ func TestRoutePanic(t *testing.T) {
 		}
 	}()
 
-	NewProgram(&testComponenent{}, tea.WithoutRenderer())
+	root := &mockComponent[struct{}]{}
+
+	NewProgram(root, tea.WithoutRenderer())
 
 	SetRoute("/shouldFail")
 }
 
-type testNavigateComponenent struct {
-	BasicComponent
-
-	routeHistory []string
-	step         int
-}
-
-func (c *testNavigateComponenent) Init() tea.Cmd {
-	return Rerender
-}
-
 // Expecting:
 // / -> /foo -> /foo/bar -> /baz -> / -> /foo -> /bar -> /test -> / -> / -> /foo -> /bar
-func (c *testNavigateComponenent) Update(msg tea.Msg) tea.Cmd {
-	switch c.step {
-	case 0:
-		// Don't navigate
-	case 1:
-		Navigate("foo")
-	case 2:
-		Navigate("foo/bar")
-	case 3:
-		Navigate("/baz")
-	case 4:
-		Navigate("..")
-	case 5:
-		Navigate("./foo")
-	case 6:
-		Navigate(".//bar")
-	case 7:
-		Navigate("../../test")
-	case 8:
-		Navigate("/")
-	case 9:
-		Navigate("")
-	case 10:
-		Navigate(".")
-	case 11:
-		Navigate("foo")
-	case 12:
-		Navigate("foo/bar")
-	case 13:
-		Navigate("baz")
-	default:
-		return Destroy
+func TestNavigate(t *testing.T) {
+	type testState struct {
+		routeHistory []string
+		step         int
 	}
 
-	c.routeHistory = append(c.routeHistory, CurrentRoute())
+	root := &mockComponent[testState]{
+		initFunc: func(Component, *testState) tea.Cmd {
+			return Rerender
+		},
+		updateFunc: func(c Component, s *testState, msg tea.Msg) tea.Cmd {
+			switch s.step {
+			case 0:
+				// Don't navigate
+			case 1:
+				Navigate("foo")
+			case 2:
+				Navigate("foo/bar")
+			case 3:
+				Navigate("/baz")
+			case 4:
+				Navigate("..")
+			case 5:
+				Navigate("./foo")
+			case 6:
+				Navigate(".//bar")
+			case 7:
+				Navigate("../../test")
+			case 8:
+				Navigate("/")
+			case 9:
+				Navigate("")
+			case 10:
+				Navigate(".")
+			case 11:
+				Navigate("foo")
+			case 12:
+				Navigate("foo/bar")
+			case 13:
+				Navigate("baz")
+			default:
+				return Destroy
+			}
 
-	c.step += 1
+			s.routeHistory = append(s.routeHistory, CurrentRoute())
 
-	return Rerender
-}
+			s.step += 1
 
-func (c *testNavigateComponenent) Render(width int, height int) string {
-	return ""
-}
+			return Rerender
+		},
+	}
 
-func TestNavigate(t *testing.T) {
-	root := &testNavigateComponenent{}
 	program := NewProgram(root, tea.WithoutRenderer(), WithoutInput())
 
 	if _, err := program.Run(); err != nil {
@@ -107,8 +103,8 @@ func TestNavigate(t *testing.T) {
 		"/foo/baz",
 	}
 
-	if strings.Join(root.routeHistory, " - ") != strings.Join(expectedRouteHistory, " - ") {
-		t.Errorf("wrong route history, expected \"%s\", got \"%s\". Note that routes are delimited by \" - \"", strings.Join(expectedRouteHistory, " - "), strings.Join(root.routeHistory, " - "))
+	if strings.Join(root.state.routeHistory, " - ") != strings.Join(expectedRouteHistory, " - ") {
+		t.Errorf("wrong route history, expected \"%s\", got \"%s\". Note that routes are delimited by \" - \"", strings.Join(expectedRouteHistory, " - "), strings.Join(root.state.routeHistory, " - "))
 	}
 }
 

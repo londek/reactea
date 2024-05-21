@@ -12,7 +12,13 @@ func NewProgram(root Component, options ...tea.ProgramOption) *tea.Program {
 	lastRoute = "/"
 	wasRouteChanged = false
 
-	m := &model{nil, root, 0, 0}
+	m := &model{
+		program: nil,
+		root:    root,
+		width:   0,
+		height:  0,
+	}
+
 	program := tea.NewProgram(m, options...)
 	m.program = program
 

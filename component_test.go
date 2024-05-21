@@ -9,27 +9,18 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-// Component fully implemented by embedding premade structs
-type testDefaultComponent struct {
-	BasicComponent
-}
-
-func (*testDefaultComponent) Render(int, int) string {
-	return "test passed"
-}
 func TestDefaultComponent(t *testing.T) {
 	var out bytes.Buffer
 
-	component := &testDefaultComponent{}
+	component := &mockComponent[struct{}]{
+		renderFunc: func(c Component, s *struct{}, width, height int) string {
+			return "test passed"
+		},
+	}
 
 	program := NewProgram(component, WithoutInput(), tea.WithOutput(&out))
 
 	go func() {
-		t.Run("afterUpdate", func(t *testing.T) {
-			// Force running update
-			program.Send(nil)
-		})
-
 		time.Sleep(20 * time.Millisecond)
 
 		program.Quit()

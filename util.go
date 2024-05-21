@@ -104,26 +104,42 @@ func ComponentifyDumb[TRenderer AnyProplessRenderer](renderer TRenderer) Compone
 
 // Used for tests
 type mockComponent[TState any] struct {
-	initFunc    func(Component, TState) tea.Cmd
-	updateFunc  func(Component, TState) tea.Cmd
-	renderFunc  func(Component, TState, int, int) string
-	destroyFunc func(Component, TState)
+	initFunc    func(Component, *TState) tea.Cmd
+	updateFunc  func(Component, *TState, tea.Msg) tea.Cmd
+	renderFunc  func(Component, *TState, int, int) string
+	destroyFunc func(Component, *TState)
 
 	state TState
 }
 
 func (c *mockComponent[TState]) Init() tea.Cmd {
-	return c.initFunc(c, c.state)
+	if c.initFunc == nil {
+		return nil
+	}
+
+	return c.initFunc(c, &c.state)
 }
 
 func (c *mockComponent[TState]) Update(msg tea.Msg) tea.Cmd {
-	return c.updateFunc(c, c.state)
+	if c.updateFunc == nil {
+		return nil
+	}
+
+	return c.updateFunc(c, &c.state, msg)
 }
 
 func (c *mockComponent[TState]) Render(width, height int) string {
-	return c.renderFunc(c, c.state, width, height)
+	if c.renderFunc == nil {
+		return ""
+	}
+
+	return c.renderFunc(c, &c.state, width, height)
 }
 
 func (c *mockComponent[TState]) Destroy() {
-	c.destroyFunc(c, c.state)
+	if c.destroyFunc == nil {
+		return
+	}
+
+	c.destroyFunc(c, &c.state)
 }

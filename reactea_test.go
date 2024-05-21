@@ -9,42 +9,36 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-type testComponenent struct {
-	BasicComponent
-
-	echoKey string
-
-	lastWidth, lastHeight int
-}
-
-func (c *testComponenent) Update(msg tea.Msg) tea.Cmd {
-	switch msg := msg.(type) {
-	case tea.KeyMsg:
-		if msg.String() == "x" {
-			return Destroy
-		}
-
-		c.echoKey = msg.String()
-	}
-
-	SetRoute("/test/test/test")
-
-	return nil
-}
-
-func (c *testComponenent) Render(width int, height int) string {
-	c.lastWidth, c.lastHeight = width, height
-
-	return c.echoKey
-}
-
 func TestComponent(t *testing.T) {
 	var in, out bytes.Buffer
 
 	in.WriteString("~~~")
 
-	root := &testComponenent{
-		echoKey: "default",
+	type testState struct {
+		echoKey               string
+		lastWidth, lastHeight int
+	}
+
+	root := &mockComponent[testState]{
+		updateFunc: func(c Component, s *testState, msg tea.Msg) tea.Cmd {
+			switch msg := msg.(type) {
+			case tea.KeyMsg:
+				if msg.String() == "x" {
+					return Destroy
+				}
+
+				s.echoKey = msg.String()
+			}
+
+			SetRoute("/test/test/test")
+
+			return nil
+		},
+		renderFunc: func(c Component, s *testState, width, height int) string {
+			s.lastWidth, s.lastHeight = width, height
+
+			return s.echoKey
+		},
 	}
 
 	program := NewProgram(root, tea.WithInput(&in), tea.WithOutput(&out))
@@ -81,18 +75,24 @@ func TestComponent(t *testing.T) {
 		t.Errorf("current route is wrong, expected \"/test/test/test\", got \"%s\"", CurrentRoute())
 	}
 
-	if root.lastWidth != 1 {
-		t.Errorf("expected lastWidth 1, but got %d", root.lastWidth)
+	if root.state.lastWidth != 1 {
+		t.Errorf("expected lastWidth 1, but got %d", root.state.lastWidth)
 	}
 
-	if root.lastHeight != 1 {
-		t.Errorf("expected lastHeigth 1, but got %d", root.lastWidth)
+	if root.state.lastHeight != 1 {
+		t.Errorf("expected lastHeigth 1, but got %d", root.state.lastWidth)
 	}
 }
 
 func TestNew(t *testing.T) {
 	t.Run("NewProgram", func(t *testing.T) {
-		program := NewProgram(&testDefaultComponent{}, WithoutInput(), tea.WithoutRenderer())
+		root := &mockComponent[struct{}]{
+			renderFunc: func(c Component, s *struct{}, width, height int) string {
+				return "test passed"
+			},
+		}
+
+		program := NewProgram(root, WithoutInput(), tea.WithoutRenderer())
 
 		go program.Quit()
 
