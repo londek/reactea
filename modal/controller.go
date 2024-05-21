@@ -41,11 +41,13 @@ func (c *Controller) Update(msg tea.Msg) tea.Cmd {
 
 	c.cond.L.Lock()
 	c.locked = true
-	for c.modal == nil {
+	for c.modal == nil && c.escapeFunc == nil {
 		c.cond.Wait()
 	}
 
-	updateCmd = c.modal.Update(msg)
+	if c.modal != nil {
+		updateCmd = c.modal.Update(msg)
+	}
 
 	if c.escapeFunc != nil {
 		escapeFunc := c.escapeFunc
@@ -67,7 +69,11 @@ func (c *Controller) Render(width, height int) string {
 		c.locked = false
 	}
 
-	c.rendered = c.modal.Render(width, height)
+	if c.modal != nil {
+		c.rendered = c.modal.Render(width, height)
+	} else {
+		c.rendered = ""
+	}
 
 	if c.shouldDestruct {
 		c.modal.Destroy()
@@ -84,6 +90,7 @@ func (c *Controller) Run(f func(*Controller) func() tea.Cmd) tea.Cmd {
 		defer c.runMutex.Unlock()
 
 		c.escapeFunc = f(c)
+		c.cond.Broadcast()
 		c.w.Signal()
 
 		return nil
