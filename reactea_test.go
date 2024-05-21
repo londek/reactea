@@ -39,7 +39,7 @@ func (c *testComponenent) Render(width int, height int) string {
 }
 
 func TestComponent(t *testing.T) {
-	var in, out = &bytes.Buffer{}, &bytes.Buffer{}
+	var in, out bytes.Buffer
 
 	in.WriteString("~~~")
 
@@ -47,7 +47,7 @@ func TestComponent(t *testing.T) {
 		echoKey: "default",
 	}
 
-	program := NewProgram(root, tea.WithInput(in), tea.WithOutput(out))
+	program := NewProgram(root, tea.WithInput(&in), tea.WithOutput(&out))
 
 	// Test for window size
 	go func() {
