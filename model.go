@@ -19,8 +19,6 @@ func (m model) Init() tea.Cmd {
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	m.execute(handleBeforeUpdates())
-
 	isUpdate = true
 	wasRouteChanged = false
 
@@ -36,8 +34,6 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	m.execute(m.root.Update(msg))
 
 	isUpdate = false
-
-	m.execute(handleAfterUpdates())
 
 	// Guarantee rerender if route was changed
 	if wasRouteChanged {

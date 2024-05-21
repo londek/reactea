@@ -15,7 +15,6 @@ func NewProgram(root Component, options ...tea.ProgramOption) *tea.Program {
 	currentRoute = "/"
 	lastRoute = "/"
 	wasRouteChanged = false
-	afterUpdaters = nil
 
 	m := &model{nil, root, 0, 0}
 	program := tea.NewProgram(m, options...)

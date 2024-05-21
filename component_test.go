@@ -26,8 +26,6 @@ func TestDefaultComponent(t *testing.T) {
 
 	go func() {
 		t.Run("afterUpdate", func(t *testing.T) {
-			AfterUpdate(component)
-
 			// Force running update
 			program.Send(nil)
 		})
