@@ -15,11 +15,8 @@ For me, personally - **It's a must** in project with multiple pages and componen
 
 Check our quickstart [right here](#quickstart) or other examples [here!](/examples)
 
-</div>
-
-## Installation
-
 `go get -u github.com/londek/reactea`
+</div>
 
 ## General info
 
