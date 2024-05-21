@@ -4,7 +4,7 @@ import tea "github.com/charmbracelet/bubbletea"
 
 type RerenderMsg struct{}
 
-// Utility tea.Cmd for requesting rerender (or reupdate)
+// Utility tea.Cmd for requesting rerender
 func Rerender() tea.Msg {
 	return RerenderMsg{}
 }
@@ -30,7 +30,7 @@ func RenderAny[TProps any, TRenderer AnyRenderer[TProps]](renderer TRenderer, pr
 	return
 }
 
-// Renders all AnyProplessRenderers in one function
+// Handles rendering of all AnyProplessRenderers in one function
 //
 // Note: Using named return type for 100% coverage
 func RenderDumb[TRenderer AnyProplessRenderer](renderer TRenderer, width, height int) (result string) {
@@ -100,4 +100,30 @@ func (c *dumbComponentTransformer[T]) Render(width, height int) string {
 // Returns uninitialized component with renderer taking care of .Render()
 func ComponentifyDumb[TRenderer AnyProplessRenderer](renderer TRenderer) Component {
 	return &dumbComponentTransformer[TRenderer]{renderer: renderer}
+}
+
+// Used for tests
+type mockComponent[TState any] struct {
+	initFunc    func(Component, TState) tea.Cmd
+	updateFunc  func(Component, TState) tea.Cmd
+	renderFunc  func(Component, TState, int, int) string
+	destroyFunc func(Component, TState)
+
+	state TState
+}
+
+func (c *mockComponent[TState]) Init() tea.Cmd {
+	return c.initFunc(c, c.state)
+}
+
+func (c *mockComponent[TState]) Update(msg tea.Msg) tea.Cmd {
+	return c.updateFunc(c, c.state)
+}
+
+func (c *mockComponent[TState]) Render(width, height int) string {
+	return c.renderFunc(c, c.state, width, height)
+}
+
+func (c *mockComponent[TState]) Destroy() {
+	c.destroyFunc(c, c.state)
 }

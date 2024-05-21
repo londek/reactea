@@ -10,10 +10,7 @@ import tea "github.com/charmbracelet/bubbletea"
 //       |---------------------|   therefore doesn't return tea.Cmd
 //
 // Reactea takes pointer approach for components
-// making state modifiable in any lifecycle method
-//
-// Note: Remember that Update IS NOT guaranteed to be called on
-// first-run, Init() is, and critical logic should be there
+// making state mutable in any lifecycle method
 //
 // Note: Lifecycle is fully controlled by parent component
 // making graph above fully theoretical and possibly
@@ -32,13 +29,14 @@ type Component interface {
 	// Typical tea.Model Update(), we handle all IO events here
 	Update(tea.Msg) tea.Cmd
 
-	// Callee already knows at what size should it render at
+	// Render() is called when component should render itself
+	// Provided width and height are target dimensions
 	Render(int, int) string
 }
 
-// Why not Renderer[TProps]? It would have to be type alias
+// Why not Renderer[TProps]? It would have to be a type alias
 // there are no type aliases yet for generics, but they are
-// planned for Go 1.20. Something to keep in mind for future
+// planned for some time soon. Something to keep in mind for future
 type AnyRenderer[TProps any] interface {
 	func(TProps, int, int) string | AnyProplessRenderer
 }
@@ -52,7 +50,7 @@ type AnyProplessRenderer interface {
 // Also note that it doesn't handle any IO by itself
 //
 // TODO: Change to type alias after type aliases for generics
-// support is released (planned Go 1.20). For now explicit
+// support is implemented. For now explicit
 // type conversion is required
 type Renderer[TProps any] func(TProps, int, int) string
 

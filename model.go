@@ -19,7 +19,6 @@ func (m model) Init() tea.Cmd {
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	isUpdate = true
 	wasRouteChanged = false
 
 	switch msg := msg.(type) {
@@ -30,6 +29,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		m.width, m.height = msg.Width, msg.Height
 	}
+
+	isUpdate = true
 
 	m.execute(m.root.Update(msg))
 
