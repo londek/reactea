@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/londek/reactea"
-	"github.com/londek/reactea/example/quickstart/app"
+	"github.com/londek/reactea/examples/quickstart/app"
 )
 
 func main() {

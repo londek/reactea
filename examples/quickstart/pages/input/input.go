@@ -10,13 +10,10 @@ import (
 
 type Component struct {
 	reactea.BasicComponent
-	reactea.BasicPropfulComponent[Props]
+
+	SetText func(string)
 
 	textinput textinput.Model
-}
-
-type Props struct {
-	SetText func(string)
 }
 
 func New() *Component {
@@ -25,9 +22,7 @@ func New() *Component {
 	}
 }
 
-func (c *Component) Init(props Props) tea.Cmd {
-	c.UpdateProps(props)
-
+func (c *Component) Init() tea.Cmd {
 	return c.textinput.Focus()
 }
 
@@ -36,7 +31,7 @@ func (c *Component) Update(msg tea.Msg) tea.Cmd {
 	case tea.KeyMsg:
 		if msg.Type == tea.KeyEnter {
 			// Lifted state power! Woohooo
-			c.Props().SetText(c.textinput.Value())
+			c.SetText(c.textinput.Value())
 
 			reactea.SetRoute("/displayname")
 

@@ -4,42 +4,40 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/londek/reactea"
 
-	"github.com/londek/reactea/example/quickstart/pages/displayname"
-	"github.com/londek/reactea/example/quickstart/pages/input"
+	"github.com/londek/reactea/examples/quickstart/pages/displayname"
+	"github.com/londek/reactea/examples/quickstart/pages/input"
 	"github.com/londek/reactea/router"
 )
 
 type Component struct {
 	reactea.BasicComponent
-	reactea.BasicPropfulComponent[reactea.NoProps]
 
-	mainRouter reactea.Component[router.Props]
-
-	text string
+	mainRouter *router.Component
+	text       string
 }
 
 func New() *Component {
-	return &Component{
-		mainRouter: router.New(),
-	}
-}
+	c := &Component{}
 
-func (c *Component) Init(reactea.NoProps) tea.Cmd {
-	// Does it remind you of something? react-router!
-	return c.mainRouter.Init(map[string]router.RouteInitializer{
-		"default": func(router.Params) (reactea.SomeComponent, tea.Cmd) {
+	c.mainRouter = router.NewWithRoutes(router.Routes{
+		"default": func(router.Params) reactea.Component {
 			component := input.New()
 
-			return component, component.Init(input.Props{
-				SetText: c.setText,
-			})
-		},
-		"/displayname": func(router.Params) (reactea.SomeComponent, tea.Cmd) {
-			component := reactea.Componentify[string](displayname.Render)
+			component.SetText = c.setText
 
-			return component, component.Init(c.text)
+			return component
+		},
+		"/displayname": func(router.Params) reactea.Component {
+			return reactea.Componentify[string](displayname.Render)
 		},
 	})
+
+	return c
+}
+
+func (c *Component) Init() tea.Cmd {
+	// Does it remind you of something? react-router!
+	return c.mainRouter.Init()
 }
 
 func (c *Component) Update(msg tea.Msg) tea.Cmd {
