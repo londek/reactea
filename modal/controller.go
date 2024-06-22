@@ -85,7 +85,7 @@ func (c *Controller) Render(width, height int) string {
 }
 
 func (c *Controller) Run(f func(*Controller) func() tea.Cmd) tea.Cmd {
-	return func() tea.Msg {
+	go func() tea.Msg {
 		c.runMutex.Lock()
 		defer c.runMutex.Unlock()
 
@@ -93,6 +93,10 @@ func (c *Controller) Run(f func(*Controller) func() tea.Cmd) tea.Cmd {
 		c.cond.Broadcast()
 		c.w.Signal()
 
+		return nil
+	}()
+
+	return func() tea.Msg {
 		return nil
 	}
 }
