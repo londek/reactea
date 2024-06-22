@@ -52,7 +52,6 @@ func PropfulToLess[TProps any](renderer Renderer[TProps], props TProps) Propless
 }
 
 // Static component for displaying static text
-
 type staticComponent struct {
 	BasicComponent
 
@@ -66,7 +65,6 @@ func StaticComponent(content string) Component {
 }
 
 // Transformer for AnyRenderer -> Component
-
 type componentTransformer[TProps any, TRenderer AnyRenderer[TProps]] struct {
 	BasicComponent
 
@@ -85,7 +83,6 @@ func Componentify[TProps any, TRenderer AnyRenderer[TProps]](renderer TRenderer)
 }
 
 // Transformer for AnyProplessRenderer -> Component
-
 type dumbComponentTransformer[TRenderer AnyProplessRenderer] struct {
 	BasicComponent
 
@@ -100,6 +97,11 @@ func (c *dumbComponentTransformer[T]) Render(width, height int) string {
 // Returns uninitialized component with renderer taking care of .Render()
 func ComponentifyDumb[TRenderer AnyProplessRenderer](renderer TRenderer) Component {
 	return &dumbComponentTransformer[TRenderer]{renderer: renderer}
+}
+
+// Reactifies Bubbletea's models into reactea's components
+type Reactified[TModel tea.Model] struct {
+	Model TModel
 }
 
 // Used for tests
