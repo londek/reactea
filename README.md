@@ -1,5 +1,11 @@
-<p align="center"><span style="font-size: 4em;"><b>Reactea</b></span><br>⚠️ I'm rewriting project for 2025! ⚠️</p>
-
+<div id="user-content-toc">
+  <ul align="center" style="list-style: none;">
+    <summary>
+      <h1>Reactea</h1>
+      <p>⚠️ I'm rewriting project for 2025! ⚠️</p>
+    </summary>
+  </ul>
+</div>
 
 <div align="center">
 
