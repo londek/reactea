@@ -28,7 +28,7 @@ func New() *Component {
 			return component
 		},
 		"/displayname": func(router.Params) reactea.Component {
-			return reactea.Componentify[string](displayname.Render)
+			return reactea.Componentify(displayname.Render, c.text)
 		},
 	})
 

@@ -12,7 +12,6 @@ import (
 
 type Component struct {
 	reactea.BasicComponent
-	reactea.BasicPropfulComponent[reactea.NoProps]
 
 	textinput textinput.Model
 
@@ -31,7 +30,7 @@ func New() *Component {
 	}
 }
 
-func (c *Component) Init(reactea.NoProps) tea.Cmd {
+func (c *Component) Init() tea.Cmd {
 	return c.textinput.Focus()
 }
 

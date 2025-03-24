@@ -78,8 +78,8 @@ func (c *componentTransformer[TProps, TRenderer]) Render(width, height int) stri
 
 // Componentifies AnyRenderer
 // Returns uninitialized component with renderer taking care of .Render()
-func Componentify[TProps any, TRenderer AnyRenderer[TProps]](renderer TRenderer) Component {
-	return &componentTransformer[TProps, TRenderer]{renderer: renderer}
+func Componentify[TProps any, TRenderer AnyRenderer[TProps]](renderer TRenderer, props TProps) Component {
+	return &componentTransformer[TProps, TRenderer]{renderer: renderer, props: props}
 }
 
 // Transformer for AnyProplessRenderer -> Component

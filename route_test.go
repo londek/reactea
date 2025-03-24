@@ -142,6 +142,8 @@ func TestRoutePlaceholderMatching(t *testing.T) {
 		{"/teams/foo/234", "/teams/:/:teamId", map[string]string{"$": "/teams/foo/234", "teamId": "234"}},
 		{"/teams/123/234", "/teams/:teamId/:teamId", map[string]string{"$": "/teams/123/234", "teamId": "234"}},
 		{"/teams/123/234", "/teams/:teamId/:playerId", map[string]string{"$": "/teams/123/234", "teamId": "123", "playerId": "234"}},
+
+		{"/detail/abcgsd-dsfhh2342-sdfhs-234", "/detail/:id", map[string]string{"$": "/detail/abcgsd-dsfhh2342-sdfhs-234", "id": "abcgsd-dsfhh2342-sdfhs-234"}},
 	}
 
 	for _, testCase := range testCases {

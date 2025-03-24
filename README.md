@@ -30,11 +30,11 @@ The goal is to create components that are
 - easier to code
 - all of that without code duplication
 
-The extreme performance is not main goal of this package, because either way Bubbletea\
-refresh rate is only 60hz and 50 allocations in entire **runtime** won't really hurt anyone.\
+Extreme performance is not main goal of this package, however it should not be
+that far off actual Bubbletea which is already blazing fast.
 Most info is currently in source code so I suggest checking it out
 
-Always return `reactea.Destroy` instead of `tea.Quit` in order to follow our convention
+Always return `reactea.Destroy` instead of `tea.Quit` in order to follow our convention (that way Destroy() will be called on your components)
 
 As of now Go doesn't support type aliases for generics, so `Renderer[TProps]` has to be explicitly casted.
 
@@ -42,8 +42,6 @@ As of now Go doesn't support type aliases for generics, so `Renderer[TProps]` ha
 
 Reactea unlike Bubbletea implements two-way communication, very React-like communication.\
 If you have experience with React you are gonna love Reactea straight away!
-
-While it may look in following tutorial that Reactea overcomplicates things, trust me, for major projects it's a lifesaver!
 
 In this tutorial we are going to make application that consists of 2 pages.
 
@@ -59,12 +57,8 @@ Reactea component lifecycle consists of 6 methods (while Bubbletea only 3)
 |-|-|
 | `Init(TProps) tea.Cmd` | It's called first. All critical stuff should happen here. It also supports IO through tea.Cmd |
 | `Update(tea.Msg) tea.Cmd` | It reacts to Bubbletea IO and updates state accordingly |
-| `AfterUpdate() tea.Cmd` | It's called after root component finishes `Update()`. [Components should queue themselves](#afterupdate) |
 | `Render(int, int) string` | It renders the UI. The two arguments are width and height, they should be calculated by parent |
 | `Destroy()` | It's called whenever Component is about to end it's lifecycle. Please note that it's parent's responsibility to call `Destroy()` |
-| `UpdateProps(TProps)` | Derives state from given properties. Usually called from `Init()` |
-
-Your first application should consist only of `Update` and `Render`, all other methods will be implemented by `reactea.BasicComponent` and `reactea.BasicPropfulComponent`.
 
 Let's get to work!
 
@@ -74,14 +68,12 @@ Let's get to work!
 
 ```go
 type Component struct {
-    reactea.BasicComponent                // It implements AfterUpdate() for us, so we don't have to care!
-    reactea.BasicPropfulComponent[Props]  // It implements props backend - UpdateProps() and Props()
+    reactea.BasicComponent                // It implements all reactea's core functionalities
+
+    // Props
+    SetText func(string)
 
     textinput textinput.Model             // Input for inputting name
-}
-
-type Props struct {
-    SetText func(string)  // SetText function for lifting state up
 }
 
 func New() *Component {
@@ -89,10 +81,6 @@ func New() *Component {
 }
 
 func (c *Component) Init(props Props) tea.Cmd {
-    // Always derive props in Init()! If you are not replacing Init(),
-    // reactea.BasicPropfulComponent will take care of it
-    c.UpdateProps(props)
-    
     return c.textinput.Focus()
 }
 
@@ -101,7 +89,7 @@ func (c *Component) Update(msg tea.Msg) tea.Cmd {
     case tea.KeyMsg:
         if msg.Type == tea.KeyEnter {
             // Lifted state power! Woohooo
-            c.Props().SetText(c.textinput.Value())
+            c.SetText(c.textinput.Value())
 
             // Navigate to displayname, please
             reactea.SetRoute("/displayname")
@@ -145,8 +133,7 @@ func Renderer(text Props, width, height int) string {
 
 ```go
 type Component struct {
-    reactea.BasicComponent                          // It implements AfterUpdate()
-    reactea.BasicPropfulComponent[reactea.NoProps]  // It implements props backend - UpdateProps() and Props()
+    reactea.BasicComponent                // It implements all reactea's core functionalities
 
     mainRouter reactea.Component[router.Props]      // Our router
 

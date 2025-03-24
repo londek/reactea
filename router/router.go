@@ -44,7 +44,7 @@ func (c *Component) Update(msg tea.Msg) tea.Cmd {
 	}
 
 	if c.currentComponent != nil {
-		c.currentComponent.Destroy()
+		updateCmd = c.currentComponent.Update(msg)
 	}
 
 	return tea.Batch(initCmd, updateCmd)

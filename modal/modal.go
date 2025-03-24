@@ -10,13 +10,6 @@ type Modal[T any] struct {
 	c  *Controller
 }
 
-type ModalComponent[TReturn any] interface {
-	reactea.Component
-
-	initModal(chan<- ModalResult[TReturn], *Controller)
-	Return(ModalResult[TReturn]) tea.Cmd
-}
-
 //lint:ignore U1000 This function is used, but through interface
 func (modal *Modal[T]) initModal(resultChan chan<- ModalResult[T], controller *Controller) {
 	modal.ch = resultChan
@@ -30,7 +23,7 @@ func (modal *Modal[T]) Return(result ModalResult[T]) tea.Cmd {
 }
 
 func (modal *Modal[T]) Ok(result T) tea.Cmd {
-	return modal.Return(Ok[T](result))
+	return modal.Return(Ok(result))
 }
 
 func (modal *Modal[T]) Error(err error) tea.Cmd {

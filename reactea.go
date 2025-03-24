@@ -20,6 +20,7 @@ func NewProgram(root Component, options ...tea.ProgramOption) *tea.Program {
 	}
 
 	program := tea.NewProgram(m, options...)
+
 	m.program = program
 
 	return program

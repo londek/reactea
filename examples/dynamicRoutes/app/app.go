@@ -14,35 +14,34 @@ import (
 
 type Component struct {
 	reactea.BasicComponent
-	reactea.BasicPropfulComponent[reactea.NoProps]
 
-	mainRouter reactea.Component[router.Props]
+	mainRouter reactea.Component
 
 	text string
 }
 
 func New() *Component {
 	return &Component{
-		mainRouter: router.New(),
+		mainRouter: router.NewWithRoutes(map[string]router.RouteInitializer{
+			"default": func(router.Params) reactea.Component {
+				component := input.New()
+
+				return component
+			},
+			// We are using dynamic routes (route params) in this example
+			"/players/:playerId": func(params router.Params) reactea.Component {
+				playerId, _ := strconv.Atoi(params["playerId"])
+
+				component := reactea.Componentify(displayplayer.Render, playerId)
+
+				return component
+			},
+		}),
 	}
 }
 
 func (c *Component) Init(reactea.NoProps) tea.Cmd {
-	return c.mainRouter.Init(map[string]router.RouteInitializer{
-		"default": func(router.Params) (reactea.SomeComponent, tea.Cmd) {
-			component := input.New()
-
-			return component, component.Init(reactea.NoProps{})
-		},
-		// We are using dynamic routes (route params) in this example
-		"/players/:playerId": func(params router.Params) (reactea.SomeComponent, tea.Cmd) {
-			component := reactea.Componentify[int](displayplayer.Render)
-
-			playerId, _ := strconv.Atoi(params["playerId"])
-
-			return component, component.Init(playerId)
-		},
-	})
+	return c.mainRouter.Init()
 }
 
 func (c *Component) Update(msg tea.Msg) tea.Cmd {
