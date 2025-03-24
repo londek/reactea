@@ -1,11 +1,4 @@
-<div id="user-content-toc">
-  <ul align="center" style="list-style: none;">
-    <summary>
-      <h1>Reactea</h1>
-      <p>⚠️ I'm rewriting project for 2025! ⚠️</p>
-    </summary>
-  </ul>
-</div>
+# <p align="center">Reactea</p>
 
 <div align="center">
 
@@ -14,6 +7,8 @@
 ![Codecov](https://img.shields.io/codecov/c/github/Londek/reactea)
 [![Go Reference](https://pkg.go.dev/badge/github.com/londek/reactea.svg)](https://pkg.go.dev/github.com/londek/reactea)
 [![Go Report Card](https://goreportcard.com/badge/github.com/londek/reactea)](https://goreportcard.com/report/github.com/londek/reactea)
+
+<p align="center">⚠️ I'm rewriting project for 2025! ⚠️</p>
 
 Rather simple **Bubbletea companion** for **handling hierarchy**, support for **lifting state up.**\
 It Reactifies Bubbletea philosophy and makes it especially easy to work with in bigger projects.
