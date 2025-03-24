@@ -54,7 +54,7 @@ func TestComponentify(t *testing.T) {
 			return "working"
 		}
 
-		if result := Componentify[struct{}](renderer, struct{}{}).Render(1, 1); result != "working" {
+		if result := Componentify(renderer, struct{}{}).Render(1, 1); result != "working" {
 			t.Errorf("transformed value doesn't render correctly, expected \"working\", got \"%s\"", result)
 		}
 	})
@@ -64,7 +64,7 @@ func TestComponentify(t *testing.T) {
 			return "working"
 		}
 
-		if result := Componentify[struct{}](proplessRenderer, struct{}{}).Render(1, 1); result != "working" {
+		if result := Componentify(proplessRenderer, struct{}{}).Render(1, 1); result != "working" {
 			t.Errorf("transformed value doesn't render correctly, expected \"working\", got \"%s\"", result)
 		}
 	})
@@ -74,7 +74,7 @@ func TestComponentify(t *testing.T) {
 			return "working"
 		}
 
-		if result := Componentify[struct{}](dumbRenderer, struct{}{}).Render(1, 1); result != "working" {
+		if result := Componentify(dumbRenderer, struct{}{}).Render(1, 1); result != "working" {
 			t.Errorf("transformed value doesn't render correctly, expected \"working\", got \"%s\"", result)
 		}
 	})

@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/londek/reactea"
-	"github.com/londek/reactea/example/dynamicRoutes/app"
+	"github.com/londek/reactea/examples/dynamicRoutes/app"
 )
 
 func main() {
