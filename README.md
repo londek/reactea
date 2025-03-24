@@ -8,7 +8,7 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/londek/reactea.svg)](https://pkg.go.dev/github.com/londek/reactea)
 [![Go Report Card](https://goreportcard.com/badge/github.com/londek/reactea)](https://goreportcard.com/report/github.com/londek/reactea)
 
-Rather simple **Bubbletea companion** for **handling hierarchy**, support for **lifting state up.** and **responsive rendering**\
+Rather simple **Bubbletea companion** for **handling hierarchy**, support for **lifting state up.**\
 It Reactifies Bubbletea philosophy and makes it especially easy to work with in bigger projects.
 
 For me, personally - **It's a must** in project with multiple pages and component communication
@@ -23,10 +23,8 @@ Check our quickstart [right here](#quickstart) or other examples [here!](/exampl
 The goal is to create components that are
 
 - dimensions-aware (especially unify all setSize conventions)
-- move on from raw strings to higher level of abstraction
-- propful
-- easy to lift the state up
-- able to communicate with parent without importing it (I spent too many hours solving import cycles hehe)
+- scallable
+- more robust
 - easier to code
 - all of that without code duplication
 
@@ -55,7 +53,7 @@ More detailed docs about component lifecycle can be found [here](#component-life
 Reactea component lifecycle consists of 6 methods (while Bubbletea only 3)
 |Method|Purpose|
 |-|-|
-| `Init(TProps) tea.Cmd` | It's called first. All critical stuff should happen here. It also supports IO through tea.Cmd |
+| `Init() tea.Cmd` | It's called first. All critical stuff should happen here. It also supports IO through tea.Cmd |
 | `Update(tea.Msg) tea.Cmd` | It reacts to Bubbletea IO and updates state accordingly |
 | `Render(int, int) string` | It renders the UI. The two arguments are width and height, they should be calculated by parent |
 | `Destroy()` | It's called whenever Component is about to end it's lifecycle. Please note that it's parent's responsibility to call `Destroy()` |
@@ -80,7 +78,7 @@ func New() *Component {
     return &Component{textinput: textinput.New()}
 }
 
-func (c *Component) Init(props Props) tea.Cmd {
+func (c *Component) Init() tea.Cmd {
     return c.textinput.Focus()
 }
 
@@ -103,9 +101,8 @@ func (c *Component) Update(msg tea.Msg) tea.Cmd {
 }
 
 // Here we are not using width and height, but you can!
-func (c *Component) Render(rc *render.Context) {
-    rc.Add(render.Paragraph("Enter your name: " + c.textinput.View()))
-    rc.Add(render.Paragraph("And press [ Enter ]"))
+func (c *Component) Render(int, int) string {
+    return fmt.Sprintf("Enter your name: %s\nAnd press [ Enter ]", c.textinput.View())
 }
 ```
 
@@ -149,20 +146,18 @@ func New() *Component {
 func (c *Component) Init(reactea.NoProps) tea.Cmd {
     // Does it remind you of something? react-router!
     return c.mainRouter.Init(map[string]router.RouteInitializer{
-        "default": func(router.Params) (reactea.SomeComponent, tea.Cmd) {
-            component := input.New()
+        "default": func(router.Params) reactea.Component {
+			component := input.New()
 
-            return component, component.Init(input.Props{
-                SetText: c.setText, // Can also use "lambdas" (function can be created here)
-            })
-        },
-        "/displayname": func(router.Params) (reactea.SomeComponent, tea.Cmd) {
-            // RouteInitializer requires SomeComponent so we have to convert
-            // Stateless component (renderer) to SomeComponent
-            component := reactea.Componentify[string](displayname.Renderer)
+			component.SetText = c.setText
 
-            return component, component.Init(c.text)
-        },
+			return component
+		},
+		"/displayname": func(router.Params) reactea.Component {
+            // RouteInitializer requires Component so we have to convert
+            // Stateless component (renderer) to Component
+			return reactea.Componentify(displayname.Render, c.text)
+		},
     })
 }
 
@@ -208,29 +203,16 @@ if _, err := program.Run(); err != nil {
 Reactea component lifecycle consists of 6 methods (while Bubbletea only 3)
 |Method|Purpose|
 |-|-|
-| `Init(TProps) tea.Cmd` | It's called first. All critical stuff should happen here. It also supports IO through tea.Cmd |
+| `Init() tea.Cmd` | It's called first. All critical stuff should happen here. It also supports IO through tea.Cmd |
 | `Update(tea.Msg) tea.Cmd` | It reacts to Bubbletea IO and updates state accordingly |
-| `AfterUpdate() tea.Cmd` | It's called after root component finishes `Update()`. [Components should queue themselves](#afterupdate) |
 | `Render(int, int) string` | It renders the UI. The two arguments are width and height, they should be calculated by parent |
 | `Destroy()` | It's called whenever Component is about to end it's lifecycle. Please note that it's parent's responsibility to call `Destroy()` |
-| `UpdateProps(TProps)` | Derives state from given properties. Usually called from `Init()` |
 
 Reactea takes pointer approach for components making state modifiable in any lifecycle method\
-**There are also 2 additional lifecycle methods: [AfterUpdate()](#afterupdate) and [UpdateProps()](#updateprops)**
-
-### AfterUpdate()
-
-`AfterUpdate()` is the only lifecycle method that is not controlled by parent. It's called right after root component finishes `Update()`. Components should queue itself with `reactea.AfterUpdate(component)` in `Update()`
-
-### UpdateProps()
-
-`UpdateProps()` is a lifecycle method that derives state from props, It can happen anytime during lifecycle. Usually called by `Init()`
 
 ### Notes
 
 `Update()` **IS NOT** guaranteed to be called on first-run, `Init()` for most part is, and critical logic should be there
-
-Lifecycle is **(almost, see [AfterUpdate()](#afterupdate)) fully controlled by parent component** making graph above fully theoretical and possibly invalid for third-party components
 
 ## Stateless components
 
