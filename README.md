@@ -8,7 +8,7 @@
 [![Go Reference](https://pkg.go.dev/badge/github.com/londek/reactea.svg)](https://pkg.go.dev/github.com/londek/reactea)
 [![Go Report Card](https://goreportcard.com/badge/github.com/londek/reactea)](https://goreportcard.com/report/github.com/londek/reactea)
 
-<p align="center">⚠️ I'm rewriting project for 2025! ⚠️</p>
+<p align="center">With the release of bubbletea v2 I'm archiving this project - it's not actively maintained anymore</p>
 
 Rather simple **Bubbletea companion** for **handling hierarchy**, support for **lifting state up.**\
 It Reactifies Bubbletea philosophy and makes it especially easy to work with in bigger projects.
